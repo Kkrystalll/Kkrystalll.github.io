@@ -400,6 +400,13 @@
     height: 2em;
   }
 }
+.header-body-background {
+  width: 100%;
+  display: flex;
+  flex-shrink: 0;
+  background: linear-gradient(to top, #f1f5fb, #f9fcff);
+  height: 466px;
+}
 .header-body-background-content {
   display: flex;
   flex-direction: column;
