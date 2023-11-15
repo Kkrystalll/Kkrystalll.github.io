@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Vim 基礎常用指令-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Vim,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Vim">#Vim</a></li>
+       
+    </ul>
+
+    <h1>Vim 基礎常用指令</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Vim/" target="_blank">Vim</a>
+          
+        </div>
+        <p>2023-11-15 18:45:11</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%AF%E4%BB%80%E9%BA%BC%E8%AE%93%E6%88%91%E5%AD%B8%E8%B5%B7-vim"><span class="toc-number">1.</span> <span class="toc-text">是什麼讓我學起 vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim-%E6%98%AF%E4%BB%80%E9%BA%BC"><span class="toc-number">2.</span> <span class="toc-text">Vim 是什麼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Vim-%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">Vim 的模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%EF%BC%88Normal-Mode%EF%BC%89%EF%BC%9A"><span class="toc-number">3.1.</span> <span class="toc-text">正常模式（Normal Mode）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Insert-Mode%EF%BC%89%EF%BC%9A"><span class="toc-number">3.2.</span> <span class="toc-text">插入模式（Insert Mode）：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%89%93%E9%96%8B-Vim-%E7%B7%A8%E8%BC%AF%E5%99%A8%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">如何打開 Vim 編輯器？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E7%B7%A8%E8%BC%AF%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">如何編輯檔案內容？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%87%E6%8F%9B%E6%88%90%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F%EF%BC%88Insert-Mode%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">切換成插入模式（Insert Mode）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#i-a-o-%E5%B7%AE%E5%9C%A8%E5%93%AA%E5%91%A2%EF%BC%9F"><span class="toc-number">5.2.</span> <span class="toc-text">i a o 差在哪呢？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B7%A8%E8%BC%AF%E5%A5%BD%E6%AA%94%E6%A1%88%E5%9B%9E%E5%88%B0%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">編輯好檔案回到正常模式？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%84%B2%E5%AD%98%E6%88%96%E9%80%80%E5%87%BA%E6%AA%94%E6%A1%88%EF%BC%9F"><span class="toc-number">7.</span> <span class="toc-text">如何儲存或退出檔案？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim-%E8%A3%A1%E7%9A%84%E4%B8%8A%E4%B8%8B%E5%B7%A6%E5%8F%B3%E9%8D%B5"><span class="toc-number">8.</span> <span class="toc-text">vim 裡的上下左右鍵</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim-%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%E5%B8%B8%E7%94%A8%E6%B8%B8%E6%A8%99%E6%8C%87%E4%BB%A4%EF%BC%9A"><span class="toc-number">9.</span> <span class="toc-text">vim 正常模式常用游標指令：</span></a></li></ol>
+    </div>
+     <h2 id="是什麼讓我學起-vim"><a href="#是什麼讓我學起-vim" class="headerlink" title="是什麼讓我學起 vim"></a>是什麼讓我學起 vim</h2><p>會知道 vim 的起源是因為之前上課的時候，看龍哥各種不需要滑鼠鍵盤一個神操作，看起來酷斃了！<br>但迫使我學習這些常用語法的初衷：</p>
+<ol>
+<li>是 <code>git rebase</code> 當我在 rebase 分支時，需要 <code>git rebase --continue</code> 繼續下一個 rebase ，這時 vscode 就會進到 vim 編輯器</li>
+<li>當我使用 AWS 跟 Docker 部署時，在終端機有時會需要使用 vim 編輯器</li>
+</ol>
+<p>所以就學習了幾個常用指令今天分享給大家。</p>
+<h2 id="Vim-是什麼"><a href="#Vim-是什麼" class="headerlink" title="Vim 是什麼"></a>Vim 是什麼</h2><p>Vim 是從 vi 發展出來的一款<strong>文字編輯器</strong>，它於 1988 年釋出了 1.0 版本，到現在已經超過 35 年的歷史。</p>
+<h2 id="Vim-的模式"><a href="#Vim-的模式" class="headerlink" title="Vim 的模式"></a>Vim 的模式</h2><p>Vim 有多種模式，其中最主要兩大的模式為：</p>
+<h3 id="正常模式（Normal-Mode）："><a href="#正常模式（Normal-Mode）：" class="headerlink" title="正常模式（Normal Mode）："></a>正常模式（Normal Mode）：</h3><p>進入 Vim 後的預設模式，可用於移動游標、刪除、複製、貼上等操作。</p>
+<h3 id="插入模式（Insert-Mode）："><a href="#插入模式（Insert-Mode）：" class="headerlink" title="插入模式（Insert Mode）："></a>插入模式（Insert Mode）：</h3><p>允許用戶輸入文字，一般編輯器都把這個設為預設模式。</p>
+<h2 id="如何打開-Vim-編輯器？"><a href="#如何打開-Vim-編輯器？" class="headerlink" title="如何打開 Vim 編輯器？"></a>如何打開 Vim 編輯器？</h2><p>我是使用 mac ，只需要打開終端機，打上</p>
+<pre><code class="vim">vim &lt;文件名稱&gt;
+</code></pre>
+<p>例：我有事先準備好一個 <code>hello.txt</code> 的文件，我就可以使用</p>
+<pre><code class="vim">vim hello.txt
+</code></pre>
+<p>就可以看到使用 Vim 編輯器打開 hello.txt 的畫面<br><img src="/image/vim/1.png" alt="Vim 編輯器打開檔案"></p>
+<h2 id="如何編輯檔案內容？"><a href="#如何編輯檔案內容？" class="headerlink" title="如何編輯檔案內容？"></a>如何編輯檔案內容？</h2><p>相信一開始碰到 vim 最大的問題是，怎麼打字都沒反應？？？其實是因為上面說的目前屬於預設的 <strong>正常模式（Normal Mode）</strong> ，如果需要在這個文件輸入文字時我們需要切換到 <strong>插入模式（Insert Mode）</strong>。</p>
+<h3 id="切換成插入模式（Insert-Mode）"><a href="#切換成插入模式（Insert-Mode）" class="headerlink" title="切換成插入模式（Insert Mode）"></a>切換成插入模式（Insert Mode）</h3><p>要切換成 插入模式（Insert Mode），只需要按鍵盤 <code>i</code> 或 <code>a</code> 或 <code>o</code> 任一個鍵都可以</p>
+<p>📍 注意： 需要是英文鍵盤，如果現在鍵盤是中文按了會無效喔！</p>
+<p>當我們按鍵盤 <code>i</code> 或 <code>a</code> 或 <code>o</code> 任一個鍵後，可以看到左下角變成 INSERT 模式，這時輸入文字就會有反應啦 🥳🥳🥳</p>
+<p><img src="/image/vim/2.png" alt="INSERT 模式"></p>
+<h3 id="i-a-o-差在哪呢？"><a href="#i-a-o-差在哪呢？" class="headerlink" title="i a o 差在哪呢？"></a>i a o 差在哪呢？</h3><p><strong>i 鍵</strong>：現在游標位置的前面<br><strong>a 鍵</strong>：現在游標位置的後面<br><img src="/image/vim/3.png" alt="vim i a o 差在哪"><br>假如我一開始的游標都放在第一行的「第」字，那我按 <code>i 鍵</code> 打字會出現的位置就是下圖的 <code>i</code> ; 反之<code>a 鍵</code> 會在 <code>a</code> 的位置（如下圖）<br><img src="/image/vim/4.png" alt="vim i a o 插入位置"></p>
+<p><strong>o 鍵</strong>：直接換下一行新的<br><img src="/image/vim/5.png" alt="vim o 鍵"><br>可以看到原本的第二行被擠下去了</p>
+<h2 id="編輯好檔案回到正常模式？"><a href="#編輯好檔案回到正常模式？" class="headerlink" title="編輯好檔案回到正常模式？"></a>編輯好檔案回到正常模式？</h2><ol>
+<li><strong>esc 鍵</strong></li>
+<li><strong>control 鍵</strong> ＋ <strong>[ 鍵</strong></li>
+</ol>
+<p>以上兩者都可以退回正常模式，秉持著懶的天性，我個人較常使用前者。</p>
+<h2 id="如何儲存或退出檔案？"><a href="#如何儲存或退出檔案？" class="headerlink" title="如何儲存或退出檔案？"></a>如何儲存或退出檔案？</h2><p><strong><code>:w</code></strong> 是 write 儲存的意思<br><strong><code>:q</code></strong> 是 quit 離開的意思</p>
+<p>📍 以上兩個也可以合併使用<br><strong><code>:wq</code></strong> 是 write &amp; quit 儲存並離開的意思</p>
+<h2 id="vim-裡的上下左右鍵"><a href="#vim-裡的上下左右鍵" class="headerlink" title="vim 裡的上下左右鍵"></a>vim 裡的上下左右鍵</h2><p>在 vim 編輯器裡也有自己的上下左右鍵<br>📍 原本的上下左右鍵也還是可以用喔～</p>
+<p><strong><code>h 鍵</code></strong> ：⬅ 左邊<br><strong><code>j 鍵</code></strong> ：⬇ 下面<br><strong><code>k 鍵</code></strong> ：⬆ 上面<br><strong><code>l 鍵</code></strong> ：➡ 右邊</p>
+<h2 id="vim-正常模式常用游標指令："><a href="#vim-正常模式常用游標指令：" class="headerlink" title="vim 正常模式常用游標指令："></a>vim 正常模式常用游標指令：</h2><p><strong><code>w 鍵</code></strong> ：跳下個字字首<br><strong><code>b 鍵</code></strong> ：跳上個字字首<br><strong><code>e 鍵</code></strong> ：跳當前字的字尾<br><strong><code>dd 鍵</code></strong> ：連按兩次 d 鍵，就可以不用進到插入模式刪除該行<br><strong><code>shift 鍵</code></strong> ＋ <strong><code>) 鍵</code></strong> ：跳到這行的句首<br><strong><code>shift 鍵</code></strong> ＋ <strong><code>^ 鍵</code></strong> ：跳到這行的句首<br><strong><code>0 鍵</code></strong> ：跳到這行的句首(有了這個前兩個我直接忘ＸＤ)<br><strong><code>shift 鍵</code></strong> ＋ <strong><code>( 鍵</code></strong> ：跳到這行的句尾<br><strong><code>shift 鍵</code></strong> ＋ <strong><code>$ 鍵</code></strong> ：跳到這行的句尾<br><strong><code>gg 鍵</code></strong> ：跳到文件最開頭</p>
+<p>以上就是我整理覺得最常用到的 vim 指令們！若是大家有機會用到 vim 編輯器可以試試喔～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/posts/Docker-network/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - Docker Network(網路)容器與容器間的橋樑</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2023 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
