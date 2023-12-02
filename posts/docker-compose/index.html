@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - Docker Compose 讓多個容器同時跑起來-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,image,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/image">#image</a></li>
+       
+    </ul>
+
+    <h1>Docker - Docker Compose 讓多個容器同時跑起來</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-30 18:07:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Compose-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Docker Compose 是什麼？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BD%95%E6%88%91%E8%A6%81%E7%94%A8-Docker-Compose-%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">為何我要用 Docker Compose ？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%84%AA%E9%BB%9E"><span class="toc-number">2.1.</span> <span class="toc-text">優點</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Compose-%E5%B8%B8%E8%A6%8B%E6%8C%87%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">Docker Compose 常見指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%95%9F%E5%8B%95%E5%AE%B9%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">啟動容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E8%83%8C%E6%99%AF%E4%B8%AD%E5%95%9F%E5%8B%95%E5%AE%B9%E5%99%A8"><span class="toc-number">3.2.</span> <span class="toc-text">在背景中啟動容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E6%97%A5%E8%AA%8C"><span class="toc-number">3.3.</span> <span class="toc-text">查看容器日誌</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%BB%BA%E7%AB%8B%E5%AE%B9%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">重新建立容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E7%8B%80%E6%85%8B"><span class="toc-number">3.5.</span> <span class="toc-text">查看容器狀態</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E6%AD%A2%E5%AE%B9%E5%99%A8"><span class="toc-number">3.6.</span> <span class="toc-text">停止容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%9C%E9%96%89%E5%AE%B9%E5%99%A8%E4%B8%A6%E5%88%AA%E9%99%A4"><span class="toc-number">3.7.</span> <span class="toc-text">關閉容器並刪除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%95%9F%E5%8B%95%E5%AE%B9%E5%99%A8"><span class="toc-number">3.8.</span> <span class="toc-text">重新啟動容器</span></a></li></ol></li></ol>
+    </div>
+     <p>前三天不小心陷入 Dockerfile 的除錯地獄中 🤢，甚至最後留下的畫面都還是紅畫面，像極了在一片黑的洞穴中，找不到任何一絲光線的出口，剛開始學 docker 很容易因為遇到這種狀況所以就放棄了。所以今天我們先轉換一下口味，脫離除錯地獄，轉換心情來學習 Docker Compose 是什麼，當然這也是我之後要拿來解決昨天紅畫面錯誤訊息的解決方案。</p>
+<h2 id="Docker-Compose-是什麼？"><a href="#Docker-Compose-是什麼？" class="headerlink" title="Docker Compose 是什麼？"></a>Docker Compose 是什麼？</h2><blockquote>
+<p>Docker Compose 是一個用於定義和執行多容器 Docker 應用程式的工具。它允許使用單一 YAML 檔案來設定應用程式的服務、網路和磁碟區，然後使用一個命令來啟動整個應用程式的環境。簡化多容器應用程式的管理和部署，並確保它們在不同環境中的一致運作。</p>
+</blockquote>
+<p>上面的解釋一如既往，都是中文但是接在一起就看不太懂 🤯，這邊就將它翻成白話來解釋，以我們這次範例的專案來說是使用 ruby 這個程式語言，並使用 rails 這個開發框架，資料庫則是使用 PostgreSQL ，上次我們寫在 dockerfile 是寫 <code>FROM ruby:3.2.2</code> 最後跑 rails s 這個指令，當這個容器跑起來時，這就是一個簡單的 Ruby 開發環境，可用於運行 Ruby on Rails 應用程式的容器，但是 PostgreSQL 資料庫並沒有被跑起來，所以這時候我們就會需要一個可以執行多個容器(一個運行 Ruby on Rails 應用程式，一個 PostgreSQL 資料庫)的地方，而 Docker Compose 就是這樣的存在。</p>
+<h2 id="為何我要用-Docker-Compose-？"><a href="#為何我要用-Docker-Compose-？" class="headerlink" title="為何我要用 Docker Compose ？"></a>為何我要用 Docker Compose ？</h2><h3 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h3><p>執行多個容器：使用 Docker Compose 可以將應用程式的各個部分在不同的容器中運行。包含 Web 伺服器、資料庫等等。可以在一個 YAML 檔案中定義這些服務以及它們之間的關係。</p>
+<p>簡化開發環境：Docker Compose 可以在開發過程中模擬生產環境，使開發人員可以在自己的本機上執行多容器應用程式。可以確保開發和測試在一致的環境中進行。</p>
+<p>易於使用：Docker Compose 提供了一個簡單的命令列介面，讓您可以輕鬆啟動、停止、重建和管理多容器應用程式。您可以使用單一命令來處理整個應用程式的生命週期。</p>
+<p>環境變數和磁碟區允許：Docker Compose 也可以輕鬆設定環境變數，以自訂每個服務的配置。</p>
+<p>總之，Docker Compose 是一個特別適用於開發、測試和部署多容器 Docker 應用程式，並有助於簡化容器化應用程式的管理和配置。</p>
+<h2 id="Docker-Compose-常見指令"><a href="#Docker-Compose-常見指令" class="headerlink" title="Docker Compose 常見指令"></a>Docker Compose 常見指令</h2><h3 id="啟動容器"><a href="#啟動容器" class="headerlink" title="啟動容器"></a>啟動容器</h3><pre><code class="docker">docker-compose up
+</code></pre>
+<p>啟動應用程式的所有容器。如果沒有這個容器 Compose 會先建立容器，再啟動它。</p>
+<h3 id="在背景中啟動容器"><a href="#在背景中啟動容器" class="headerlink" title="在背景中啟動容器"></a>在背景中啟動容器</h3><pre><code class="docker">docker-compose up -d
+</code></pre>
+<p>在背景中啟動容器，並持續運行。</p>
+<h3 id="查看容器日誌"><a href="#查看容器日誌" class="headerlink" title="查看容器日誌"></a>查看容器日誌</h3><pre><code class="docker">docker-compose logs
+</code></pre>
+<p>查看應用程式的 logs。</p>
+<h3 id="重新建立容器"><a href="#重新建立容器" class="headerlink" title="重新建立容器"></a>重新建立容器</h3><pre><code class="docker">docker-compose up --build
+</code></pre>
+<p>重新建立(build)應用程式的容器。如果 Dockerfile 或 Compose 檔案有更改，就會用到這個指令。</p>
+<h3 id="查看容器狀態"><a href="#查看容器狀態" class="headerlink" title="查看容器狀態"></a>查看容器狀態</h3><pre><code class="docker">docker-compose ps
+</code></pre>
+<p>查看正在運行的容器的狀態，其實跟 docker ps 很類似，只是這是 compose 版本的。</p>
+<h3 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h3><pre><code class="docker">docker-compose down
+</code></pre>
+<p>停止應用程式的所有容器，並刪除它們的容器、網路等。</p>
+<h3 id="關閉容器並刪除"><a href="#關閉容器並刪除" class="headerlink" title="關閉容器並刪除"></a>關閉容器並刪除</h3><pre><code class="docker">docker-compose down -v
+</code></pre>
+<p><code>-v</code> 是 <code>--volumes</code> 的縮寫，通常在需要完全重建和清理應用程式環境時很有用。一般的 <code>docker-compose down</code> 只會停止和刪除容器、網路等，而不刪除 volumes ，所以若需要刪除 volumes 就可以加上 <code>-v</code>。</p>
+<h3 id="重新啟動容器"><a href="#重新啟動容器" class="headerlink" title="重新啟動容器"></a>重新啟動容器</h3><pre><code class="docker">docker-compose restart
+</code></pre>
+<p>通常在修改了 Docker Compose 文件時，會用到重新啟動應用程式的容器。</p>
+<p>今天已經大約了解 Docker Compose ，明天我們就要來實際寫 Docker Compose 的 YAML 檔案，來解決上次撰寫 Dockerfile 並跑起來得容器，所留下的紅畫面。</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/vim-commands/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Vim 基礎常用指令</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-run/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 將我的 image 跑起來</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2023 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

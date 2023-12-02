@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 拆解 Dockerfile 的關鍵字(上)-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Dockerfile,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Dockerfile">#Dockerfile</a></li>
+       
+    </ul>
+
+    <h1>Docker - 拆解 Dockerfile 的關鍵字(上)</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-25 18:16:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Dockerfile 是什麼？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dockerfile-%E8%A3%A1%E9%9D%A2%E7%9A%84%E9%97%9C%E9%8D%B5%E5%AD%97"><span class="toc-number">2.</span> <span class="toc-text">Dockerfile 裡面的關鍵字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FROM"><span class="toc-number">2.1.</span> <span class="toc-text">FROM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AS"><span class="toc-number">2.2.</span> <span class="toc-text">AS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MAINTAINER-%E7%9B%AE%E5%89%8D%E5%BB%BA%E8%AD%B0%E4%BD%BF%E7%94%A8-LABEL"><span class="toc-number">2.3.</span> <span class="toc-text">MAINTAINER(目前建議使用 LABEL)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LABEL"><span class="toc-number">2.4.</span> <span class="toc-text">LABEL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RUN"><span class="toc-number">2.5.</span> <span class="toc-text">RUN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMD"><span class="toc-number">2.6.</span> <span class="toc-text">CMD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ENTRYPOINT"><span class="toc-number">2.7.</span> <span class="toc-text">ENTRYPOINT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CMD-%E8%B7%9F-ENTRYPOINT-%E7%9A%84%E5%B7%AE%E5%88%A5"><span class="toc-number">2.7.1.</span> <span class="toc-text">CMD 跟 ENTRYPOINT 的差別</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXPOSE"><span class="toc-number">2.8.</span> <span class="toc-text">EXPOSE</span></a></li></ol></li></ol>
+    </div>
+     <h2 id="Dockerfile-是什麼？"><a href="#Dockerfile-是什麼？" class="headerlink" title="Dockerfile 是什麼？"></a>Dockerfile 是什麼？</h2><p>回到我前幾天介紹的 Docker Image(映像) 我們把它想像成烤雞蛋糕模型，那這個 Dockerfile 我們就可以把它想像成這個模型的說明書，這本說明書包含了一系列指令，告訴 Docker 如何建立一个映像。當我們要 run docker 時，他會根據現在專案的根目錄，找尋 Dockerfile ，並且根據 Dockerfile 裡面一步一步的說明，來安裝好相關套件資料庫等環境，然後製作成一個 Image(映像)。<br>當然如果你的 Dockerfile 沒有在根目錄也是可以的，只要指定對路徑，能找到 Dockerfile 就可以根據 Dockerfile 來製作 Image(映像)。</p>
+<h2 id="Dockerfile-裡面的關鍵字"><a href="#Dockerfile-裡面的關鍵字" class="headerlink" title="Dockerfile 裡面的關鍵字"></a>Dockerfile 裡面的關鍵字</h2><h3 id="FROM"><a href="#FROM" class="headerlink" title="FROM"></a>FROM</h3><p>也就是我們在 Docker Hub 上可以看到的基礎鏡像版本</p>
+<pre><code class="docker">FROM ruby:3.2.2
+</code></pre>
+<p>📍 通常會放在 Dockerfile 的第一行</p>
+<h3 id="AS"><a href="#AS" class="headerlink" title="AS"></a>AS</h3><p>通常與 FROM 一起在多階段建立，我們可以把它想像成暱稱</p>
+<pre><code class="docker">FROM ruby:3.2.2 AS app
+</code></pre>
+<p>也就是我們可以在這個檔案後面以 <code>app</code> 這個暱稱來稱呼 <code>ruby:3.2.2</code></p>
+<h3 id="MAINTAINER-目前建議使用-LABEL"><a href="#MAINTAINER-目前建議使用-LABEL" class="headerlink" title="MAINTAINER(目前建議使用 LABEL)"></a>MAINTAINER(目前建議使用 LABEL)</h3><p>Dockerfile 的作者&#x2F;維護者（1.13 版本以後，建議改用 LABEL）</p>
+<pre><code class="docker">MAINTAINER Krystal &lt;krystal@example.com&gt;
+</code></pre>
+<h3 id="LABEL"><a href="#LABEL" class="headerlink" title="LABEL"></a>LABEL</h3><p>以 key value 的形式，來描述鏡像的屬性(作者、版本、描述等)</p>
+<pre><code class="docker">LABEL maintainer=&quot;Krystal &lt;krystal@example.com&gt;&quot;
+LABEL version=&quot;1.0&quot;
+LABEL description=&quot;My rails project&quot;
+LABEL website=&quot;https://www.example.com&quot;
+</code></pre>
+<p>主要功用就是提供資訊，讓其他人更容易理解和使用映像，我自己是把他想得很像 README 的作用。</p>
+<h3 id="RUN"><a href="#RUN" class="headerlink" title="RUN"></a>RUN</h3><p>建立 image 時，安裝軟體套件、下載依賴項、設定環境。</p>
+<pre><code class="docker">RUN apk add --update --no-cache \
+    postgresql-dev
+
+RUN gem install bundler:2.3.19 &amp;&amp; \
+    bundle install -j4 --retry 3 &amp;&amp; \
+    bundle clean --force
+</code></pre>
+<p>📍 每個 RUN 指令都會 <strong>生成一層新的鏡像層</strong>，所以根據上面範例會生成兩層</p>
+<p>📍 上面看到的 <code>\</code> 其實只是為了排版美觀的一個符號，代表雖然換行，但其實是同一行。<br>所以我們可以改成如下</p>
+<pre><code class="docker">RUN apk add --update --no-cache postgresql-dev
+
+RUN gem install bundler:2.3.19 &amp;&amp;  bundle install -j4 --retry 3 &amp;&amp; bundle clean --force
+</code></pre>
+<p>只是我個人推薦上方有 <code>\</code> 符號的寫法，因為可讀性較佳。</p>
+<p>📍 <code>&amp;&amp;</code> 其實就是如果前一個命令執行成功，才會執行下一個命令。如果前一個命令執行失敗，那後面的命令就不會執行。</p>
+<p>上面會需要 &amp;&amp; 是為了確保安裝 bundler、執行 bundle install 和清理 bundle 時，只有在前一步成功時才繼續執行後續步驟。</p>
+<h3 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h3><p>容器啟動時要執行的預設命令，每個 Dockerfile 只能有一個 CMD 指令，如果有多個 CMD 指令，前面會被覆蓋，只有最後一個會執行</p>
+<pre><code class="docker">CMD [&quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
+</code></pre>
+<p>也因為上面說的 CMD 指令會被覆蓋，所以我們通常把他放在 <strong>Dockerfile 的最後一行</strong>，以避免覆蓋狀況。</p>
+<h3 id="ENTRYPOINT"><a href="#ENTRYPOINT" class="headerlink" title="ENTRYPOINT"></a>ENTRYPOINT</h3><p>定義容器的主要執行命令，且會在容器啟動時執行</p>
+<pre><code class="docker">ENTRYPOINT [&quot;echo&quot;, &quot;Hello, Docker!&quot;]
+</code></pre>
+<p>當 Docker run 這個容器，容器啟動後便會輸出 “Hello, Docker!”</p>
+<p>看到這邊我超暈 CMD 跟 ENTRYPOINT 差在哪？看起來根本都一樣，我們直接用範例解釋</p>
+<h4 id="CMD-跟-ENTRYPOINT-的差別"><a href="#CMD-跟-ENTRYPOINT-的差別" class="headerlink" title="CMD 跟 ENTRYPOINT 的差別"></a>CMD 跟 ENTRYPOINT 的差別</h4><p>如果有上面的 ENTRYPOINT ，然後我們將這個 image run 起來 <code>docker run &lt;image&gt; Hi</code>，再多給一個 Hi 參數<br>會輸出</p>
+<pre><code class="docker">Hello, Docker! Hi
+</code></pre>
+<p>反過來如果是 CMD</p>
+<pre><code class="docker">CMD [&quot;echo&quot;, &quot;Hello&quot;]
+</code></pre>
+<p>然後我們將這個 image run 起來 <code>docker run &lt;image&gt; Hi</code>，再多給一個 Hi 參數</p>
+<p>會輸出</p>
+<pre><code class="docker">Hello Hi
+</code></pre>
+<p>你可能覺得看起來都一樣，但其實不同的是，這時 CMD 的內容 <code>[&quot;echo&quot;, &quot;Hello&quot;]</code> 已經被修改為 <code>[&quot;echo&quot;, &quot;Hello&quot;, &quot;Hi&quot;]</code></p>
+<p>總結來說 ENTRYPOINT 是不可變且一定會執行的 ; CMD 可能被覆蓋也可能被修改的。</p>
+<h3 id="EXPOSE"><a href="#EXPOSE" class="headerlink" title="EXPOSE"></a>EXPOSE</h3><p>指出容器內應用程式，應該使用哪些 port (連接口)進行監聽</p>
+<pre><code class="docker">EXPOSE 3000
+</code></pre>
+<p>代表監聽 3000 port</p>
+<p>今天就先介紹到這邊，明天我們繼續拆解 Dockerfile 剩餘的關鍵字～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/dockerfile-2/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 拆解 Dockerfile 的關鍵字(下)</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-image/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - Docker Image(映像) 用模型烤出一個個一樣的雞蛋糕</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2023 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
