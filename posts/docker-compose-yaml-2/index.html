@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>撰寫 Docker Compose 的 YAML 檔案(下)-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,docker-compose,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/docker-compose">#docker-compose</a></li>
+       
+    </ul>
+
+    <h1>撰寫 Docker Compose 的 YAML 檔案(下)</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-10-02 20:06:35</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%87%E8%B3%87%E6%96%99%E5%BA%AB%E6%9C%8D%E5%8B%99%E5%AE%9A%E7%BE%A9%E5%A5%BD"><span class="toc-number">1.</span> <span class="toc-text">將資料庫服務定義好</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E7%BE%A9-PostgreSQL-%E6%9C%8D%E5%8B%99%E5%90%8D%E7%A8%B1"><span class="toc-number">1.1.</span> <span class="toc-text">定義 PostgreSQL 服務名稱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%93%9A%E4%BB%80%E9%BA%BC%E5%BB%BA%E7%AB%8B%E5%AE%B9%E5%99%A8%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">根據什麼建立容器？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D-PostgreSQL-%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.1.</span> <span class="toc-text">確認 PostgreSQL 版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8-Docker-Hub-%E6%89%BE%E9%81%A9%E5%90%88%E7%9A%84-image"><span class="toc-number">1.2.2.</span> <span class="toc-text">在 Docker Hub 找適合的 image</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%88%90-db-%E6%9C%8D%E5%8B%99%E8%A8%AD%E5%AE%9A"><span class="toc-number">1.3.</span> <span class="toc-text">完成 db 服務設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-compose-%E7%9A%84-restart-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">1.4.</span> <span class="toc-text">docker compose 的 restart 是什麼？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#no-%E9%A0%90%E8%A8%AD%E5%80%BC"><span class="toc-number">1.4.1.</span> <span class="toc-text">no(預設值)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#always"><span class="toc-number">1.4.2.</span> <span class="toc-text">always</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#on-failure"><span class="toc-number">1.4.3.</span> <span class="toc-text">on-failure</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#unless-stopped"><span class="toc-number">1.4.4.</span> <span class="toc-text">unless-stopped</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%95%9F%E5%8B%95-docker-compose-%E7%9C%8B%E7%9C%8B"><span class="toc-number">2.</span> <span class="toc-text">啟動 docker-compose 看看</span></a></li></ol>
+    </div>
+     <p>昨天將 app 服務 docker-compose.yml 的部分撰寫好了，今天就來寫資料庫服務的部分</p>
+<h2 id="將資料庫服務定義好"><a href="#將資料庫服務定義好" class="headerlink" title="將資料庫服務定義好"></a>將資料庫服務定義好</h2><h3 id="定義-PostgreSQL-服務名稱"><a href="#定義-PostgreSQL-服務名稱" class="headerlink" title="定義 PostgreSQL 服務名稱"></a>定義 PostgreSQL 服務名稱</h3><p>跟昨天一樣取一個資料庫在 compose 裡的唯一名稱</p>
+<pre><code class="docker">db:
+</code></pre>
+<p>為了簡明扼要又好讀，就直接叫做 <code>db</code></p>
+<h3 id="根據什麼建立容器？"><a href="#根據什麼建立容器？" class="headerlink" title="根據什麼建立容器？"></a>根據什麼建立容器？</h3><p>昨天我們使用</p>
+<pre><code class="docker">build:
+   context: .
+</code></pre>
+<p>是因為我們希望可以根據本地的 Dockerfile 來建置容器 ; 但今天我們的資料庫就是因為沒有在 Dockerfile 建立出來的容器裡，所以我們應該要找一個符合我安裝的 PostgreSQL 版本的 image 寫成：</p>
+<pre><code class="docker">image: &lt;我要引用的 image&gt;
+</code></pre>
+<h4 id="確認-PostgreSQL-版本"><a href="#確認-PostgreSQL-版本" class="headerlink" title="確認 PostgreSQL 版本"></a>確認 PostgreSQL 版本</h4><p>首先若是本機已經安裝 PostgreSQL 可以在終端機下</p>
+<pre><code>psql
+</code></pre>
+<p>使用 psql 指令連接到您的 PostgreSQL 資料庫，可以看到如下</p>
+<p><img src="/image/dockerDay17/17_1.png" alt="psql"></p>
+<p>這邊可以看到後面的 14.5 就是 PostgreSQL 服務的版本，但若是你還是想再確認一次，或是知道更多詳細訊息，也可以在這邊再下</p>
+<pre><code class="SQL">SELECT version();
+</code></pre>
+<p><img src="/image/dockerDay17/17_2.png" alt="psql 詳細訊息"><br><img src="/image/dockerDay17/17_3.png" alt="psql 詳細訊息"></p>
+<p>如圖我們就可以知道有關版本的更多詳細訊息。</p>
+<h4 id="在-Docker-Hub-找適合的-image"><a href="#在-Docker-Hub-找適合的-image" class="headerlink" title="在 Docker Hub 找適合的 image"></a>在 Docker Hub 找適合的 image</h4><p>要找公開包好的 image ，第一時間想到 Docker Hub，我在 Docker Hub 裡搜尋 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres">postgres</a> 找尋版本 14 開頭的 tag</p>
+<p><img src="/image/dockerDay17/17_4.png" alt="Docker Hub postgres"></p>
+<p>因為沒有完全符合 14.5 的 tag ，所以我就選擇 <code>14-alpine</code> ，這時 docker-compose.yml 可以寫成：</p>
+<pre><code class="docker">image: postgres:14-alpine
+</code></pre>
+<h3 id="完成-db-服務設定"><a href="#完成-db-服務設定" class="headerlink" title="完成 db 服務設定"></a>完成 db 服務設定</h3><p>剛剛找好根據哪個 image ，然後呢？還有哪些要定義的？我們可以順勢參考頁面 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres">postgres</a></p>
+<p><img src="/image/dockerDay17/17_5.png" alt="Docker Hub postgres"></p>
+<p>這邊寫到需要設置環境變數，我們就加上去</p>
+<pre><code class="docker">environment:
+   POSTGRES_PASSWORD: password
+</code></pre>
+<p>倒是有一個 <code>restart: always</code> 好像是先前沒有看過的</p>
+<h3 id="docker-compose-的-restart-是什麼？"><a href="#docker-compose-的-restart-是什麼？" class="headerlink" title="docker compose 的 restart 是什麼？"></a>docker compose 的 restart 是什麼？</h3><p>如其名就是重新開啟，再解釋清楚一點就是容器在什麼狀況下需要重新 restart ，通常用於確保容器在故障或異常情況下能夠恢復正常運行。<br>而 restart 有多種選項：</p>
+<h4 id="no-預設值"><a href="#no-預設值" class="headerlink" title="no(預設值)"></a>no(預設值)</h4><p>如果容器停止不會自動重新啟動容器，若希望容器啟動，需要手動啟動。</p>
+<h4 id="always"><a href="#always" class="headerlink" title="always"></a>always</h4><p>設定為 always，那無論手動停止 <code>docker-compose stop</code> 容器，還是將服務停止 <code>docker-compose down</code>，容器都會在停止後自動重新啟動。這對於保持應用程式的可用性非常有用，因為它確保了即使發生故障，容器也可以重新啟動。</p>
+<h4 id="on-failure"><a href="#on-failure" class="headerlink" title="on-failure"></a>on-failure</h4><p>表示當容器因為失敗而停止時，才會自動重新啟動。如果容器正常退出（我自己退出的），將不會自動重新啟動。</p>
+<h4 id="unless-stopped"><a href="#unless-stopped" class="headerlink" title="unless-stopped"></a>unless-stopped</h4><p>我將它理解為跟 always 九成像，唯一一成不同則是，如果手動停止容器，並 <strong>不</strong> 會自動重新啟動。</p>
+<p>這邊根據我的狀況我希望加上</p>
+<pre><code class="docker">restart: on-failure
+</code></pre>
+<p>並且也順便幫 app 服務也一併加上。</p>
+<p>這時我的 <code>docker-compose.yml</code> 長成如下：</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    build:
+      context: .
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+    restart: on-failure
+  db:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: password
+</code></pre>
+<h2 id="啟動-docker-compose-看看"><a href="#啟動-docker-compose-看看" class="headerlink" title="啟動 docker-compose 看看"></a>啟動 docker-compose 看看</h2><pre><code class="docker">docker-compose up --build
+</code></pre>
+<p>使用 <code>docker-compose up --build</code> 建立＋啟動容器，通常會需要一小段時間，我們先讓子彈飛一會兒…</p>
+<p><img src="/image/dockerDay17/17_6.png" alt="建立＋啟動容器"></p>
+<p>容器看似開起來，有動靜</p>
+<p><img src="/image/dockerDay17/17_7.png" alt="建立＋啟動容器"></p>
+<p>但當我打開瀏覽器在網址搜尋 <code>http://0.0.0.0:3000</code> ，出現了跟之前一樣的</p>
+<p><img src="/image/dockerDay17/17_8.png" alt="瀏覽器頁面"></p>
+<p>記得上次是因為我沒有指定 port ，於是我詢問谷歌大神，搜尋關鍵字 <code>docker compose port</code> 可以看到第一篇文章，也就是 <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/networking/">官方文件</a> 說明 docker-compose.yml 檔也要寫 port ，這樣才可以知道容器的 port 要對應到主機的哪個 port ，供主機訪問，所以我在 app 的服務中加上</p>
+<pre><code class="docker">ports:
+   - 3000:3000
+</code></pre>
+<p>現在的 <code>docker-compose.yml</code> 長成如下：</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    build:
+      context: .
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    restart: on-failure
+    ports:
+      - 3000:3000
+  db:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: password
+</code></pre>
+<p>要重新將容器 build ，需要先將 compose 內的容器移除</p>
+<pre><code class="docker">docker compose down
+</code></pre>
+<p><img src="/image/dockerDay17/17_9.png" alt="移除容器"></p>
+<p>再重複上述動作</p>
+<pre><code class="docker">docker-compose up --build
+</code></pre>
+<p>這時我們打開瀏覽器在網址搜尋 <code>http://0.0.0.0:3000</code> 可以看到</p>
+<p><img src="/image/dockerDay17/17_10.png" alt="Create database"></p>
+<p>仔細看錯誤訊息只是因為我們的 database 還沒有建立，所以直接點選上面的 <code>Create database</code> 按鈕，這個按鈕其實就是我們平常打的 <code>bin/rails db:create</code> 。</p>
+<p>順利 Create database 後，不曉得大家腦中有沒有預期到等等會發生的錯誤了？</p>
+<p><img src="/image/dockerDay17/17_11.png" alt="rails db:migrate"></p>
+<p>就是還需要跑 <code>rails db:migrate</code> ，一樣先點按按鈕即可</p>
+<p><img src="/image/dockerDay17/17_12.png" alt="成功開啟專案"></p>
+<p>終於 🥳🥳🥳 看到了我們空空如也的首頁，這代表以後我們都可以透過 <code>docker compose up</code> 來啟動容器！</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/vim-commands/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Vim 基礎常用指令</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-compose-yaml-1/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>撰寫 Docker Compose 的 YAML 檔案(上)</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2023 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
