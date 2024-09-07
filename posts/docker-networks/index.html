@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - Docker Networks(網路)容器與容器間的橋樑-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,network,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/network">#network</a></li>
+       
+    </ul>
+
+    <h1>Docker - Docker Networks(網路)容器與容器間的橋樑</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-21 02:31:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Bridge-Network-%E6%A9%8B%E6%8E%A5%E7%B6%B2%E7%B5%A1-%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">Bridge Network (橋接網絡)：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Host-Network%EF%BC%88%E4%B8%BB%E6%A9%9F%E7%B6%B2%E8%B7%AF%EF%BC%89%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">Host Network（主機網路）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#None-Network%EF%BC%88%E7%84%A1%E7%B6%B2%E8%B7%AF%EF%BC%89%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">None Network（無網路）：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%9C%AC%E6%A9%9F-docker-%E7%B6%B2%E8%B7%AF%E5%88%97%E8%A1%A8"><span class="toc-number">4.</span> <span class="toc-text">查看本機 docker 網路列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%91%E7%9A%84%E6%AF%8F%E4%B8%80%E5%80%8B-Container-%E5%AE%B9%E5%99%A8-%E5%88%86%E5%88%A5%E4%BD%BF%E7%94%A8%E5%93%AA%E4%BA%9B%E7%B6%B2%E8%B7%AF"><span class="toc-number">5.</span> <span class="toc-text">我的每一個 Container (容器)分別使用哪些網路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%88%91%E6%89%80%E5%BB%BA%E7%AB%8B%E7%9A%84%E7%B6%B2%E8%B7%AF"><span class="toc-number">6.</span> <span class="toc-text">建立及使用我所建立的網路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%B6%B2%E8%B7%AF"><span class="toc-number">6.1.</span> <span class="toc-text">建立網路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%87%E6%88%91%E7%9A%84-container-natwork-%E6%8F%9B%E6%88%90%E7%89%B9%E5%AE%9A-natwork"><span class="toc-number">6.2.</span> <span class="toc-text">將我的 container natwork 換成特定 natwork</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%80%A3%E6%8E%A5-Network%EF%BC%88%E7%B6%B2%E8%B7%AF%EF%BC%89%E8%88%87-Container-%E5%AE%B9%E5%99%A8"><span class="toc-number">6.2.1.</span> <span class="toc-text">連接 Network（網路）與 Container (容器)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%96%B7%E9%96%8B-Network%EF%BC%88%E7%B6%B2%E8%B7%AF%EF%BC%89%E8%88%87-Container-%E5%AE%B9%E5%99%A8-%E7%9A%84%E9%80%A3%E6%8E%A5"><span class="toc-number">6.2.2.</span> <span class="toc-text">斷開 Network（網路）與 Container (容器) 的連接</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A7%BB%E9%99%A4-Network%EF%BC%88%E7%B6%B2%E8%B7%AF%EF%BC%89"><span class="toc-number">6.3.</span> <span class="toc-text">移除 Network（網路）</span></a></li></ol></li></ol>
+    </div>
+     <p>前一章有說 Docker Container (容器)是有隔離性的，也就是互不影響，但這樣的話，我們應該要如何連結兩個容器呢？這時候 Docker Network (網路)就出場啦！ Docker Network (網路)是 Docker Container (容器)與 Container (容器)之間 ; 以及 Container (容器)與外部容器、網路或服務之間連接通訊的橋樑。Docker 提供了不同類型的網絡，使容器能夠連接到這些不同類型的網絡。</p>
+<p>以下就來介紹三種使用 Docker 時，一定會遇到的基礎網路模式：</p>
+<h3 id="Bridge-Network-橋接網絡-："><a href="#Bridge-Network-橋接網絡-：" class="headerlink" title="Bridge Network (橋接網絡)："></a>Bridge Network (橋接網絡)：</h3><p>bridge 是在 Docker 裡預設的網路。在 bridge 網路模式中，每个 Container (容器)都分配一个獨立、不重複的 IP 地址，Container (容器)可以通过这个 IP 地址相互聯絡。容器可以通過一個主機的 NAT（網絡地址轉換）訪問外部網絡。</p>
+<blockquote>
+<p>容器可以通過一個主機的 NAT（網絡地址轉換）訪問外部網絡</p>
+</blockquote>
+<p>我在看上述這句話的時候覺得看了沒有很懂，所以了解了一下，再以自己的話加以解釋：</p>
+<p>上面有說到每個 Container (容器)都會分配一个獨立、不重複的 IP 地址，而這些 IP 地址是私有的，只能在 Container (容器)內找到，無法跟 Container (容器)外部聯絡。所以當 Container (容器)需要與外部聯絡時， Docker 主機會成為 Docker Network(網路)的 NAT ，全名為 Network Address Translation（網路地址翻譯），也就是可以把 Docker 主機想像成翻譯機，將 Container (容器)內的請求，翻譯成外部可以聽得懂的語言，然後將外部回來的 response 再翻譯回給 Container (容器)。</p>
+<h3 id="Host-Network（主機網路）："><a href="#Host-Network（主機網路）：" class="headerlink" title="Host Network（主機網路）："></a>Host Network（主機網路）：</h3><p>當 Container (容器)使用 Host Network 模式時，代表它們與主機共享同樣的網絡接口和設定，也就是與主機具有相同且公開的 IP 地址。這意味著 Container (容器)可以像主機 (Host) 一樣直接使用主機上的網絡資源，所以並不需要使用 NAT 這個翻譯機來翻譯。</p>
+<p>另外通常，在 Docker 中，容器的 port (端口)可以對應到主機的某個 port (端口)，以便從外部網絡可順利對應到 Container (容器)中的服務。但在主機網絡模式下，容器不需要 port (端口)對應。容器的網絡設定與主機上的網絡設定一樣，它們可以使用相同的 port (端口)。</p>
+<h3 id="None-Network（無網路）："><a href="#None-Network（無網路）：" class="headerlink" title="None Network（無網路）："></a>None Network（無網路）：</h3><p>在 None Network（無網路）模式下， Container (容器)不會連接到任何網絡，因為根本沒有網絡接口。<br>None Network（無網路）適用時機會是比較特殊的情況，例如：我希望 Container (容器)完全隔離並且沒有任何網絡訪問權限。</p>
+<p>總結來說，因為 Host Network（主機網路）可以直接以主機本人身份加進去網路，就像一般人出國需要翻譯，但是當翻譯官本人出國時，因為本來就會當國語言，他就不需要再另外請翻譯，因為他自己就聽得懂。所以在一些情況下使用 Host Network（主機網路）是非常有用的。但是需要特別注意，因為是可以直接以主機身份操作，這樣可能會影響 Container (容器)網路的隔離性和安全性，所以不能濫用。<br>而 None Network（無網路）就別說是出國了，根本是把人丟到一座無人島，我 Container (容器)幾乎等於與世隔絕，無法與外界聯繫。</p>
+<p>在了解三種使用 Docker 時，一定會遇到的基礎網路模式後，不曉得大家會不會跟我一樣充滿問號，說這麼多，啊我到底該如何知道我現在有哪些網路？以及我的每一個 Container (容器)分別使用哪些網路？最後是我應該如何建立一個屬於自己的網路，以及將 Container (容器)使用我建立的網路？</p>
+<h3 id="查看本機-docker-網路列表"><a href="#查看本機-docker-網路列表" class="headerlink" title="查看本機 docker 網路列表"></a>查看本機 docker 網路列表</h3><pre><code class="docker">docker network ls
+</code></pre>
+<p><img src="/image/dockerDay6/6_1.png" alt="看本機 docker 網路列表"></p>
+<p>根據 <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/reference/commandline/network_ls/">官網</a> 的圖片，我們可以看到在最一開始，使用 <code>docker network ls</code> 可以看到有三種名稱的網路：<code>bridge</code>、<code>host</code>、<code>none</code> 這三個是 docker 基礎預設的網路。</p>
+<h3 id="我的每一個-Container-容器-分別使用哪些網路"><a href="#我的每一個-Container-容器-分別使用哪些網路" class="headerlink" title="我的每一個 Container (容器)分別使用哪些網路"></a>我的每一個 Container (容器)分別使用哪些網路</h3><p>要想知道任一個 Container (容器)的詳細資訊，例如：使用哪個網路、環境變數有哪些等等時，可以使用</p>
+<pre><code class="docker">docker inspect &lt;container_id_or_name&gt;
+</code></pre>
+<p><img src="/image/dockerDay6/6_2.png" alt="容器的詳細資訊"></p>
+<p>圖片是擷取有關網路部分的資訊，實際上還有很多其他資訊喔！<br>根據圖片我們可以得知，這個 Container (容器)是使用預設的 Bridge Network (橋接網絡)，另外可以看到更多詳細的 ID 或是 IP 位置等等。</p>
+<h3 id="建立及使用我所建立的網路"><a href="#建立及使用我所建立的網路" class="headerlink" title="建立及使用我所建立的網路"></a>建立及使用我所建立的網路</h3><p>那我的這個容器不想使用預設的 Bridge Network (橋接網絡)，我想要有自己的網路，可以使用</p>
+<h4 id="建立網路"><a href="#建立網路" class="headerlink" title="建立網路"></a>建立網路</h4><pre><code class="docker">docker network create &lt;network_name&gt;
+</code></pre>
+<p><img src="/image/dockerDay6/6_3.png" alt="建立網路"></p>
+<p>當建立成功可以看到一個獨一無二的 SHA 值<br>我們再次使用 <code>docker network ls</code> 查看，可以看到 my-net 已經成功被建立<br><img src="/image/dockerDay6/6_4.png" alt="docker network ls"></p>
+<h4 id="將我的-container-natwork-換成特定-natwork"><a href="#將我的-container-natwork-換成特定-natwork" class="headerlink" title="將我的 container natwork 換成特定 natwork"></a>將我的 container natwork 換成特定 natwork</h4><p>首先先使用 <code>docker ps</code> 看有哪些正在運行的 Container (容器)<br><img src="/image/dockerDay6/6_5.png" alt="docker ps"></p>
+<h5 id="連接-Network（網路）與-Container-容器"><a href="#連接-Network（網路）與-Container-容器" class="headerlink" title="連接 Network（網路）與 Container (容器)"></a>連接 Network（網路）與 Container (容器)</h5><pre><code class="docker">docker network connect &lt;network_name&gt; &lt;container_id_or_name&gt;
+</code></pre>
+<p><img src="/image/dockerDay6/6_6.png" alt="連接 Network 與 Container"><br>這邊執行成功並不會有輸出，所以看到如圖片的空白行是正常的！</p>
+<h5 id="斷開-Network（網路）與-Container-容器-的連接"><a href="#斷開-Network（網路）與-Container-容器-的連接" class="headerlink" title="斷開 Network（網路）與 Container (容器) 的連接"></a>斷開 Network（網路）與 Container (容器) 的連接</h5><pre><code class="docker">docker network disconnect &lt;network_name&gt; &lt;container_id_or_name&gt;
+</code></pre>
+<p><img src="/image/dockerDay6/6_7.png" alt="斷開連接"><br>同上成功並不會有輸出。<br>這時再使用 <code>docker inspect &lt;container_id_or_name&gt;</code> 可以看到這個容器，已經沒有連接 my_net</p>
+<h4 id="移除-Network（網路）"><a href="#移除-Network（網路）" class="headerlink" title="移除 Network（網路）"></a>移除 Network（網路）</h4><pre><code class="docker">docker network rm &lt;network_name&gt;
+</code></pre>
+<p><img src="/image/dockerDay6/6_8.png" alt="移除 Network"></p>
+<p>這時再使用 <code>docker network ls</code> 可以看到已經沒有 my_net 這個網路</p>
+<p>今天了解了 Docker Network(網路) 的基本語法及觀念，明天來繼續深入了解昨天有小提過的 Docker Tag。</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-tags/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - Docker Tags (標籤)不只是標籤</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-container-life-cycle/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 管理 Docker Container(容器) 的生命周期</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 拆解 Dockerfile 的關鍵字(下)-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Dockerfile,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Dockerfile">#Dockerfile</a></li>
+       
+    </ul>
+
+    <h1>Docker - 拆解 Dockerfile 的關鍵字(下)</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-26 20:08:40</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#ENV"><span class="toc-number">1.</span> <span class="toc-text">ENV</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ARG"><span class="toc-number">2.</span> <span class="toc-text">ARG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WORKDIR"><span class="toc-number">3.</span> <span class="toc-text">WORKDIR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#COPY"><span class="toc-number">4.</span> <span class="toc-text">COPY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADD"><span class="toc-number">5.</span> <span class="toc-text">ADD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#VOLUME"><span class="toc-number">6.</span> <span class="toc-text">VOLUME</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#USER"><span class="toc-number">7.</span> <span class="toc-text">USER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ONBUILD"><span class="toc-number">8.</span> <span class="toc-text">ONBUILD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#STOPSIGNAL"><span class="toc-number">9.</span> <span class="toc-text">STOPSIGNAL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HEALTHCHECK"><span class="toc-number">10.</span> <span class="toc-text">HEALTHCHECK</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93interval-x3D-30s"><span class="toc-number">10.1.</span> <span class="toc-text">–interval&#x3D;30s</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93timeout-x3D-10s"><span class="toc-number">10.2.</span> <span class="toc-text">–timeout&#x3D;10s</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93start-period-x3D-90s"><span class="toc-number">10.3.</span> <span class="toc-text">–start-period&#x3D;90s</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93start-interval-x3D-10s"><span class="toc-number">10.4.</span> <span class="toc-text">–start-interval&#x3D;10s</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93retries-x3D-5"><span class="toc-number">10.5.</span> <span class="toc-text">–retries&#x3D;5</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SHELL"><span class="toc-number">11.</span> <span class="toc-text">SHELL</span></a></li></ol>
+    </div>
+     <p>昨天了解上半部的 Dockerfile 關鍵字，今天繼續來把 Dockerfile 的關鍵字學完吧～</p>
+<h3 id="ENV"><a href="#ENV" class="headerlink" title="ENV"></a>ENV</h3><p>在容器內部設定的環境變數</p>
+<pre><code class="docker">ENV DB_HOST=postgresql
+</code></pre>
+<p>設定一個環境變數叫做 <code>DB_HOST</code> ， value 是 <code>postgresql</code></p>
+<h3 id="ARG"><a href="#ARG" class="headerlink" title="ARG"></a>ARG</h3><p>在 Dockerfile 中使用的參數，與 ENV 作用很類似，但是作用域不一樣。<br>ARG 設定的環境變數只有在 Dockerfile 內，及 docker build 的過程中有效，建立成 Image(映像) 內，就沒有這個環境變數 ; 但 ENV 則是容器啟動時，也可以使用的變數。</p>
+<pre><code class="docker">ARG &lt;参数名&gt;[=&lt;默认值&gt;]
+</code></pre>
+<pre><code class="docker">ARG DB_HOST=postgresql
+</code></pre>
+<h3 id="WORKDIR"><a href="#WORKDIR" class="headerlink" title="WORKDIR"></a>WORKDIR</h3><p>是設定這個容器內部現在的資料夾</p>
+<pre><code class="docker">WORKDIR /app
+</code></pre>
+<p>代表 Docker 會在容器裡面建立一個名為 &#x2F;app 的資料夾，且現在就在這個資料夾裡，我自己是把它想像成這個容器的根目錄。</p>
+<h3 id="COPY"><a href="#COPY" class="headerlink" title="COPY"></a>COPY</h3><p>將文件或文件夾複製到 Image(鏡像) 裡</p>
+<pre><code class="docker">COPY app.rb /app
+</code></pre>
+<p>將 app.rb 檔案複製到 app 資料夾裡</p>
+<h3 id="ADD"><a href="#ADD" class="headerlink" title="ADD"></a>ADD</h3><p>也是將文件或文件夾複製到 Image(鏡像) 裡，除了複製外，還支援自動解壓縮檔案、URL 下載和複製上下文的檔案</p>
+<pre><code class="docker">ADD https://example.com/file.gz /app/
+</code></pre>
+<p>自動解壓縮 <code>https://example.com/file.gz</code> 這個檔案，並下載下來到 app 目錄內</p>
+<h3 id="VOLUME"><a href="#VOLUME" class="headerlink" title="VOLUME"></a>VOLUME</h3><p>可以建立一個或多個永久性儲存的資料夾，內容不會隨容器的生命週期結束而消失，裡面的資料可以在容器與容器間共享。<br>📍 但 VOLUME 裡面的資料並不是存在容器裡，是存在主機的文件裡。</p>
+<pre><code class="docker">VOLUME /mydata
+</code></pre>
+<p>建立一個 <code>mydata</code> 資料夾，可以把需要一直存在的資料放進來。</p>
+<p>如果希望容器中的資料在容器停止後仍然存在，就使用 VOLUME 來建立永久性存儲區 ; 而 WORKDIR 只有用於操作容器內部的當前工作目錄，會隨容器的生命週期結束而消失。</p>
+<h3 id="USER"><a href="#USER" class="headerlink" title="USER"></a>USER</h3><p>指定用哪個使用者身分來執行容器中的命令</p>
+<pre><code class="docker">USER &lt;用户名稱或用户 ID&gt;:&lt;群組名稱或群组 ID&gt;
+</code></pre>
+<pre><code class="docker">USER krystal:baby_team
+</code></pre>
+<p>也可以單純指定 user</p>
+<pre><code class="docker">USER krystal
+</code></pre>
+<p>優點是可以限制容器內部使用者，根據身分來有不同權限執行，可以增加容器的安全性。</p>
+<h3 id="ONBUILD"><a href="#ONBUILD" class="headerlink" title="ONBUILD"></a>ONBUILD</h3><blockquote>
+<p>在基礎映像建置時要執行的操作，讓您在建置基礎映像時當時定義了一些操作，然後在後續的鏡像建置中自動執行這些操作。</p>
+</blockquote>
+<p>上面這段解釋老實說我是完全有看沒有懂，直接使用下面範例來說明:</p>
+<p>我們先將這個生成的映像取名為 <code>my-base-image</code></p>
+<pre><code class="docker">FROM ubuntu:latest
+
+ONBUILD ADD install_app /app/
+ONBUILD RUN /app/install_app
+</code></pre>
+<p>ONBUILD 兩句依序的意思是：</p>
+<ol>
+<li>將原本映像的 install_app 複製到新映像的 &#x2F;app&#x2F; 目錄中。</li>
+<li>執行新映像中的 &#x2F;app&#x2F;install_app 。</li>
+</ol>
+<p>但重點是他何時執行？那就是當我要建立另一個新的映像，而這個映像是取自上一個建立的 <code>my-base-image</code> 映像時，我的 Dockerfile 可以直接這樣寫</p>
+<pre><code class="docker">FROM my-base-image
+</code></pre>
+<p>這時我的新映像便會直接執行前面 ONBUILD 的那兩句指令，也就是我不用在這邊在寫一次。<br>優點是可以 <strong>通用邏輯</strong> ; 缺點是會更複雜，導致有非預期的錯誤發生。</p>
+<h3 id="STOPSIGNAL"><a href="#STOPSIGNAL" class="headerlink" title="STOPSIGNAL"></a>STOPSIGNAL</h3><p>如其名，是容器在接收到停止時，需要做的動作</p>
+<pre><code class="docker">STOPSIGNAL SIGTERM
+</code></pre>
+<p>預設是 SIGTERM ，就是單純的停止。</p>
+<pre><code class="docker">STOPSIGNAL 9
+</code></pre>
+<p>9 就是 立即強制停止。</p>
+<h3 id="HEALTHCHECK"><a href="#HEALTHCHECK" class="headerlink" title="HEALTHCHECK"></a>HEALTHCHECK</h3><p>可以在容器內部執行一些自訂的指令或檢查，來檢查容器的健康狀態。</p>
+<pre><code class="docker">HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=5 CMD [ &quot;ruby&quot;, &quot;health_check.rb&quot; ]
+</code></pre>
+<h4 id="–interval-x3D-30s"><a href="#–interval-x3D-30s" class="headerlink" title="–interval&#x3D;30s"></a>–interval&#x3D;30s</h4><p>這表示健康檢查的 <strong>時間間隔</strong> 為 30 秒，也就是每 30 秒健康檢查一次。<br>📍 預設為 30 秒</p>
+<h4 id="–timeout-x3D-10s"><a href="#–timeout-x3D-10s" class="headerlink" title="–timeout&#x3D;10s"></a>–timeout&#x3D;10s</h4><p>如果健康檢查時間超過 10 秒，則為失敗。<br>📍 預設為 30 秒</p>
+<h4 id="–start-period-x3D-90s"><a href="#–start-period-x3D-90s" class="headerlink" title="–start-period&#x3D;90s"></a>–start-period&#x3D;90s</h4><p>通常容器啟動會需要一些時間，但如果我們設定每 30 秒檢查一次，那可能容器都還沒有順利啟動好，就檢查了，就可能造成不正確的檢查結果，所以我們可以透過 <code>--start-period</code> 來設定容器啟動後，健康檢查之前的等待時間。<br>所以上面的意思就是容器啟動後再等 90 秒，再開始健康檢查。<br>📍 預設為 0 秒</p>
+<h4 id="–start-interval-x3D-10s"><a href="#–start-interval-x3D-10s" class="headerlink" title="–start-interval&#x3D;10s"></a>–start-interval&#x3D;10s</h4><p>在容器啟動後的多長時間第一次進行健康檢查。<br>📍 預設為 5 秒</p>
+<h4 id="–retries-x3D-5"><a href="#–retries-x3D-5" class="headerlink" title="–retries&#x3D;5"></a>–retries&#x3D;5</h4><p>表示若是健康檢查為不健康時，會再重試幾次。<br>如範例就是如果在 5 次連續的健康檢查中都失敗了，容器將被標記為不健康。<br>📍 預設為 3 次</p>
+<p>接著會實際執行 <code>ruby health_check.rb</code> 這個檔案的指令來做健康檢查，如果成功，則容器標示為健康。</p>
+<h3 id="SHELL"><a href="#SHELL" class="headerlink" title="SHELL"></a>SHELL</h3><p>在 Dockerfile 中執行命令時使用的預設 shell，通常是用在 Windows 上要基於 Linux 的容器映像時，可以將預設 shell 變為 Bash。</p>
+<pre><code class="docker">SHELL [&quot;/bin/bash&quot;, &quot;-c&quot;]
+</code></pre>
+<p>光是要一一介紹 Dockerfile 的關鍵字，就花了兩天的篇幅呢！但我想若是可以先詳細介紹完這些關鍵字的功用，當我們在撰寫 Dockerfile 時，也比較知道應該怎麼寫，以及我到底在寫什麼，所以明天我們就要來撰寫 Dockerfile 啦，明天見～～～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/write-dockerfile/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 撰寫自己專案的 Dockerfile</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/dockerfile-1/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 拆解 Dockerfile 的關鍵字(上)</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

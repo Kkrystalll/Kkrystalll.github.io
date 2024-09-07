@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>超全建立 LINE 官方帳號流程-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Line,設定,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Line">#Line</a></li>
+      
+      <li><a href="/tags/設定">#設定</a></li>
+       
+    </ul>
+
+    <h1>超全建立 LINE 官方帳號流程</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/LINE/" target="_blank">LINE</a>
+          
+        </div>
+        <p>2024-08-22 20:40:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8E%BB-LINE-%E5%AE%98%E6%96%B9%E5%B8%B3%E8%99%9F%E5%AE%98%E7%B6%B2%E7%99%BB%E5%85%A5%E6%88%96%E8%A8%BB%E5%86%8A%E5%B8%B3%E8%99%9F"><span class="toc-number">1.</span> <span class="toc-text">一、去 LINE 官方帳號官網登入或註冊帳號</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%BB%BA%E7%AB%8B-LINE-%E5%AE%98%E6%96%B9%E5%B8%B3%E8%99%9F"><span class="toc-number">2.</span> <span class="toc-text">二、建立 LINE 官方帳號</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%96%8B%E5%95%9F-Messaging-API-%E6%9C%8D%E5%8B%99"><span class="toc-number">3.</span> <span class="toc-text">三、開啟 Messaging API 服務</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%89%BE%E5%88%B0-LINE-Channel-access-token"><span class="toc-number">4.</span> <span class="toc-text">四、找到 LINE Channel access token</span></a></li></ol>
+    </div>
+     <h2 id="一、去-LINE-官方帳號官網登入或註冊帳號"><a href="#一、去-LINE-官方帳號官網登入或註冊帳號" class="headerlink" title="一、去 LINE 官方帳號官網登入或註冊帳號"></a>一、去 LINE 官方帳號官網登入或註冊帳號</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://tw.linebiz.com/">首頁</a> 點擊右上角 <a target="_blank" rel="noopener" href="https://tw.linebiz.com/account/">免費開設帳號</a></p>
+<p><img src="/image/lineOfficialAccount/1.png" alt="免費開設帳號"></p>
+</li>
+<li><p>在「LINE 官方帳號」區塊點擊 <a target="_blank" rel="noopener" href="https://account.line.biz/login?redirectUri=https://account.line.biz/oauth2/callback?client_id=18&code_challenge=FCA3UR74dteRWFHWN0geBTNxyCrxTnCi_xEMJeiD8As&code_challenge_method=S256&nonce=HF3FUJOrb1ipkC7FV8XckVpcStWHPvJK&path=%25252Flogin%25253Fscope%25253Dphone&redirect_uri=https%253A%252F%252Fentry.line.biz%252Fapi%252Foauth2%252FbizId%252Fcallback&response_type=code&state=kcyhly7MmN7cdr1jUCsZV1ovxDvZmlE8">免費開設帳號</a> 按鈕</p>
+<p><img src="/image/lineOfficialAccount/2.png" alt="免費開設帳號"></p>
+</li>
+<li><p>選擇登入方式</p>
+</li>
+</ol>
+<ul>
+<li><p><strong>使用 LINE 帳號登入</strong>：使用舊有的 LINE 帳號登入</p>
+</li>
+<li><p><strong>使用商用帳號登入</strong>：使用舊有的商用帳號登入</p>
+</li>
+<li><p><strong>建立帳號</strong>：創建新帳號（本文選擇此方式）</p>
+<p><img src="/image/lineOfficialAccount/3.png" alt="建立帳號"></p>
+</li>
+</ul>
+<ol start="4">
+<li><p>選擇建立帳號<br>選擇使用電子郵件帳號註冊，並填入電子郵件<br><img src="/image/lineOfficialAccount/4.png" alt="電子郵件帳號註冊"><br><img src="/image/lineOfficialAccount/5.png" alt="填入電子郵件"></p>
+</li>
+<li><p>去你填入的電子郵件收件夾點擊按鈕或複製連結網址<br><img src="/image/lineOfficialAccount/6.png" alt="驗證"></p>
+</li>
+<li><p>輸入姓名密碼<br><img src="/image/lineOfficialAccount/7.png" alt="輸入姓名密碼"><br><img src="/image/lineOfficialAccount/8.png" alt="確認"></p>
+</li>
+<li><p>完成後可以看到右上角有自己的名字，代表已登入管理頁面</p>
+<p><img src="/image/lineOfficialAccount/9.png" alt="已登入管理頁面"></p>
+</li>
+</ol>
+<h2 id="二、建立-LINE-官方帳號"><a href="#二、建立-LINE-官方帳號" class="headerlink" title="二、建立 LINE 官方帳號"></a>二、建立 LINE 官方帳號</h2><ol>
+<li><p>點擊「建立 LINE 官方帳號」<br><img src="/image/lineOfficialAccount/10.png" alt="建立 LINE 官方帳號"></p>
+</li>
+<li><p>使用此帳號登入<br><img src="/image/lineOfficialAccount/11.png" alt="登入"></p>
+</li>
+<li><p>需先進行簡訊驗證<br><img src="/image/lineOfficialAccount/12.png" alt="簡訊驗證"><br><img src="/image/lineOfficialAccount/13.png" alt="認證"></p>
+</li>
+<li><p>填入帳號資訊<br><img src="/image/lineOfficialAccount/14.png" alt="登入公司店舖資訊"></p>
+</li>
+<li><p>確認輸入內容<br><img src="/image/lineOfficialAccount/15.png" alt="確認輸入內容"></p>
+</li>
+<li><p>申請完成會獲得官方帳號 ID<br><img src="/image/lineOfficialAccount/16.png" alt="官方帳號 ID"></p>
+</li>
+<li><p>點擊回到管理頁面按鈕，會先需要同意政策<br><img src="/image/lineOfficialAccount/17.png" alt="同意政策"></p>
+</li>
+<li><p>可以使用其他帳號掃 QRcode 加入好友，或是搜尋 <code>@042okcst</code>，並回到主頁<br><img src="/image/lineOfficialAccount/18.png" alt="QRcode"><br><img src="/image/lineOfficialAccount/19.png" alt="回到主頁"></p>
+</li>
+<li><p>看到主控台<br><img src="/image/lineOfficialAccount/20.png" alt="官方帳號 ID"></p>
+</li>
+<li><p>加入好友後看到畫面<br><img src="/image/lineOfficialAccount/21.jpg" alt="加入好友"></p>
+</li>
+</ol>
+<p>📍 到這邊為止已經算是完成建立 LINE 官方帳號，後續步驟為後續為了串接 LINE 的第三方 API 所需要做的基本設定。</p>
+<h2 id="三、開啟-Messaging-API-服務"><a href="#三、開啟-Messaging-API-服務" class="headerlink" title="三、開啟 Messaging API 服務"></a>三、開啟 Messaging API 服務</h2><ol>
+<li><p>點選右上角「設定」按鈕<br><img src="/image/lineOfficialAccount/22.png" alt="設定"></p>
+</li>
+<li><p>點選左方 sidebar 「Messaging API」按鈕<br><img src="/image/lineOfficialAccount/23.png" alt="Messaging API"></p>
+</li>
+<li><p>點選「啟用 Messaging API」 按鈕<br><img src="/image/lineOfficialAccount/24.png" alt="啟用 Messaging API"></p>
+</li>
+<li><p>根據步驟填入資訊<br><img src="/image/lineOfficialAccount/25.png" alt="填開發者資訊"><br><img src="/image/lineOfficialAccount/26.png" alt="確認資訊"><br><img src="/image/lineOfficialAccount/27.png" alt="選擇服務"><br><strong>選填可不填直接按確定</strong><br><img src="/image/lineOfficialAccount/28.png" alt="隱私權政策"></p>
+<p><img src="/image/lineOfficialAccount/29.png" alt="啟用服務"></p>
+</li>
+<li><p>啟用完成可以看到自己的 <code>Channel ID</code> 以及 <code>Channel secret</code> ，需記下來<br><img src="/image/lineOfficialAccount/30.png" alt="Channel ID. Channel secret"></p>
+</li>
+</ol>
+<h2 id="四、找到-LINE-Channel-access-token"><a href="#四、找到-LINE-Channel-access-token" class="headerlink" title="四、找到 LINE Channel access token"></a>四、找到 LINE Channel access token</h2><ol>
+<li><p>點擊「LINE Developers」按鈕<br><img src="/image/lineOfficialAccount/31.jpg" alt="LINE Developers"></p>
+</li>
+<li><p>點選右上方「Console」按紐<br><img src="/image/lineOfficialAccount/32.png" alt="Console"></p>
+</li>
+<li><p>選擇剛建立的官方帳號<br><img src="/image/lineOfficialAccount/33.png" alt="選擇官方帳號"></p>
+</li>
+<li><p>點選「Messaging API」按鈕<br><img src="/image/lineOfficialAccount/34.png" alt="Messaging API"></p>
+</li>
+<li><p>可以看到 Channel access token 區塊，點擊「Issue」按鈕<br><img src="/image/lineOfficialAccount/35.png" alt="產生 Channel access token"></p>
+</li>
+<li><p>生成 <code>Channel access token</code> ，需記下來<br><img src="/image/lineOfficialAccount/36.png" alt="Channel access token"></p>
+</li>
+</ol>
+<p>以上為完整建立 LINE 官方帳號，以及為了後續串接 LINE 的第三方 API 所需要做的基本設定，實際辦過發現小流量的官方帳號可以免錢真的好佛啊～</p>
+<p>2024&#x2F;09&#x2F;07 更新：</p>
+<p>LINE 自 2024&#x2F;09&#x2F;03 強制啟用雙重驗證，我使用我先前已經註冊的帳號登入，會被引導到雙重驗證的頁面<br><img src="/image/lineOfficialAccount/37.png" alt="雙重驗證"><br>只需要依照步驟去收驗證碼信，填入驗證碼即可成功驗證並登入!<br><img src="/image/lineOfficialAccount/38.png" alt="驗證碼信"></p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/rails-line-psychological-test/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>使用 Ruby on Rails 串接 LINE 快速構建心理測驗</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/vim-commands/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Vim 基礎常用指令</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

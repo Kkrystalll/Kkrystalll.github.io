@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 認識及安裝 Docker-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,安裝,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/安裝">#安裝</a></li>
+       
+    </ul>
+
+    <h1>Docker - 認識及安裝 Docker</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-16 18:31:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">Docker 是什麼？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-%E6%83%B3%E8%A7%A3%E6%B1%BA%E7%9A%84%E5%95%8F%E9%A1%8C%E5%8F%8A%E7%82%BA%E4%BD%95%E6%88%91%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8-Docker"><span class="toc-number">2.</span> <span class="toc-text">Docker 想解決的問題及為何我需要使用 Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-Docker-Desktop"><span class="toc-number">3.</span> <span class="toc-text">安裝 Docker Desktop</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#On-Mac"><span class="toc-number">3.1.</span> <span class="toc-text">On Mac</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#On-Windows"><span class="toc-number">3.2.</span> <span class="toc-text">On Windows</span></a></li></ol></li></ol>
+    </div>
+     <p>因為工作上剛好需要將專案自動部署，所以接觸了 Docker ，所以就決定用文章來讓大家一起了解為何我需要用 Docker ，以及介紹一些基礎語法。</p>
+<h2 id="Docker-是什麼？"><a href="#Docker-是什麼？" class="headerlink" title="Docker 是什麼？"></a>Docker 是什麼？</h2><p>Docker 是一個開源的容器化平台，他使用 Google 公司推出的 Go 語言實作，用於將應用程式、環境和相依套件打包成 <strong>輕量</strong>、<strong>可移植</strong> 的容器。這些容器可以在任何地方運行，包括開發機器、測試環境和生產伺服器，確保應用程式在不同環境中的一致運行。其中每個容器都有自己的文件、環境變數和空間，但它們共享主機系統的操作核心。容器化的優點是<strong>非常高效</strong>且<strong>佔用資源少</strong>。</p>
+<h2 id="Docker-想解決的問題及為何我需要使用-Docker"><a href="#Docker-想解決的問題及為何我需要使用-Docker" class="headerlink" title="Docker 想解決的問題及為何我需要使用 Docker"></a>Docker 想解決的問題及為何我需要使用 Docker</h2><ol>
+<li><strong>省下安裝時間及記憶體空間</strong>：改善傳統虛擬機器因為需要額外安裝作業系統，導致啟動慢、佔較大記憶體的問題。</li>
+<li><strong>環境一致性</strong>：Docker 可以確保應用在不同環境中的一致運行，從開發到測試到生產環境，減少了由於環境不一致而導致的問題。</li>
+<li><strong>快速部署</strong>：Docker 可以快速地創建、啟動和停止容器，部署過程可以更加快速簡易。</li>
+<li><strong>容器映像管理</strong>：Docker Hub 提供了大量的共用映像 (Image)，讓我們可以直接使用這些映像 (Image)，也可以根據自己的需求自己製作映像 (Image)。</li>
+</ol>
+<p>以我工作上寫 rails 專案為例，所有需要共同開發的人，都至少需要先裝好 ruby 、 rails 、 資料庫(我們使用 PostgreSQL )，但是當今天我將專案包好 Docker ，就算其他人電腦沒有先安裝好以上項目，也可以使用簡單的 <code>docker run</code> 或<code>docker compose up</code> 指令，使用 docker 打開專案，當不需要額外安裝時，絕對是可以省下安裝的時間與記憶體容量，且因為我們是使用同一個 docker 映像 (Image) 來產生容器 (Container)，所以可以確保所有人都在同個環境下運行專案，最後我需要將我的專案部署時，我可以將我 <code>docker build</code> 好的映像 (Image) 推送到遠端倉庫 (Repository) ，並在遠端 <code>docker run</code> 或<code>docker compose up</code> ，在設定好網路等，便可以快速部署。</p>
+<p>在了解 Docker 是什麼之後，就先來將 Docker 安裝在自己本機吧！</p>
+<h2 id="安裝-Docker-Desktop"><a href="#安裝-Docker-Desktop" class="headerlink" title="安裝 Docker Desktop"></a>安裝 Docker Desktop</h2><p>根據<a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/">官方文件</a> Docker Desktop 是一款適用於 Mac、Linux 或 Windows 環境的應用程式，今天就示範以使用 Mac 電腦以及 Windows 安裝 Docker 為例</p>
+<p><img src="/image/dockerDay1/1_1.png" alt="安裝 Docker"></p>
+<p>根據<a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/">官方文件</a>可以看到圖示，點選符合電腦環境的連結</p>
+<h3 id="On-Mac"><a href="#On-Mac" class="headerlink" title="On Mac"></a>On Mac</h3><p>當我們使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/mac-install/">Mac</a> 需要安裝 Docker Desktop 時，首先應該要確認自己的電腦是屬於<code>Intel 晶片</code> 還是 <code>Apple 晶片</code> ，選擇對應的按鈕<br><img src="/image/dockerDay1/1_2.png" alt="Mac 安裝 Docker"><br>若是不確定自己的電腦屬於哪種晶片，只需要</p>
+<ol>
+<li><p>點擊螢幕左上方的 </p>
+</li>
+<li><p>選擇<code>關於這台 Mac</code><br><img src="/image/dockerDay1/1_3.png" alt="關於這台 Mac"></p>
+</li>
+<li><p>即可以看到自己的電腦是哪種晶片<br><img src="/image/dockerDay1/1_4.png" alt="關於這台 Mac 詳細資料"></p>
+</li>
+</ol>
+<p>點擊之後會直接進下載項目，根據指示可以打開 Docker Desktop 登入，但下載好不是全部，還需要啟動 Docker Desktop<br><img src="/image/dockerDay1/1_5.png" alt="啟動 Docker"></p>
+<p>啟動完成即可以看到這台電腦現在的容器 (Container) 列表、映像 (Image) 列表、控制台、網路等等圖形化介面。<br><img src="/image/dockerDay1/1_6.png" alt="Docker 圖形化介面"></p>
+<p>上圖是我的容器 (Container) 列表，可以看到我現在有一個容器目前是 Exited （執行完畢並退出）的狀態，當然各位剛下載的話就會是空的。</p>
+<h3 id="On-Windows"><a href="#On-Windows" class="headerlink" title="On Windows"></a>On Windows</h3><p>若是使用 Windows 就更簡單一點，不需要檢查電腦是哪個晶片，可以直接一鍵下載<br><img src="/image/dockerDay1/1_7.png" alt="Windows 安裝 Docker"></p>
+<p>點選下載後可以以看右上角已經有下載中的標示<br><img src="/image/dockerDay1/1_8.png" alt="Windows 下載"></p>
+<p>接著打開電腦的下載檔案夾，可以看到 Docker Desktop，直接雙擊滑鼠安裝<br><img src="/image/dockerDay1/1_9.png" alt="下載檔案夾"></p>
+<p>根據指示點選<br><img src="/image/dockerDay1/1_10.png" alt="根據指示點選"></p>
+<p>會看到正在安裝的進度<br><img src="/image/dockerDay1/1_11.png" alt="正在安裝的進度"></p>
+<p>當安裝好時會需要將電腦重開機，直接點擊 <code>close and restart</code> 按鈕<br><img src="/image/dockerDay1/1_12.png" alt="restart Docker"></p>
+<p>待電腦重開機完成，我們點選 Docker Desktop ，打開就可以按照指示註冊登入了<br><img src="/image/dockerDay1/1_13.png" alt="註冊登入 Docker"></p>
+<p>到這邊為止是兩種電腦的安裝方式，接著明天我們要教大家第一次執行 Docker ，也就是學習程式的起手式 Hello World ，但在執行之前我們需要先了解使用 Docker 時，絕對必須知道的 Docker 三寶！</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/hello-world-docker/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 你好世界 Hello World</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/ruby-case-when/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Ruby - 到底 if...else 好？還是 case...when 好？</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

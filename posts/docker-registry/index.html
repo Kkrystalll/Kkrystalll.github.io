@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - Docker Registry (註冊表) 是倉庫的倉庫-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,registry,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/registry">#registry</a></li>
+       
+    </ul>
+
+    <h1>Docker - Docker Registry (註冊表) 是倉庫的倉庫</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-23 21:16:30</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%A4%87%E7%BF%92-Docker-Repository%EF%BC%88%E5%84%B2%E5%AD%98%E5%BA%AB%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">先複習 Docker Repository（儲存庫）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%A3-Docker-Registry-%E8%A8%BB%E5%86%8A%E8%A1%A8-%E5%80%89%E5%BA%AB%E7%9A%84%E5%80%89%E5%BA%AB%E5%8F%88%E6%98%AF%E5%95%A5%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">那 Docker Registry (註冊表) 倉庫的倉庫又是啥？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Hub-%E6%98%AF-Docker-Registry-%E8%A8%BB%E5%86%8A%E8%A1%A8-%EF%BC%8C%E4%B9%9F%E6%98%AF-Docker-Repository%EF%BC%88%E5%84%B2%E5%AD%98%E5%BA%AB%EF%BC%89%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">Docker Hub 是 Docker Registry (註冊表)，也是 Docker Repository（儲存庫）？</span></a></li></ol>
+    </div>
+     <p>在前面介紹 docker 三寶時，有介紹到 Docker Repository（儲存庫），可以把它想像成存放 Docker Image(映像) 的倉庫，那今天要介紹的 Docker Registry (註冊表) 就可以把它想像成倉庫的倉庫，那究竟倉庫的倉庫是什麼意思呢？</p>
+<h2 id="先複習-Docker-Repository（儲存庫）"><a href="#先複習-Docker-Repository（儲存庫）" class="headerlink" title="先複習 Docker Repository（儲存庫）"></a>先複習 Docker Repository（儲存庫）</h2><p>我們可以把多個不同版本和標籤的 Docker Image(映像)，放在 Docker Repository（儲存庫）這個倉庫保存著，每個 Docker 倉庫都只能有一個名稱，但可能有一個或多個 Tag (標籤) ，用來辨別 Image(映像) ，這也就是為什麼我們前一章使用 <code>docker images</code> 指令時，出現的是這些資訊</p>
+<p><img src="/image/dockerDay8/8_1.png" alt="Docker Repository"></p>
+<p>所以像是 <code>myapp</code> 以及 <code>ruby</code> 都是不同 Docker Repository（儲存庫），但是 <code>myapp</code> 這個 Docker Repository（儲存庫）可以有如 <code>latest</code> 與 <code>v1</code> 一個或多個 Tag (標籤)，所以我們可以用 <code>myapp:v1</code> 來辨別要找哪個 Image(映像)。</p>
+<h2 id="那-Docker-Registry-註冊表-倉庫的倉庫又是啥？"><a href="#那-Docker-Registry-註冊表-倉庫的倉庫又是啥？" class="headerlink" title="那 Docker Registry (註冊表) 倉庫的倉庫又是啥？"></a>那 Docker Registry (註冊表) 倉庫的倉庫又是啥？</h2><p>直接講結論就是，一個 Docker Registry (註冊表)可以包含多個 Docker Repository（儲存庫），每個 Docker Repository（儲存庫）可以包含多個不同版本的 Docker Image(映像) 。</p>
+<h2 id="Docker-Hub-是-Docker-Registry-註冊表-，也是-Docker-Repository（儲存庫）？"><a href="#Docker-Hub-是-Docker-Registry-註冊表-，也是-Docker-Repository（儲存庫）？" class="headerlink" title="Docker Hub 是 Docker Registry (註冊表)，也是 Docker Repository（儲存庫）？"></a>Docker Hub 是 Docker Registry (註冊表)，也是 Docker Repository（儲存庫）？</h2><p>我鑽牛角尖的個性又出來了，前面明明說 Docker Hub 是 Docker Repository（儲存庫）的一種公開官方平台，現在為什麼說既是 Registry (註冊表)又是 Repository（儲存庫）？搞得我好亂啊！<br>舉個例子來說：<br>Docker Hub 是一個公共的 Docker Registry (註冊表) ，而在 Docker Hub 裡面，可以有很多個的 Docker Repository（儲存庫），例如我們前面範例用到的 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">ruby</a> 是其中一個 Docker Repository（儲存庫），這個 Docker Repository（儲存庫）可能包含與 Ruby 相關的多個不同版本的 Docker Image(映像) ，如上面的：3.2.2, latest 等等版本。我們可以使用 docker pull 命令來下載這些 Image(映像)，並使用它。</p>
+<p>在這篇文我們清楚了解到 Docker Registry (註冊表) ，是一個中央存儲和分發 Docker Image(映像) 的服務，那明天我們繼續了解，出鏡率極高的 Docker Image(映像) 吧。</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-image/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - Docker Image(映像) 用模型烤出一個個一樣的雞蛋糕</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-tags/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - Docker Tags (標籤)不只是標籤</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

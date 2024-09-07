@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - Docker Container (容器) 的特點-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,container,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/container">#container</a></li>
+       
+    </ul>
+
+    <h1>Docker - Docker Container (容器) 的特點</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-19 00:31:03</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Container-%E5%AE%B9%E5%99%A8-%E7%9A%84%E7%89%B9%E9%BB%9E"><span class="toc-number">1.</span> <span class="toc-text">Docker Container(容器)的特點</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%94%E9%9B%A2%E6%80%A7%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">隔離性：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BC%95%E9%87%8F%E7%B4%9A%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">輕量級：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E7%A7%BB%E6%A4%8D%E6%80%A7%EF%BC%9A"><span class="toc-number">1.3.</span> <span class="toc-text">可移植性：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E9%83%A8%E7%BD%B2%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">快速部署：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%94%9F%E6%85%8B%E7%B3%BB%E7%B5%B1%EF%BC%9A"><span class="toc-number">1.5.</span> <span class="toc-text">容器生態系統：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A"><span class="toc-number">1.6.</span> <span class="toc-text">版本控制：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E5%85%B1%E4%BA%AB%EF%BC%9A"><span class="toc-number">1.7.</span> <span class="toc-text">容器共享：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E7%BA%8C%E6%95%B4%E5%90%88%E8%88%87%E6%8C%81%E7%BA%8C%E4%BA%A4%E4%BB%98%EF%BC%88CI-x2F-CD%EF%BC%89%EF%BC%9A"><span class="toc-number">1.8.</span> <span class="toc-text">持續整合與持續交付（CI&#x2F;CD）：</span></a></li></ol></li></ol>
+    </div>
+     <p>在我們使用 Docker Container(容器)時，一定要先知道他到底好在哪裡？解決了哪些問題？</p>
+<blockquote>
+<p>Docker Container(容器)是是一種輕量級、可移植的執行環境，能夠確保在不同的環境中具有一致的執行行為。</p>
+</blockquote>
+<p><del>但如果講這樣大家都了解那我文章也不用寫了，謝謝明天見</del></p>
+<h2 id="Docker-Container-容器-的特點"><a href="#Docker-Container-容器-的特點" class="headerlink" title="Docker Container(容器)的特點"></a>Docker Container(容器)的特點</h2><h3 id="隔離性："><a href="#隔離性：" class="headerlink" title="隔離性："></a>隔離性：</h3><p>Docker Container(容器)確保容器與容器之間幾乎不互相影響，所以不同 Container(容器)能夠在同一主機上一起執行，而互不干擾。</p>
+<h3 id="輕量級："><a href="#輕量級：" class="headerlink" title="輕量級："></a>輕量級：</h3><p>在以前我們需要開傳統虛擬機器（VM），一台傳統虛擬機器（VM）包含作業系統、虛擬機器管理程式、應用程式和服務，也就是說每個虛擬機器都要包含完整的作業系統，這會導致虛擬機器的體積很大。<br>使用 Docker Container(容器)比傳統機器輕量很多，因為 Docker Container(容器)是共享主機網路的核心和系統庫，代表說 Container(容器)不需要包含完整的網絡，只需包含應用程式、依賴項和必需的庫等等，也因為輕量所以容器的啟動和停止速度極快。</p>
+<h3 id="可移植性："><a href="#可移植性：" class="headerlink" title="可移植性："></a>可移植性：</h3><p>Docker Container(容器)封裝了應用程式、環境變數等所有需要的元素，為了確保應用程式在不同的環境中有相同的執行結果。所以我們可以將容器部署到任何支援 Docker 的主機上，而不用擔心版本或環境不同的問題。</p>
+<h3 id="快速部署："><a href="#快速部署：" class="headerlink" title="快速部署："></a>快速部署：</h3><p>由於容器具有輕量級和可移植性的優勢，所以可以更快速的部署。</p>
+<h3 id="容器生態系統："><a href="#容器生態系統：" class="headerlink" title="容器生態系統："></a>容器生態系統：</h3><p>Docker 提供了一系列工具和服務，可以輕鬆地管理、監控和編排容器們。例如，Docker Compose 可以用於定義和執行多個容器。</p>
+<h3 id="版本控制："><a href="#版本控制：" class="headerlink" title="版本控制："></a>版本控制：</h3><p>Docker 可讓您為容器 Image(映像) 建立不同的版本，並為每個版本指派 Tags(標籤)。這使得當專案版本需要升級時，在開發、測試和生產環境之間我們可以使用不同的 Tags(標籤) 輕鬆切換不同版本。（這個部分我們講到 Docker Tags(標籤)會詳細介紹）</p>
+<h3 id="容器共享："><a href="#容器共享：" class="headerlink" title="容器共享："></a>容器共享：</h3><p>Docker Container(容器)可以輕鬆共享，使得開發人員和團隊可以共同使用相同容器來開發和測試應用程式，使團體協作會更佳便利。</p>
+<h3 id="持續整合與持續交付（CI-x2F-CD）："><a href="#持續整合與持續交付（CI-x2F-CD）：" class="headerlink" title="持續整合與持續交付（CI&#x2F;CD）："></a>持續整合與持續交付（CI&#x2F;CD）：</h3><p>Docker Container(容器)可自動化建置、測試和部署流程，讓部屬變得簡單且自動化，我們可以設定自動將 GitHub 上專案的 main 分支，若有新的進度就自動部署，如此一來可以節省許多部署的時間。</p>
+<p>總結，Docker 容器是一個方便、輕量級且可移植的運行環境，能夠有效地隔離和管理應用城市及其相依性。通過 Docker，開發人員能夠更快速地部署，並提高了開發和維護的效率。</p>
+<p>今天了解了 Docker Container(容器)的特性，那明天我們就要實際來打打指令，看看如何啟動、開始、停止、刪除 Docker Container(容器)，那明天見～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-container-life-cycle/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 管理 Docker Container(容器) 的生命周期</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-basic-instructions/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 基本指令</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>從原理到精通的 React 全攻略課程-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="心得,課程,React,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/心得">#心得</a></li>
+      
+      <li><a href="/tags/課程">#課程</a></li>
+      
+      <li><a href="/tags/React">#React</a></li>
+       
+    </ul>
+
+    <h1>從原理到精通的 React 全攻略課程</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/課程心得/" target="_blank">課程心得</a>
+          
+        </div>
+        <p>2023-02-19 18:58:45</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%83%E5%8A%A0-React-%E5%AE%8C%E5%85%A8%E9%80%B2%E9%9A%8E%E6%94%BB%E7%95%A5-%E5%8B%95%E6%A9%9F"><span class="toc-number">1.</span> <span class="toc-text">參加 React 完全進階攻略 動機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AA%B2%E7%A8%8B%E5%85%A7%E5%AE%B9%E8%B2%BC%E5%92%8C%E6%A5%AD%E7%95%8C"><span class="toc-number">2.</span> <span class="toc-text">課程內容貼和業界</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%8E%E6%A8%A3%E7%9A%84%E4%BA%BA%E9%81%A9%E5%90%88%E9%80%99%E9%96%80%E8%AA%B2%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">怎樣的人適合這門課程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#React-%E5%AE%8C%E5%85%A8%E9%80%B2%E9%9A%8E%E6%94%BB%E7%95%A5-%E8%AA%B2%E7%A8%8B%E6%9C%80%E8%AE%93%E6%88%91%E8%A6%BA%E5%BE%97%E7%89%A9%E8%B6%85%E6%89%80%E5%80%BC%E7%9A%84%E6%98%AF"><span class="toc-number">4.</span> <span class="toc-text">React 完全進階攻略 課程最讓我覺得物超所值的是</span></a></li></ol>
+    </div>
+     <h2 id="參加-React-完全進階攻略-動機"><a href="#參加-React-完全進階攻略-動機" class="headerlink" title="參加 React 完全進階攻略 動機"></a>參加 React 完全進階攻略 動機</h2><p>在五倍參加完 ASTRO camp 幸運的很快速找到工作，但第一份工作居然是要寫 React ？！因為看到五倍也有開設 <strong>React 完全進階攻略</strong> 課程，加上在 ASTRO camp 其間有上過一堂奶綠老師的基礎 React 課程，喜歡老師在課堂中會穿插一點笑話，讓整體課程不會過於沉悶的教學風格，於是乎我又再度回到五倍的懷抱，利用假日來上奶綠老師的 <strong>React 完全進階攻略</strong> 課程，如此一來我就可以平日上班實作 React 專案，假日跟著老師了解 React 原理，以及學習怎樣叫做漂亮的 Pure Function 。</p>
+<h2 id="課程內容貼和業界"><a href="#課程內容貼和業界" class="headerlink" title="課程內容貼和業界"></a>課程內容貼和業界</h2><p>雖然課程名稱是 <strong>React 完全進階攻略</strong> 但老師上課會由淺入深的帶入，從 Components 如何撰寫，到 Testing Library 測試，所以相信跟我一樣對於 JavaScript 有基礎，但對 React 幾乎是零基礎的人，也可以跟得上進度，加上我自認自己滿幸運的，一起上課的學生們大部分都跟我一樣工作上有運用到 React ，除了老師上課舉例是業界工作上實際會遇到的雷外，同學們也會提問自己專案上遇到的問題，讓這堂課幾乎可以說是完全貼合現在業界的需求。</p>
+<h2 id="怎樣的人適合這門課程"><a href="#怎樣的人適合這門課程" class="headerlink" title="怎樣的人適合這門課程"></a>怎樣的人適合這門課程</h2><p>在工作與學習並行的情況下，我每週學習到新的或是更好的寫法時，都可以立即運用在專案上，抑或是遇到一些困難點，也可以跟老師討論一下大方向，非常慶幸自己在剛上工即報名課程，大大縮短了我上工時的陣痛期。我覺得這門課程除了適合對 React 有興趣的人外，更適合目前工作上也會用到 React 的人，可以在課程中發現自己寫 code 的盲點，或是了解更好的做法。</p>
+<p>以我自己為例：像是簡單的 Modal 開關，在上課前的我絕對是利用 <code>useState</code> 控制開合，再在最外層 <code>useEffect</code> 時打 API 資料，內層需要資料時再一層一層將 props 傳入，實際上這個做法會導致傳入一堆 props ，讓自己距離 Pure Function 更加遙遠（因為層層互相影響），且平行層級的 <code>Components</code> 用此方法非常難拿到資料；但在上課後，學到了 <code>useContext</code> 、 <code>useReducer</code> 等更進階的用法原理時，我就像是打通任度二脈，可以節省很多參數傳來傳去的弊端!</p>
+<p>在學會更進階的用法後，就變成如下的範例，如此一來程式碼可讀性提高，且光看英文大概都可以知道是在控制不同 Modal 開關！</p>
+<pre><code class="react">import &#123; BuyListContext &#125; from &quot;components/buyer/list&quot;
+
+&lt;BuyListContext.Provider value=&#123;&#123; state, dispatch &#125;&#125;&gt; // 在最外層的元件包 BuyListContext.Provider 可以使內層的元件在不用傳 props 的狀況下拿到 value
+    // 元件內容...
+&lt;/BuyListContext.Provider&gt;
+</code></pre>
+<pre><code class="react">import &#123; useContext &#125; from &quot;react&quot;
+import &#123; Modal &#125; from &quot;components/shared&quot; // 客制 modal 元件
+import &#123; SubmitButton &#125; from &quot;components/shared&quot; // 客制 SubmitButton 元件
+import &#123; BuyListContext &#125; from &quot;components/buyer/list&quot;
+
+const CancelHintModal = (&#123; open &#125;) =&gt; &#123;   // 用 open 傳入 modal 開合的布林值
+  const &#123; dispatch &#125; = useContext(BuyListContext)
+
+  const handleBackOrderDetial = () =&gt; &#123;
+    dispatch(&#123; type: &quot;CANCEL_HINT_MODAL_SWITCH&quot;, payload: false &#125;)
+    dispatch(&#123; type: &quot;ORDER_DETAIL_MODAL_SWITCH&quot;, payload: true &#125;)
+  &#125;
+
+  const handleToCancelReason = () =&gt; &#123;
+    dispatch(&#123; type: &quot;CANCEL_REASON_MODAL_SWITCH&quot;, payload: true &#125;)
+    dispatch(&#123; type: &quot;CANCEL_HINT_MODAL_SWITCH&quot;, payload: false &#125;)
+  &#125;
+
+  return (
+    &lt;Modal open=&#123;open&#125; showIcon=&#123;false&#125;&gt;
+      &lt;h3&gt;取消訂單提醒&lt;/h3&gt;
+      &lt;p&gt;為保障買賣雙方的權利，若商品為已發貨，將不能取消訂單。&lt;/p&gt;
+      &lt;div&gt;
+        &lt;SubmitButton value=&quot;取消&quot; isHollow=&#123;true&#125; atClick=&#123;handleBackOrderDetial&#125; /&gt; // 若點下取消，則關閉此 modal ; 且開啟訂單詳細資訊 modal
+        &lt;SubmitButton value=&quot;繼續&quot; atClick=&#123;handleToCancelReason&#125; /&gt; // 若點下繼續，則開啟取消原因 modal ; 且關閉此 modal
+      &lt;/div&gt;
+    &lt;/Modal&gt;
+  )
+&#125;
+</code></pre>
+<h2 id="React-完全進階攻略-課程最讓我覺得物超所值的是"><a href="#React-完全進階攻略-課程最讓我覺得物超所值的是" class="headerlink" title="React 完全進階攻略 課程最讓我覺得物超所值的是"></a>React 完全進階攻略 課程最讓我覺得物超所值的是</h2><p>因為奶綠老師本職就是業界的資深工程師，除了上述說到老師會舉實際上工作會遇到的雷外，更會介紹很多實際 React 專案會用到的套件或是小工具，讓我們可以更快上手。但撇除以上幾點，我自己最喜歡這堂課的最關鍵點是，每堂課都會有個回家作業，當交作業後，老師會親自幫你 code review ，畢竟要寫得出功能或許不難，但要寫出好的 code ，對現階段的我來說還是非常不足的，而參加 <strong>React 完全進階攻略</strong> 除了可以學到 React 的運用及原理，附加價值更是可以獲得業界資深工程師親自 code rewiew，對我這個小菜雞來說已經太超值！以上參加課程的心得希望可以幫助到，對 React 有興趣，或是正在猶豫的大家～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/ruby-case-when/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Ruby - 到底 if...else 好？還是 case...when 好？</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/astrocamp-experience/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>誤打誤撞的文組生，成功轉職從未想過的網頁工程師</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 撰寫自己專案的 Dockerfile-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Dockerfile,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Dockerfile">#Dockerfile</a></li>
+       
+    </ul>
+
+    <h1>Docker - 撰寫自己專案的 Dockerfile</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+        </div>
+        <p>2023-09-27 18:58:33</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%A2%9E-Dockerfile-%E6%AA%94%E6%A1%88"><span class="toc-number">1.</span> <span class="toc-text">新增 Dockerfile 檔案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D%E5%B0%88%E6%A1%88%E7%89%88%E6%9C%AC"><span class="toc-number">2.</span> <span class="toc-text">確認專案版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%BE%E5%B0%8B%E9%81%A9%E5%90%88%E7%9A%84%E5%9F%BA%E7%A4%8E%E9%8F%A1%E5%83%8F%E7%89%88%E6%9C%AC"><span class="toc-number">3.</span> <span class="toc-text">找尋適合的基礎鏡像版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%AB%E5%80%8B-LABEL-%E8%AE%93%E5%85%B6%E4%BB%96%E4%BA%BA%E6%9B%B4%E5%AE%B9%E6%98%93%E7%90%86%E8%A7%A3%E9%80%99%E5%80%8B%E6%98%A0%E5%83%8F"><span class="toc-number">4.</span> <span class="toc-text">寫個 LABEL 讓其他人更容易理解這個映像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-RUN-%E4%BE%86%E5%AE%89%E8%A3%9D%E7%9B%B8%E4%BE%9D%E7%9A%84%E8%BB%9F%E9%AB%94%E5%A5%97%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">使用 RUN 來安裝相依的軟體套件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-WORKDIR-%E5%BB%BA%E7%AB%8B%E5%AE%B9%E5%99%A8%E7%9A%84%E8%B3%87%E6%96%99%E5%A4%BE"><span class="toc-number">6.</span> <span class="toc-text">使用 WORKDIR 建立容器的資料夾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-COPY-%E4%BE%86%E8%A4%87%E8%A3%BD%E9%9C%80%E8%A6%81%E7%9A%84-Gemfile"><span class="toc-number">7.</span> <span class="toc-text">使用 COPY 來複製需要的 Gemfile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-RUN-%E5%9F%B7%E8%A1%8C-bundle-install-%EF%BC%8C%E5%AE%89%E8%A3%9D%E6%89%80%E9%9C%80%E7%9A%84-Gem"><span class="toc-number">8.</span> <span class="toc-text">使用 RUN 執行 bundle install ，安裝所需的 Gem</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%87%E5%B0%88%E6%A1%88%E4%B8%AD%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6-COPY-%E5%88%B0-Docker-%E5%AE%B9%E5%99%A8%E4%B8%AD"><span class="toc-number">9.</span> <span class="toc-text">將專案中的所有文件 COPY 到 Docker 容器中</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-EXPOSE-%E5%91%8A%E8%A8%B4-Docker-%E7%9B%A3%E8%81%BD%E7%9A%84-port"><span class="toc-number">10.</span> <span class="toc-text">使用 EXPOSE 告訴 Docker 監聽的 port</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-CMD-%E5%81%9A%E5%80%8B%E6%94%B6%E5%B0%BE%EF%BC%8C%E8%A8%AD%E5%AE%9A%E5%AE%B9%E5%99%A8%E5%95%9F%E5%8B%95%E6%99%82%E8%A6%81%E5%9F%B7%E8%A1%8C%E7%9A%84%E9%A0%90%E8%A8%AD%E5%91%BD%E4%BB%A4"><span class="toc-number">11.</span> <span class="toc-text">用 CMD 做個收尾，設定容器啟動時要執行的預設命令</span></a></li></ol>
+    </div>
+     <p>前兩天我們了解了 Dockerfile 所有的關鍵字，就是為了今天我們實際寫的時候可以有些概念，會比較好上手一點點。<br>不確定大家手邊是否都有專案，所以我這邊有準備一個示範的 rails 專案，有需要的人可以從 <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll/rails-docker">這邊</a> 將專案給 clone 下來，在預設的 main 分支就可以一步一步跟著做了。</p>
+<h2 id="新增-Dockerfile-檔案"><a href="#新增-Dockerfile-檔案" class="headerlink" title="新增 Dockerfile 檔案"></a>新增 Dockerfile 檔案</h2><p>順利打開專案後（以下範例我都是使用 Visual Studio Code 這個編輯器），首先我們需要先在專案的<strong>根目錄</strong>新增一個名為 <strong><code>Dockerfile</code></strong> 的檔案</p>
+<p><img src="/image/dockerDay12/12_1.png" alt="新增 Dockerfile"></p>
+<p>📍Dockerfile 是在 Docker 中預設的 Docker 映像建置檔的預設名字，若你想要取自己想要的名字也可以，但就是在建置 image 的時候，需要說明清楚用哪個文件來建置</p>
+<pre><code class="docker">docker build -f MyDockerfile .
+</code></pre>
+<p>上面 <code>-f</code> 是 <code>file</code> 的縮寫，正常取名為 <code>Dockerfile</code> 就不用特別寫，但如果需要自定義名稱時，如： <code>MyDockerfile</code>，那就要在建置 image 時，使用 -f 標清楚</p>
+<p>另外前幾天也有提到，我們預設是將 Dockerfile 放在根目錄，但如果我希望把 Dockerfile 放在專案路徑 docker&#x2F;Dockerfile 時，就一樣需要使用 <code>-f</code> 標明清楚</p>
+<pre><code class="docker">docker build -f docker/Dockerfile .
+</code></pre>
+<h2 id="確認專案版本"><a href="#確認專案版本" class="headerlink" title="確認專案版本"></a>確認專案版本</h2><p>那我們這邊一樣根據預設在根目錄建立一個 Dockerfile 檔案就好，接著我們要來寫 <code>FROM</code> ，所以首先要先來選擇這個專案的基礎鏡像版本，首先先確認一下這個專案使用的 ruby 版本</p>
+<ol>
+<li>我可以在 Visual Studio Code 的終端機上使用以下語法，來查看專案的 ruby 版本</li>
+</ol>
+<pre><code class="ruby">ruby -v
+</code></pre>
+<p><img src="/image/dockerDay12/12_2.png" alt="查看專案的 ruby 版本"></p>
+<ol start="2">
+<li>若是 clone 的專案，那可以參考那個專案的 <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll/rails-docker/tree/docker">README.md</a> ，正常都會在專案寫下使用的版本</li>
+</ol>
+<p><img src="/image/dockerDay12/12_3.png" alt="查看專案的 ruby 版本"></p>
+<ol start="3">
+<li>或是可以在專案裡找版本或配置的檔案，在 rails 專案就可以看 Gemfile 檔案</li>
+</ol>
+<p><img src="/image/dockerDay12/12_4.png" alt="查看專案的 ruby 版本"></p>
+<h2 id="找尋適合的基礎鏡像版本"><a href="#找尋適合的基礎鏡像版本" class="headerlink" title="找尋適合的基礎鏡像版本"></a>找尋適合的基礎鏡像版本</h2><p>上面這麼多種方法我們都可以得知是使用 <code>ruby 3.2.2</code> ，那這時我們就要去 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">Docker Hub ruby</a> 來找尋是否有符合的 image</p>
+<p><img src="/image/dockerDay12/12_5.png" alt="Docker Hub ruby"></p>
+<p>看到後我又暈了，這麼多不同的 tag 都是 3.2.2 我到底要選用哪一個＠＠</p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">Docker Hub ruby</a> 往下滑，有介紹不同 Variants 的差別是什麼可以幫助大家選擇</p>
+<p><img src="/image/dockerDay12/12_6.png" alt="不同 Variants 的差別是什麼"></p>
+<blockquote>
+<p>This is the defacto image. If you are unsure about what your needs are, you probably want to use this one. It is designed to be used both as a throw away container (mount your source code and start the container to start your app), as well as the base to build other images off of.<br>根據 <code>ruby:&lt;version&gt;</code> 上面的說明，「如果你不確定自己的需求是什麼，你可能想使用這個」，沒錯我自己也是覺得當不知道要選擇哪個時，選擇一個最標準的 image 準沒錯，所以我在剛剛眾多的 tags 找到了我的超人！<br><img src="/image/dockerDay12/12_7.png" alt="ruby:&lt;version&gt;"></p>
+</blockquote>
+<p>選好之後我們可以撰寫 Dockerfile 第一行</p>
+<pre><code class="docker">FROM ruby:3.2.2
+</code></pre>
+<p>📍 特別說明上面這種版本通常是那種豪華大禮包，也就是包山包海全都有的意思，但有時候實際上我們並不需要這麼多東西，所以這時可以考慮 <code>ruby:&lt;version&gt;-alpine</code> ，Alpine Linux 比基礎鏡像小得多，因此可以讓鏡像更精簡，所以我更加推薦以下用法。</p>
+<pre><code class="docker">FROM ruby:3.2.2-alpine
+</code></pre>
+<h2 id="寫個-LABEL-讓其他人更容易理解這個映像"><a href="#寫個-LABEL-讓其他人更容易理解這個映像" class="headerlink" title="寫個 LABEL 讓其他人更容易理解這個映像"></a>寫個 LABEL 讓其他人更容易理解這個映像</h2><pre><code class="docker">LABEL maintainer=&quot;Krystal &lt;krystal@5xcampus.com&gt;&quot;
+</code></pre>
+<p>寫個 LABEL maintainer 讓使用的人知道這個 Dockerfile 的維護者或負責人是誰（<del>這個 Dockerfile 我罩的 🤣</del>）<br>但這個部分寫不寫就見仁見智，並非必要。</p>
+<h2 id="使用-RUN-來安裝相依的軟體套件"><a href="#使用-RUN-來安裝相依的軟體套件" class="headerlink" title="使用 RUN 來安裝相依的軟體套件"></a>使用 RUN 來安裝相依的軟體套件</h2><p>前面兩個指令我都覺得有跡可循，或是都還在我嘗試理解的範圍內，到這邊我就覺得要開啟第三隻眼開始通靈了＠＠，真的不知道要裝些什麼誒 🫥，所以我就參考 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">Docker Hub ruby</a> 下面寫的範例 Dockerfile</p>
+<pre><code class="docker">RUN bundle config --global frozen 1
+</code></pre>
+<p>這邊我丟了 ChatGPT 解釋一下這句話的意思，大概意思如下：</p>
+<blockquote>
+<p>在這個專案中，Gemfile.lock 檔案的內容將保持不變，不會在執行 bundle install 時自動更新。</p>
+</blockquote>
+<p>這邊我們就先將上面那句留著，先繼續寫下去（<del>反正執行的時候碰到一對錯誤才會慢慢建置成對的樣子</del>）</p>
+<h2 id="使用-WORKDIR-建立容器的資料夾"><a href="#使用-WORKDIR-建立容器的資料夾" class="headerlink" title="使用 WORKDIR 建立容器的資料夾"></a>使用 WORKDIR 建立容器的資料夾</h2><p>我就直接將資料夾取名為 app ，那未來我們進到容器內就等於直接進到這個 app 資料夾裡</p>
+<pre><code class="docker">WORKDIR /app
+</code></pre>
+<h2 id="使用-COPY-來複製需要的-Gemfile"><a href="#使用-COPY-來複製需要的-Gemfile" class="headerlink" title="使用 COPY 來複製需要的 Gemfile"></a>使用 COPY 來複製需要的 Gemfile</h2><pre><code class="docker">COPY Gemfile Gemfile.lock ./
+</code></pre>
+<p>將 Gemfile 和 Gemfile.lock 檔案複製到 Docker 映像中的目前工作目錄(app)，以便在後續的步驟中執行 bundle install 命令，安裝所需的 Gem 。<br>上述也等於：</p>
+<pre><code class="docker">COPY Gemfile Gemfile.lock .
+</code></pre>
+<p>也可以寫成：</p>
+<pre><code class="docker">COPY Gemfile* .
+</code></pre>
+<p>就是將所有 Gemfile 開頭的檔案，複製到當前工作目錄(app)，我自己是偏好最後一個寫法（<del>因為我懶 🤣</del>）</p>
+<h2 id="使用-RUN-執行-bundle-install-，安裝所需的-Gem"><a href="#使用-RUN-執行-bundle-install-，安裝所需的-Gem" class="headerlink" title="使用 RUN 執行 bundle install ，安裝所需的 Gem"></a>使用 RUN 執行 bundle install ，安裝所需的 Gem</h2><pre><code class="docker">RUN bundle install
+</code></pre>
+<p>之所以需要在這邊 bundle install ，是為了在 Docker 映像中的安裝 Ruby 應用程式的相依 gem 套件。主要是因為 Docker 映像是一個獨立的運作環境，所以我們要將應用程式及其依賴項放在一起備份，以確保應用在不同的環境中運行程式時具有相同的效果。</p>
+<h2 id="將專案中的所有文件-COPY-到-Docker-容器中"><a href="#將專案中的所有文件-COPY-到-Docker-容器中" class="headerlink" title="將專案中的所有文件 COPY 到 Docker 容器中"></a>將專案中的所有文件 COPY 到 Docker 容器中</h2><pre><code class="docker">COPY . .
+</code></pre>
+<p>第一個 <code>.</code> 是<strong>專案的目錄</strong>，也就是我們在 Visual Studio Code 看到的那些檔案，第二個 <code>.</code> 是 Docker <strong>容器中的當前目錄</strong>（一起來 <strong>想像</strong> 有一個 app 檔案夾是當前目錄，我們要將所有東西複製進來）</p>
+<h2 id="使用-EXPOSE-告訴-Docker-監聽的-port"><a href="#使用-EXPOSE-告訴-Docker-監聽的-port" class="headerlink" title="使用 EXPOSE 告訴 Docker 監聽的 port"></a>使用 EXPOSE 告訴 Docker 監聽的 port</h2><pre><code class="docker">EXPOSE 3000
+</code></pre>
+<p>表示 Docker 容器在執行時應該監聽 port 3000</p>
+<p>📍 特別注意 EXPOSE 只是一個記號，它告訴其他容器內應用程式可能使用的 port 。如果要實際將容器的 port 對應到主機上，需要在容器執行時使用 -p 或 -P 來實際執行 port 的連接。</p>
+<h2 id="用-CMD-做個收尾，設定容器啟動時要執行的預設命令"><a href="#用-CMD-做個收尾，設定容器啟動時要執行的預設命令" class="headerlink" title="用 CMD 做個收尾，設定容器啟動時要執行的預設命令"></a>用 CMD 做個收尾，設定容器啟動時要執行的預設命令</h2><pre><code class="docker">CMD [&quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
+</code></pre>
+<p>前面兩個指令就是我們一般啟動伺服器的 <code>rails server</code> ; 後面的 <code>-b</code> 是 <code>bind</code>(綁定) 的縮寫，<code>-b 0.0.0.0</code> 主要是要讓我們的應用程式可以從外部設備或其他容器可以取用。</p>
+<p>根據上述步驟，我們大致完成了自己的 Dockerfile ，目前全貌如下：</p>
+<pre><code class="docker">FROM ruby:3.2.2-alpine
+
+LABEL maintainer=&quot;Krystal &lt;krystal@5xcampus.com&gt;&quot;
+
+RUN bundle config --global frozen 1
+
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+
+RUN bundle install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD [&quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
+</code></pre>
+<p>今天我們的 Dockerfile 大概有個樣子了，但還沒結束明天要實際來根據 Dockerfile build 屬於這個專案的 image，那我們明天繼續～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-build/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 打磨我的 Dockerfile 製成 image</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/dockerfile-2/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 拆解 Dockerfile 的關鍵字(下)</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2024 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
