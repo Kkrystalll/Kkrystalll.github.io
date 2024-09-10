@@ -524,7 +524,7 @@ end
 <li><code>message</code>: 從 event 取出發送的訊息內容。</li>
 <li><code>if...else</code>: 使用 if…else 判定接收到的訊息是否符合 <code>心理測驗</code> 四個字<br>是的話執行 <code>start_test</code> 方法，並且把 <code>user_id</code> 當參數傳入;<br>不是的話執行 <code>reply_message</code>方法，並且把 <code>user_id</code> 跟 <code>要回傳的文字內容</code> 當參數傳入。</li>
 </ul>
-<h3 id="6-reply-message-邏輯"><a href="#6-reply-message-邏輯" class="headerlink" title="6. reply_message 邏輯"></a>6. reply_message 邏輯</h3><p>定義 <code>reply_message</code> 方法，來撰寫我們想要回覆給使用者的訊息。</p>
+<h3 id="6-reply-message-邏輯"><a href="#6-reply-message-邏輯" class="headerlink" title="6. reply_message 邏輯"></a>6. reply_message 邏輯</h3><p>定義 <code>reply_message</code> 方法，來撰寫我們想要回覆給使用者的訊息 <a target="_blank" rel="noopener" href="https://developers.line.biz/en/reference/messaging-api/#text-message">參考官方文件</a>。</p>
 <pre><code class="rb">def reply_message(user_id, text)
   message = &#123;
     type: &#39;text&#39;,
