@@ -363,11 +363,15 @@ rails s
 rails g scaffold Question title option_1 option_2 value_1 value_2
 </code></pre>
 <ul>
-<li><code>rails g</code> : 是 rails 生成的簡寫，它是 Rails 提供的一個指令，用於產生各種文件和程式碼結構，以加速開發過程。</li>
-<li><code>Question</code> : 是你要建立的 model 名稱</li>
-<li><code>title option_1 option_2 value_1 value_2</code> : 在 Question model 裡面要的欄位，正常應該要寫成<pre><code>rails g scaffold Question title:string option_1:string option_2:string value_1:string value_2:string
+<li><p><code>rails g</code> : 是 rails 生成的簡寫，它是 Rails 提供的一個指令，用於產生各種文件和程式碼結構，以加速開發過程。</p>
+</li>
+<li><p><code>Question</code> : 是你要建立的 model 名稱</p>
+</li>
+<li><p><code>title option_1 option_2 value_1 value_2</code> : 在 Question model 裡面要的欄位，正常應該要寫成</p>
+<pre><code>rails g scaffold Question title:string option_1:string option_2:string value_1:string value_2:string
 </code></pre>
-<code>title:string</code> 翻成中文意思就是 <code>欄位名稱:資料型態</code>，但若資料型態是 <code>string</code> ，可以簡寫成<pre><code>rails g scaffold Question title option_1 option_2 value_1 value_2
+<p><code>title:string</code> 翻成中文意思就是 <code>欄位名稱:資料型態</code>，但若資料型態是 <code>string</code> ，可以簡寫成</p>
+<pre><code>rails g scaffold Question title option_1 option_2 value_1 value_2
 </code></pre>
 </li>
 </ul>
