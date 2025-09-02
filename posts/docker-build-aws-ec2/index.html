@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 認識及建立 AWS EC2 Instance-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,AWS,EC2,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/AWS">#AWS</a></li>
+      
+      <li><a href="/tags/EC2">#EC2</a></li>
+       
+    </ul>
+
+    <h1>Docker - 認識及建立 AWS EC2 Instance</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+        </div>
+        <p>2023-10-04 17:30:12</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-EC2-%E6%98%AF%E4%BB%80%E9%BA%BC%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">AWS EC2 是什麼？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AWS-EC2-%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="toc-number">2.</span> <span class="toc-text">AWS EC2 的優點</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%88%E6%80%A7%E4%BC%B8%E7%B8%AE%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">彈性伸縮：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E7%A8%AE%E5%9F%B7%E8%A1%8C%E5%80%8B%E9%AB%94%E9%A1%9E%E5%9E%8B%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">多種執行個體類型：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1%E9%9D%88%E6%B4%BB%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">作業系統靈活：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B6%B2%E8%B7%AF%E5%92%8C%E5%AE%89%E5%85%A8%E6%80%A7%EF%BC%9A"><span class="toc-number">2.4.</span> <span class="toc-text">網路和安全性：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%8F%A1%E5%83%8F%E7%AE%A1%E7%90%86%EF%BC%9A"><span class="toc-number">2.5.</span> <span class="toc-text">鏡像管理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E4%BB%98%E8%B2%BB%EF%BC%9A"><span class="toc-number">2.6.</span> <span class="toc-text">首先付費：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E7%90%83%E6%95%88%E8%83%BD%EF%BC%9A"><span class="toc-number">2.7.</span> <span class="toc-text">全球效能：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%96%8B-AWS-EC2-%E6%A9%9F%E5%99%A8%E7%9A%84%E8%B5%B7%E6%89%8B%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">開 AWS EC2 機器的起手式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BB%E5%85%A5-x2F-%E8%A8%BB%E5%86%8A-AWS"><span class="toc-number">3.1.</span> <span class="toc-text">登入 &#x2F; 註冊 AWS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E5%88%B0-EC2-%E7%9A%84%E9%A0%81%E9%9D%A2"><span class="toc-number">3.2.</span> <span class="toc-text">找到 EC2 的頁面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-AWS-EC2-Instance"><span class="toc-number">4.</span> <span class="toc-text">建立 AWS EC2 Instance</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A1%AB%E5%AF%AB-instance-%E5%90%8D%E7%A8%B1"><span class="toc-number">4.1.</span> <span class="toc-text">1. 填寫 instance 名稱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%81%B8%E6%93%87%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1"><span class="toc-number">4.2.</span> <span class="toc-text">2. 選擇作業系統</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%81%B8%E6%93%87-instance-type"><span class="toc-number">4.3.</span> <span class="toc-text">3. 選擇 instance type</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%81%B8%E6%93%87-amp-%E5%BB%BA%E7%AB%8B%E5%AF%86%E9%91%B0"><span class="toc-number">4.4.</span> <span class="toc-text">4. 選擇 &amp; 建立密鑰</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%B6%B2%E8%B7%AF%E8%A8%AD%E5%AE%9A"><span class="toc-number">4.5.</span> <span class="toc-text">5. 網路設定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%BB%BA%E7%AB%8B-instance"><span class="toc-number">4.6.</span> <span class="toc-text">6. 建立 instance</span></a></li></ol></li></ol>
+    </div>
+     <h2 id="AWS-EC2-是什麼？"><a href="#AWS-EC2-是什麼？" class="headerlink" title="AWS EC2 是什麼？"></a>AWS EC2 是什麼？</h2><p>AWS EC2 全名 Amazon Elastic Compute Cloud ，根據 <a target="_blank" rel="noopener" href="https://aws.amazon.com/tw/ec2/">官方文件</a>，可以看到介紹</p>
+<blockquote>
+<p>AWS EC2 提供最廣泛、最深入的運算平台，擁有超過 700 個執行個體，可選擇最新處理器、儲存、聯網、作業系統和購買模型，以協助您最有效地滿足工作負載需求。我們是第一間支援 Intel、AMD 和 Arm 處理器的主要雲端供應商，提供唯一具有隨需 EC2 Mac 執行個體的雲端，以及唯一具有 400 Gbps 以太網路聯網的雲端。我們為機器學習訓練提供了最佳價格效能，同時也是每個雲端推論執行個體的最低成本。在 AWS 上執行的 SAP、高效能運算 (HPC)、機器學習 (ML) 和 Windows 工作負載多過任何其他雲端。</p>
+</blockquote>
+<p>看了一長串還是不太懂，直接再翻白話一點 AWS EC2 允許開發人員租用虛擬運算資源，以便在雲端中運行應用程式，使開發人員能夠輕鬆地建立、啟動和管理虛擬伺服器。</p>
+<h2 id="AWS-EC2-的優點"><a href="#AWS-EC2-的優點" class="headerlink" title="AWS EC2 的優點"></a>AWS EC2 的優點</h2><h3 id="彈性伸縮："><a href="#彈性伸縮：" class="headerlink" title="彈性伸縮："></a>彈性伸縮：</h3><p>以前我們需要空間就是要買硬體，但是在 EC2 我們可以根據專案或個人需求，來決定要開一個或多個 EC2 ，這種彈性可以讓人根據應用程式負載需求的增加或減少計算資源。</p>
+<h3 id="多種執行個體類型："><a href="#多種執行個體類型：" class="headerlink" title="多種執行個體類型："></a>多種執行個體類型：</h3><p>AWS EC2 可以選擇不同的虛擬伺服器，滿足不同種類的運算工作。</p>
+<h3 id="作業系統靈活："><a href="#作業系統靈活：" class="headerlink" title="作業系統靈活："></a>作業系統靈活：</h3><p>我們可以在 EC2 上執行的 Linux 、 Windows Server 或其他作業系統，不會因為不相容被迫換其他作業系統。</p>
+<h3 id="網路和安全性："><a href="#網路和安全性：" class="headerlink" title="網路和安全性："></a>網路和安全性：</h3><p>AWS EC2 可以讓人自訂虛擬雲端（VPC）來管理網路配置，還可以控制執行個體的存取權限，以確保安全性。</p>
+<h3 id="鏡像管理："><a href="#鏡像管理：" class="headerlink" title="鏡像管理："></a>鏡像管理：</h3><p>EC2 可以建立自己的 AMI（Amazon Machine Image）來定義 EC2 執行個體的配置，包括網路、應用程式和資料。可以輕鬆地複製和部署多個相同配置的 EC2。</p>
+<h3 id="首先付費："><a href="#首先付費：" class="headerlink" title="首先付費："></a>首先付費：</h3><p>上面有說到 EC2 的彈性伸縮特性，定價也是如此，只需負擔實際使用的資源付費。</p>
+<h3 id="全球效能："><a href="#全球效能：" class="headerlink" title="全球效能："></a>全球效能：</h3><p>AWS 區域分佈在全球各地，包括美國、歐洲、亞洲、南美洲等地區，使用者可以選擇將自己的 EC2 執行個體部署在靠近的區域，以減少網路延遲。</p>
+<p>總結來說：AWS EC2 通常用於各種應用程式和工作負載，包括網站託管、應用程式開發和測試、大數據處理、機器學習、容器化應用程式等。我們這次是使用 EC2 來作為 docker 容器部署，屬於其服務中容器化應用程式的一種。</p>
+<h2 id="開-AWS-EC2-機器的起手式"><a href="#開-AWS-EC2-機器的起手式" class="headerlink" title="開 AWS EC2 機器的起手式"></a>開 AWS EC2 機器的起手式</h2><h3 id="登入-x2F-註冊-AWS"><a href="#登入-x2F-註冊-AWS" class="headerlink" title="登入 &#x2F; 註冊 AWS"></a>登入 &#x2F; 註冊 <a target="_blank" rel="noopener" href="https://portal.aws.amazon.com/billing/signup?nc2=h_ct&src=header_signup&redirect_url=https://aws.amazon.com/registration-confirmation&language=zh_tw#/start/email">AWS</a></h3><p><img src="/image/dockerDay19/19_1.webp" alt="註冊/登入 AWS"><br>有帳號直接登入、沒帳號可以直接下方點選 create 註冊</p>
+<h3 id="找到-EC2-的頁面"><a href="#找到-EC2-的頁面" class="headerlink" title="找到 EC2 的頁面"></a>找到 EC2 的頁面</h3><ol>
+<li><p>可以使用上方搜尋欄<br><img src="/image/dockerDay19/19_2.webp" alt="搜尋 EC2"></p>
+</li>
+<li><p>可以使用左上方 Services 按鈕，按字母搜尋<br><img src="/image/dockerDay19/19_3.webp" alt="Services EC2"></p>
+</li>
+</ol>
+<h2 id="建立-AWS-EC2-Instance"><a href="#建立-AWS-EC2-Instance" class="headerlink" title="建立 AWS EC2 Instance"></a>建立 AWS EC2 Instance</h2><p>搜尋後即可以看到我的 EC2 儀表板，下圖箭頭處可以看到我們現在有幾個「正在運行中的」instance，若是要建立 instance 也可以直接點擊黃色框框內的 <code>Launch instance</code> 按鈕，接著就開始填寫有關 instance 的一連串設置<br><img src="/image/dockerDay19/19_4.webp" alt="Launch instance"></p>
+<h3 id="1-填寫-instance-名稱"><a href="#1-填寫-instance-名稱" class="headerlink" title="1. 填寫 instance 名稱"></a>1. 填寫 instance 名稱</h3><h3 id="2-選擇作業系統"><a href="#2-選擇作業系統" class="headerlink" title="2. 選擇作業系統"></a>2. 選擇作業系統</h3><p>預設就是 Linux ，也可以選擇您習慣的作業系統</p>
+<p><img src="/image/dockerDay19/19_5.webp" alt="選擇作業系統"></p>
+<h3 id="3-選擇-instance-type"><a href="#3-選擇-instance-type" class="headerlink" title="3. 選擇 instance type"></a>3. 選擇 instance type</h3><p>這是 EC2 運算、記憶體、儲存和網路資源的類型，我這邊就秉持客家精神，選擇預設免費的 <code>t2.micro</code></p>
+<h3 id="4-選擇-amp-建立密鑰"><a href="#4-選擇-amp-建立密鑰" class="headerlink" title="4. 選擇 &amp; 建立密鑰"></a>4. 選擇 &amp; 建立密鑰</h3><p>正常來說我們需要打帳號密碼來連線到 AWS EC2 ，但若我今天有設定密鑰，這個秘藥就可以讓我們不需要打帳號密碼，直接透過密鑰解密就可以連線到 AWS EC2 ，所以我們現在就直接來建立一把密鑰<br><img src="/image/dockerDay19/19_6.webp" alt="建立密鑰"></p>
+<p>點選 <code>create new key pair</code> 就可以開始填寫相關資訊，完成後按 <code>create key pair</code><br><img src="/image/dockerDay19/19_7.webp" alt="建立密鑰資訊"></p>
+<p>建立後可以在下載項目看到剛剛取名的 <code>krystal.pem</code> 下載到電腦裡，這個就是我們的金鑰，我個人會習慣先將這種密鑰有關的檔案保存好。<br><img src="/image/dockerDay19/19_8.webp" alt="儲存密鑰"></p>
+<p>這時我們就可以選擇用我們剛剛建立的 krystal 這把密鑰來作為解密的工具了<br><img src="/image/dockerDay19/19_9.webp" alt="選擇新建立的密鑰"></p>
+<h3 id="5-網路設定"><a href="#5-網路設定" class="headerlink" title="5. 網路設定"></a>5. 網路設定</h3><p><img src="/image/dockerDay19/19_10.webp" alt="網路設定"><br>除了預設的選項，我還多勾了 <code>Allow HTTPS traffic from the internet</code> 跟<code>Allow HTTP traffic from the internet</code></p>
+<p>允許透過 HTTPS 與 HTTP 協定（通常使用連接埠 443 與 80）從網際網路到 EC2 ，這對於設置 Web 伺服器並實現安全的 HTTPS 與 HTTP 通訊非常有用。</p>
+<p>📍 這兩個選項必勾，因為我們要在 EC2 執行個體上執行 Web 伺服器，並希望任何人只要輸入網址，可以透過 Web 瀏覽器到我們的網站，如果不勾選這兩個選項，那使用者永遠到不了這個網站。</p>
+<h3 id="6-建立-instance"><a href="#6-建立-instance" class="headerlink" title="6. 建立 instance"></a>6. 建立 instance</h3><p><img src="/image/dockerDay19/19_11.webp" alt="建立 instance"><br>都設定完成就點選右下角的 <code>Launch Instance</code><br><img src="/image/dockerDay19/19_12.webp" alt="建立成功 notice"><br>可以看到成功建立的 notice，這時我們再點到我的 Instances ，可以看到我成功建立的 <code>docker_test</code> instance。<br><img src="/image/dockerDay19/19_13.webp" alt="EC2 instance 列表"></p>
+<p>那今天成功設置了 AWS EC2 instance ，明天開始我們就要嘗試在這個 instance 上面跑我推到 Docker Hub 上的 image，那就明天見啦～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-connect-aws-ec2/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 連接到 EC2 instance 並下載 Docker</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-push-image/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 將我的 Image 推到 Docker Hub 儲存庫</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -344,27 +344,27 @@
 <p>以我工作上寫 rails 專案為例，所有需要共同開發的人，都至少需要先裝好 ruby 、 rails 、 資料庫(我們使用 PostgreSQL )，但是當今天我將專案包好 Docker ，就算其他人電腦沒有先安裝好以上項目，也可以使用簡單的 <code>docker run</code> 或<code>docker compose up</code> 指令，使用 docker 打開專案，當不需要額外安裝時，絕對是可以省下安裝的時間與記憶體容量，且因為我們是使用同一個 docker 映像 (Image) 來產生容器 (Container)，所以可以確保所有人都在同個環境下運行專案，最後我需要將我的專案部署時，我可以將我 <code>docker build</code> 好的映像 (Image) 推送到遠端倉庫 (Repository) ，並在遠端 <code>docker run</code> 或<code>docker compose up</code> ，在設定好網路等，便可以快速部署。</p>
 <p>在了解 Docker 是什麼之後，就先來將 Docker 安裝在自己本機吧！</p>
 <h2 id="安裝-Docker-Desktop"><a href="#安裝-Docker-Desktop" class="headerlink" title="安裝 Docker Desktop"></a>安裝 Docker Desktop</h2><p>根據<a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/">官方文件</a> Docker Desktop 是一款適用於 Mac、Linux 或 Windows 環境的應用程式，今天就示範以使用 Mac 電腦以及 Windows 安裝 Docker 為例</p>
-<p><img src="/image/dockerDay1/1_1.png" alt="安裝 Docker"></p>
+<p><img src="/image/dockerDay1/1_1.webp" alt="安裝 Docker"></p>
 <p>根據<a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/">官方文件</a>可以看到圖示，點選符合電腦環境的連結</p>
-<h3 id="On-Mac"><a href="#On-Mac" class="headerlink" title="On Mac"></a>On Mac</h3><p>當我們使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/mac-install/">Mac</a> 需要安裝 Docker Desktop 時，首先應該要確認自己的電腦是屬於<code>Intel 晶片</code> 還是 <code>Apple 晶片</code> ，選擇對應的按鈕<br><img src="/image/dockerDay1/1_2.png" alt="Mac 安裝 Docker"><br>若是不確定自己的電腦屬於哪種晶片，只需要</p>
+<h3 id="On-Mac"><a href="#On-Mac" class="headerlink" title="On Mac"></a>On Mac</h3><p>當我們使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/mac-install/">Mac</a> 需要安裝 Docker Desktop 時，首先應該要確認自己的電腦是屬於<code>Intel 晶片</code> 還是 <code>Apple 晶片</code> ，選擇對應的按鈕<br><img src="/image/dockerDay1/1_2.webp" alt="Mac 安裝 Docker"><br>若是不確定自己的電腦屬於哪種晶片，只需要</p>
 <ol>
 <li><p>點擊螢幕左上方的 </p>
 </li>
-<li><p>選擇<code>關於這台 Mac</code><br><img src="/image/dockerDay1/1_3.png" alt="關於這台 Mac"></p>
+<li><p>選擇<code>關於這台 Mac</code><br><img src="/image/dockerDay1/1_3.webp" alt="關於這台 Mac"></p>
 </li>
-<li><p>即可以看到自己的電腦是哪種晶片<br><img src="/image/dockerDay1/1_4.png" alt="關於這台 Mac 詳細資料"></p>
+<li><p>即可以看到自己的電腦是哪種晶片<br><img src="/image/dockerDay1/1_4.webp" alt="關於這台 Mac 詳細資料"></p>
 </li>
 </ol>
-<p>點擊之後會直接進下載項目，根據指示可以打開 Docker Desktop 登入，但下載好不是全部，還需要啟動 Docker Desktop<br><img src="/image/dockerDay1/1_5.png" alt="啟動 Docker"></p>
-<p>啟動完成即可以看到這台電腦現在的容器 (Container) 列表、映像 (Image) 列表、控制台、網路等等圖形化介面。<br><img src="/image/dockerDay1/1_6.png" alt="Docker 圖形化介面"></p>
+<p>點擊之後會直接進下載項目，根據指示可以打開 Docker Desktop 登入，但下載好不是全部，還需要啟動 Docker Desktop<br><img src="/image/dockerDay1/1_5.webp" alt="啟動 Docker"></p>
+<p>啟動完成即可以看到這台電腦現在的容器 (Container) 列表、映像 (Image) 列表、控制台、網路等等圖形化介面。<br><img src="/image/dockerDay1/1_6.webp" alt="Docker 圖形化介面"></p>
 <p>上圖是我的容器 (Container) 列表，可以看到我現在有一個容器目前是 Exited （執行完畢並退出）的狀態，當然各位剛下載的話就會是空的。</p>
-<h3 id="On-Windows"><a href="#On-Windows" class="headerlink" title="On Windows"></a>On Windows</h3><p>若是使用 Windows 就更簡單一點，不需要檢查電腦是哪個晶片，可以直接一鍵下載<br><img src="/image/dockerDay1/1_7.png" alt="Windows 安裝 Docker"></p>
-<p>點選下載後可以以看右上角已經有下載中的標示<br><img src="/image/dockerDay1/1_8.png" alt="Windows 下載"></p>
-<p>接著打開電腦的下載檔案夾，可以看到 Docker Desktop，直接雙擊滑鼠安裝<br><img src="/image/dockerDay1/1_9.png" alt="下載檔案夾"></p>
-<p>根據指示點選<br><img src="/image/dockerDay1/1_10.png" alt="根據指示點選"></p>
-<p>會看到正在安裝的進度<br><img src="/image/dockerDay1/1_11.png" alt="正在安裝的進度"></p>
-<p>當安裝好時會需要將電腦重開機，直接點擊 <code>close and restart</code> 按鈕<br><img src="/image/dockerDay1/1_12.png" alt="restart Docker"></p>
-<p>待電腦重開機完成，我們點選 Docker Desktop ，打開就可以按照指示註冊登入了<br><img src="/image/dockerDay1/1_13.png" alt="註冊登入 Docker"></p>
+<h3 id="On-Windows"><a href="#On-Windows" class="headerlink" title="On Windows"></a>On Windows</h3><p>若是使用 Windows 就更簡單一點，不需要檢查電腦是哪個晶片，可以直接一鍵下載<br><img src="/image/dockerDay1/1_7.webp" alt="Windows 安裝 Docker"></p>
+<p>點選下載後可以以看右上角已經有下載中的標示<br><img src="/image/dockerDay1/1_8.webp" alt="Windows 下載"></p>
+<p>接著打開電腦的下載檔案夾，可以看到 Docker Desktop，直接雙擊滑鼠安裝<br><img src="/image/dockerDay1/1_9.webp" alt="下載檔案夾"></p>
+<p>根據指示點選<br><img src="/image/dockerDay1/1_10.webp" alt="根據指示點選"></p>
+<p>會看到正在安裝的進度<br><img src="/image/dockerDay1/1_11.webp" alt="正在安裝的進度"></p>
+<p>當安裝好時會需要將電腦重開機，直接點擊 <code>close and restart</code> 按鈕<br><img src="/image/dockerDay1/1_12.webp" alt="restart Docker"></p>
+<p>待電腦重開機完成，我們點選 Docker Desktop ，打開就可以按照指示註冊登入了<br><img src="/image/dockerDay1/1_13.webp" alt="註冊登入 Docker"></p>
 <p>到這邊為止是兩種電腦的安裝方式，接著明天我們要教大家第一次執行 Docker ，也就是學習程式的起手式 Hello World ，但在執行之前我們需要先了解使用 Docker 時，絕對必須知道的 Docker 三寶！</p>
 
   </div>

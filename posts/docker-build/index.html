@@ -339,7 +339,7 @@
 <h2 id="根據-Dockerfile-建立自己的-image"><a href="#根據-Dockerfile-建立自己的-image" class="headerlink" title="根據 Dockerfile 建立自己的 image"></a>根據 Dockerfile 建立自己的 image</h2><p>接著立馬試試能否成功建立自己的 image</p>
 <pre><code class="docker">docker build -t my-ruby:1.0 .
 </code></pre>
-<p><img src="/image/dockerDay13/13_1.png" alt="docker build"><br><img src="/image/dockerDay13/13_2.png" alt="docker build"></p>
+<p><img src="/image/dockerDay13/13_1.webp" alt="docker build"><br><img src="/image/dockerDay13/13_2.webp" alt="docker build"></p>
 <p>如圖示可以看到在 <code>bundle install</code> 時失敗了！錯誤訊息還不只一兩個 😅</p>
 <h3 id="1"><a href="#1" class="headerlink" title="1."></a>1.</h3><blockquote>
 <p>Bundler 2.4.10 is running, but your lockfile was generated with 2.4.18. Installing Bundler 2.4.18 and restarting using that version.</p>
@@ -402,7 +402,7 @@ EXPOSE 3000
 
 CMD [&quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
 </code></pre>
-<p><img src="/image/dockerDay13/13_3.png" alt="docker build"></p>
+<p><img src="/image/dockerDay13/13_3.webp" alt="docker build"></p>
 <p>看起來終於有點像是 build 成功了，但卻收到如下的警告訊息</p>
 <blockquote>
 <p>WARNING: No output specified with docker-container driver. Build result will only remain in the build cache. To push result image into registry use –push or to load image into docker use –load</p>
@@ -419,18 +419,18 @@ CMD [&quot;rails&quot;, &quot;server&quot;, &quot;-b&quot;, &quot;0.0.0.0&quot;]
 <pre><code class="docker">docker build -t my-ruby:1.0 . --load
 </code></pre>
 <p>那因為我這邊目標史事希望現在本地建立成功，所以我就選擇 <code>docker build -t my-ruby:1.0 . --load</code> 再重新 Build 一次。</p>
-<p><img src="/image/dockerDay13/13_4.png" alt="docker build"></p>
+<p><img src="/image/dockerDay13/13_4.webp" alt="docker build"></p>
 <p>終於沒有任何錯誤跟警告了 🎉🎉🎉</p>
 <h2 id="檢查本地的-image-有沒有我剛剛建立的-my-ruby-1-0"><a href="#檢查本地的-image-有沒有我剛剛建立的-my-ruby-1-0" class="headerlink" title="檢查本地的 image 有沒有我剛剛建立的 my-ruby:1.0"></a>檢查本地的 image 有沒有我剛剛建立的 my-ruby:1.0</h2><ol>
 <li>在終端機打 <code>docker images</code> 指令</li>
 </ol>
 <pre><code class="docker">docker images
 </code></pre>
-<p><img src="/image/dockerDay13/13_5.png" alt="docker build"></p>
+<p><img src="/image/dockerDay13/13_5.webp" alt="docker build"></p>
 <ol start="2">
 <li>打開 Docker Desktop 看</li>
 </ol>
-<p><img src="/image/dockerDay13/13_6.png" alt="打開 Docker Desktop"></p>
+<p><img src="/image/dockerDay13/13_6.webp" alt="打開 Docker Desktop"></p>
 <p>兩者都可以看到我們成功建立的 my-ruby:1.0，可以說明我們成功根據自己撰寫的 Dockerfile 製作出屬於這個 rails 專案獨一無二的一顆 image，當然建立完後，我們明天就要實際使用這顆 image 來製作成 container ，看能否成功運轉我的 rails 專案，若能成功運轉，只要其他人擁有這顆 image 就可以確保他做出來的 container ，會跟我的一樣，因為我們都是用同一個烤模烤出來的雞蛋糕。</p>
 
   </div>

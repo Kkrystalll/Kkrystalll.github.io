@@ -335,7 +335,7 @@
     </div>
      <p>前兩天我們了解了 Dockerfile 所有的關鍵字，就是為了今天我們實際寫的時候可以有些概念，會比較好上手一點點。<br>不確定大家手邊是否都有專案，所以我這邊有準備一個示範的 rails 專案，有需要的人可以從 <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll/rails-docker">這邊</a> 將專案給 clone 下來，在預設的 main 分支就可以一步一步跟著做了。</p>
 <h2 id="新增-Dockerfile-檔案"><a href="#新增-Dockerfile-檔案" class="headerlink" title="新增 Dockerfile 檔案"></a>新增 Dockerfile 檔案</h2><p>順利打開專案後（以下範例我都是使用 Visual Studio Code 這個編輯器），首先我們需要先在專案的<strong>根目錄</strong>新增一個名為 <strong><code>Dockerfile</code></strong> 的檔案</p>
-<p><img src="/image/dockerDay12/12_1.png" alt="新增 Dockerfile"></p>
+<p><img src="/image/dockerDay12/12_1.webp" alt="新增 Dockerfile"></p>
 <p>📍Dockerfile 是在 Docker 中預設的 Docker 映像建置檔的預設名字，若你想要取自己想要的名字也可以，但就是在建置 image 的時候，需要說明清楚用哪個文件來建置</p>
 <pre><code class="docker">docker build -f MyDockerfile .
 </code></pre>
@@ -349,22 +349,22 @@
 </ol>
 <pre><code class="ruby">ruby -v
 </code></pre>
-<p><img src="/image/dockerDay12/12_2.png" alt="查看專案的 ruby 版本"></p>
+<p><img src="/image/dockerDay12/12_2.webp" alt="查看專案的 ruby 版本"></p>
 <ol start="2">
 <li>若是 clone 的專案，那可以參考那個專案的 <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll/rails-docker/tree/docker">README.md</a> ，正常都會在專案寫下使用的版本</li>
 </ol>
-<p><img src="/image/dockerDay12/12_3.png" alt="查看專案的 ruby 版本"></p>
+<p><img src="/image/dockerDay12/12_3.webp" alt="查看專案的 ruby 版本"></p>
 <ol start="3">
 <li>或是可以在專案裡找版本或配置的檔案，在 rails 專案就可以看 Gemfile 檔案</li>
 </ol>
-<p><img src="/image/dockerDay12/12_4.png" alt="查看專案的 ruby 版本"></p>
+<p><img src="/image/dockerDay12/12_4.webp" alt="查看專案的 ruby 版本"></p>
 <h2 id="找尋適合的基礎鏡像版本"><a href="#找尋適合的基礎鏡像版本" class="headerlink" title="找尋適合的基礎鏡像版本"></a>找尋適合的基礎鏡像版本</h2><p>上面這麼多種方法我們都可以得知是使用 <code>ruby 3.2.2</code> ，那這時我們就要去 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">Docker Hub ruby</a> 來找尋是否有符合的 image</p>
-<p><img src="/image/dockerDay12/12_5.png" alt="Docker Hub ruby"></p>
+<p><img src="/image/dockerDay12/12_5.webp" alt="Docker Hub ruby"></p>
 <p>看到後我又暈了，這麼多不同的 tag 都是 3.2.2 我到底要選用哪一個＠＠</p>
 <p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">Docker Hub ruby</a> 往下滑，有介紹不同 Variants 的差別是什麼可以幫助大家選擇</p>
-<p><img src="/image/dockerDay12/12_6.png" alt="不同 Variants 的差別是什麼"></p>
+<p><img src="/image/dockerDay12/12_6.webp" alt="不同 Variants 的差別是什麼"></p>
 <blockquote>
-<p>This is the defacto image. If you are unsure about what your needs are, you probably want to use this one. It is designed to be used both as a throw away container (mount your source code and start the container to start your app), as well as the base to build other images off of.<br>根據 <code>ruby:&lt;version&gt;</code> 上面的說明，「如果你不確定自己的需求是什麼，你可能想使用這個」，沒錯我自己也是覺得當不知道要選擇哪個時，選擇一個最標準的 image 準沒錯，所以我在剛剛眾多的 tags 找到了我的超人！<br><img src="/image/dockerDay12/12_7.png" alt="ruby:&lt;version&gt;"></p>
+<p>This is the defacto image. If you are unsure about what your needs are, you probably want to use this one. It is designed to be used both as a throw away container (mount your source code and start the container to start your app), as well as the base to build other images off of.<br>根據 <code>ruby:&lt;version&gt;</code> 上面的說明，「如果你不確定自己的需求是什麼，你可能想使用這個」，沒錯我自己也是覺得當不知道要選擇哪個時，選擇一個最標準的 image 準沒錯，所以我在剛剛眾多的 tags 找到了我的超人！<br><img src="/image/dockerDay12/12_7.webp" alt="ruby:&lt;version&gt;"></p>
 </blockquote>
 <p>選好之後我們可以撰寫 Dockerfile 第一行</p>
 <pre><code class="docker">FROM ruby:3.2.2

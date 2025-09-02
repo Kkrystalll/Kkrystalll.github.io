@@ -336,16 +336,16 @@
      <h2 id="Docker-Container-的啟動、開始、停止、刪除"><a href="#Docker-Container-的啟動、開始、停止、刪除" class="headerlink" title="Docker Container 的啟動、開始、停止、刪除"></a>Docker Container 的啟動、開始、停止、刪除</h2><h3 id="啟動-Container"><a href="#啟動-Container" class="headerlink" title="啟動 Container"></a>啟動 Container</h3><p>當我們想要執行一個 Container 容器時，會使用 <code>docker run</code> 這個指令，這個指令會從我本地的 image 或 Docker Hub 儲存庫中下載名為 ruby 的 image ，然後使用這個 image 建立一個新的 container 並執行它。</p>
 <pre><code>docker run ruby
 </code></pre>
-<p>以上面的指令為例，會先看我本地是否有名為 <code>ruby</code> 的 image ，若有就根據這個 image 生成 container 並執行它 ; 若無，就去 Docker Hub 儲存庫中下載名為 ruby 的 image ，然後建立新的 container 並執行它。<br><img src="/image/dockerDay5/5_1.png" alt="Docker run"></p>
-<p>根據上面截圖的第一句可以看到 <code>Unable to find image &#39;ruby:latest&#39; locally</code> 代表本地沒有找到 <code>ruby:latest</code> 的 image ，所以可以看到第二句 <code>latest: Pulling from library/ruby</code> ，代表從 Docker Hub 的 library&#x2F;ruby 存儲庫中下載 <code>ruby:latest</code> 映像。<br><img src="/image/dockerDay5/5_2.png" alt="Docker run 自動下載 latest"></p>
+<p>以上面的指令為例，會先看我本地是否有名為 <code>ruby</code> 的 image ，若有就根據這個 image 生成 container 並執行它 ; 若無，就去 Docker Hub 儲存庫中下載名為 ruby 的 image ，然後建立新的 container 並執行它。<br><img src="/image/dockerDay5/5_1.webp" alt="Docker run"></p>
+<p>根據上面截圖的第一句可以看到 <code>Unable to find image &#39;ruby:latest&#39; locally</code> 代表本地沒有找到 <code>ruby:latest</code> 的 image ，所以可以看到第二句 <code>latest: Pulling from library/ruby</code> ，代表從 Docker Hub 的 library&#x2F;ruby 存儲庫中下載 <code>ruby:latest</code> 映像。<br><img src="/image/dockerDay5/5_2.webp" alt="Docker run 自動下載 latest"></p>
 <p>然後執行完成我可以可以看到上面那些亂數，也就是 image 內的每個層（layers）都 <code>Pull complete</code> 拉取完成了，代表我們已經成功在運行 ruby 這個 container 了。</p>
 <p>到這邊不知道大家會不會跟我一樣好奇，我剛剛明明就是下 <code>ruby</code> 這個 image ，為何上面的 log 卻是去找 <code>ruby:latest</code> 這個 image ? <code>:latest</code> 究竟是什麼？哪來的？</p>
 <h4 id="docker-image-tag"><a href="#docker-image-tag" class="headerlink" title="docker image tag"></a>docker image tag</h4><p>其實這個 <code>:latest</code> 就是 image 的 **tag(標籤)**，我們可以把我們的 image 取名為不同的 tag(標籤)，正常來說這個 tag 會是版本號，而當我們都不特別下 tag 時，則會去找預設的 tag ，也就是 <code>:latest</code> ，這就是為什麼我們上面沒有特別下 tag 他會自己去找 <code>ruby:latest</code> 的原因。</p>
 <pre><code>docker run ruby:3.2.2
 </code></pre>
 <p>我們可以在自己的儲存庫或是 Docker Hub 看到有哪些 tag 可以用，如：<a target="_blank" rel="noopener" href="https://hub.docker.com/_/ruby">搜尋 Docker Hub ruby</a>，可以看到 Supported tags。<br>以上面範例程式碼為例，就是執行 ruby image 3.2.2 版本的 tag。</p>
-<p>那既然我前面有成功 <code>docker run ruby</code> ，我預期我現在使用 <code>docker ps</code> 來查看我目前運行中的 container ，會看到我剛剛跑成功的 ruby ：<br><img src="/image/dockerDay5/5_3.png" alt="看我目前運行中的 container"></p>
-<p>結果怎麼是空的？？？我到底有沒有成功執行啊？<br>我們先使用 <code>docker ps -a</code> 指令來看一下所有 container 的狀態<br><img src="/image/dockerDay5/5_4.png" alt="看一下所有 container 的狀態"></p>
+<p>那既然我前面有成功 <code>docker run ruby</code> ，我預期我現在使用 <code>docker ps</code> 來查看我目前運行中的 container ，會看到我剛剛跑成功的 ruby ：<br><img src="/image/dockerDay5/5_3.webp" alt="看我目前運行中的 container"></p>
+<p>結果怎麼是空的？？？我到底有沒有成功執行啊？<br>我們先使用 <code>docker ps -a</code> 指令來看一下所有 container 的狀態<br><img src="/image/dockerDay5/5_4.webp" alt="看一下所有 container 的狀態"></p>
 <p>這邊有看到我的 ruby image ，但是看看 status 是 <code>Exited(已退出)</code> ，這是因為 container 會在執行完任務後就退出，以 ruby 為例，就是在執行完 irb（交互式 Ruby 解釋器）後會自動退出，所以若想要讓他不自動退出，就需要使用交互模式(可以進到容器內部互動)執行，或是有個讓他可以持久運行的東西。<br>翻成白話大概就是，如果沒事做 container 就下班，如果有事做 container 就會做完再下班。</p>
 <h4 id="交互模式-可以進到容器內部互動-執行"><a href="#交互模式-可以進到容器內部互動-執行" class="headerlink" title="交互模式(可以進到容器內部互動)執行"></a>交互模式(可以進到容器內部互動)執行</h4><pre><code>docker run -i -t ruby /bin/bash
 </code></pre>
@@ -356,17 +356,17 @@
 <p><strong>-t</strong>：代表 “終端”（Terminal）。這個指令是讓 Docker 為容器分配一個虛擬終端幾，讓我們可以在容器內部進行命令操作。如果沒有使用 -t ，你就想像成沒有一個可以打指令的地方（沒有終端機）。</p>
 <p><strong>&#x2F;bin&#x2F;bash</strong>:代表命令解析器（Shell）。用於解釋和執行命令、腳本以及與系統交互的操作。</p>
 <p>所以以上我們通常都會一起使用，直接使用上面範例的下者 <code>docker run -it ruby /bin/bash</code> 可以少打幾個字ＸＤ。</p>
-<p>執行後我們可以看到實際上是進到容器裡面<br><img src="/image/dockerDay5/5_5.png" alt="進到容器裡面"></p>
-<p>所以我們可以在這個有 ruby 環境的容器裡進到 irb ，並執行 ruby 語法<br><img src="/image/dockerDay5/5_6.png" alt="容器裡進到 irb"></p>
+<p>執行後我們可以看到實際上是進到容器裡面<br><img src="/image/dockerDay5/5_5.webp" alt="進到容器裡面"></p>
+<p>所以我們可以在這個有 ruby 環境的容器裡進到 irb ，並執行 ruby 語法<br><img src="/image/dockerDay5/5_6.webp" alt="容器裡進到 irb"></p>
 <p>當這時我們再開一個新的終端機，使用 <code>docker ps</code> 就可以看到，我現在正在運行的 container 了</p>
-<p><img src="/image/dockerDay5/5_7.png" alt="docker ps"></p>
+<p><img src="/image/dockerDay5/5_7.webp" alt="docker ps"></p>
 <p>上面有說過 docker container 是有 <strong>隔離性</strong> 的，這邊我們可以看到上面使用 <code>docker ps -a</code> 看到已停止的容器，跟前面我們使用交互模式後，使用 <code>docker ps</code> 看到的正在執行的容器，兩者的名稱分別為 <code>quizzical_rhode</code> 跟 <code>lucid_rosalind</code> ，就可以說明他們是兩個不同的 container。</p>
 <h4 id="命名我的-container"><a href="#命名我的-container" class="headerlink" title="命名我的 container"></a>命名我的 container</h4><p>上面既然說到名稱，大家不會好奇那我上面那兩個名字哪來的？</p>
 <p>當我們執行 Docker 容器而不指定名稱時，Docker 會根據一定的規則自動為容器生成一個唯一的名稱。這些自動生成的名稱通常由<code>形容詞＋名詞</code>組成。</p>
 <p>當然我們也可以自己命名我的 container</p>
 <pre><code>docker run --name my_ruby ruby
 </code></pre>
-<p><img src="/image/dockerDay5/5_8.png" alt="命名我的 container"><br>執行上方指令，可以看到我成功將我的 container 取名為 <code>my_ruby</code></p>
+<p><img src="/image/dockerDay5/5_8.webp" alt="命名我的 container"><br>執行上方指令，可以看到我成功將我的 container 取名為 <code>my_ruby</code></p>
 <h4 id="背景（持久）模式執行"><a href="#背景（持久）模式執行" class="headerlink" title="背景（持久）模式執行"></a>背景（持久）模式執行</h4><pre><code>docker run -d ruby
 </code></pre>
 <p>這個指令是可以在背景執行，也就是不跑出執行中的 log ，若以 rails 舉例，當我們每次打開 <code>rails s</code> 時，他都會佔用一個終端機，若我想要另外開 <code>rails c</code> 時，就要多開一個終端機，那在 docker 時，使用 <strong>-d</strong> 即可在背景執行，不會多佔一個終端機的概念。</p>
@@ -374,7 +374,7 @@
 <pre><code>docker run -it --name ruby_test ruby
 </code></pre>
 <h3 id="停止-Container"><a href="#停止-Container" class="headerlink" title="停止 Container"></a>停止 Container</h3><p>我們學會開始運行一個 Container ，就要知道如何停止它，要停止 Container 有兩種方法</p>
-<h4 id="在容器裡停止"><a href="#在容器裡停止" class="headerlink" title="在容器裡停止"></a>在容器裡停止</h4><p><img src="/image/dockerDay5/5_9.png" alt="在容器裡停止"><br>若我們使用上面學到的 <code>docker run -it ruby /bin/bash</code> 語法進到容器內，這時需要退出時可以使用</p>
+<h4 id="在容器裡停止"><a href="#在容器裡停止" class="headerlink" title="在容器裡停止"></a>在容器裡停止</h4><p><img src="/image/dockerDay5/5_9.webp" alt="在容器裡停止"><br>若我們使用上面學到的 <code>docker run -it ruby /bin/bash</code> 語法進到容器內，這時需要退出時可以使用</p>
 <ol>
 <li>exit+enter</li>
 <li>control+d<br>打上 <code>exit 再按 enter 鍵</code> ; 或是 <code>按 control 鍵 + d</code> 可退出容器。</li>
@@ -389,7 +389,7 @@
 <h3 id="刪除-Container"><a href="#刪除-Container" class="headerlink" title="刪除 Container"></a>刪除 Container</h3><p>但是並不是每個停止的容器我們都需要再度開啟的，就像是我上面為了示範建的很多不同的 ruby container ，我確定我不會再使用了，所以我就可以使用以下語法將它刪除</p>
 <pre><code>docker rm &lt;container_id_or_name&gt;
 </code></pre>
-<p>📍 需要特別注意的是，想要刪除的 container 不能是運行中的 container ，若想刪除會出現錯誤訊息 “You cannot remove a running container”<br><img src="/image/dockerDay5/5_10.png" alt="刪除運行中的 container"></p>
+<p>📍 需要特別注意的是，想要刪除的 container 不能是運行中的 container ，若想刪除會出現錯誤訊息 “You cannot remove a running container”<br><img src="/image/dockerDay5/5_10.webp" alt="刪除運行中的 container"></p>
 
   </div>
   <div id=""></div>

@@ -339,20 +339,20 @@
 <pre><code class="docker">docker images
 </code></pre>
 <p>看一下自己現在本機所有的 Image(映像)</p>
-<p><img src="/image/dockerDay7/7_1.png" alt="看本機所有的 Images"></p>
+<p><img src="/image/dockerDay7/7_1.webp" alt="看本機所有的 Images"></p>
 <p>這邊我們可以看到有之前我們 run 時，從公共儲存庫 pull 下來的 ruby Image(映像) ，這時我們可以使用以下語法來建立一個有新標籤的 Image(映像)</p>
 <pre><code class="docker">docker tag &lt;本機現有映像 id_or_repository&gt;:&lt;本機現有標籤&gt; &lt;新映像 repository&gt;:&lt;新標籤&gt;
 </code></pre>
-<p><img src="/image/dockerDay7/7_2.png" alt="建立一個有新標籤的 Image"></p>
+<p><img src="/image/dockerDay7/7_2.webp" alt="建立一個有新標籤的 Image"></p>
 <p>這個語法是為本機原本的 ruby Image(映像)，建立一個新的 Image(映像) ，而這個 Image(映像)是新的標籤 <code>v1</code>，所以當你看 <code>docker images</code> 時，會看到兩個 ruby Repository(倉庫)，但是是不同 Tags(標籤) - <code>latest</code> 跟 <code>v1</code>。</p>
 <p>另外建立 Tags(標籤) 成功並不會有輸出。</p>
 <p>📍 注意事項：<br>Tags(標籤)可以包括字母、數字、橫線(<code>-</code>)和下劃線(<code>_</code>)，但不建議使用特殊符號(<code>.</code>、<code>:</code>、<code>/</code>等)。</p>
 <p>新的映像 repository 跟新標籤名稱當然可以取自己滿意的名字，如圖</p>
-<p><img src="/image/dockerDay7/7_3.png" alt="repository 跟新標籤名稱可自訂"></p>
+<p><img src="/image/dockerDay7/7_3.webp" alt="repository 跟新標籤名稱可自訂"></p>
 <p>這時我們有兩個不同 Tags(標籤) 的 ruby Image(映像)，若是我們想將 Tags(標籤) 為 latest 的 ruby Image(映像) 建立一個新的 myapp Repository(倉庫) 且 Tags(標籤) 為 latest 時，因為是默認的 latest Tags(標籤) ，所以可以使用簡寫</p>
 <pre><code class="docker">docker tag &lt;本機現有映像id_or_repository&gt; &lt;新映像 repository&gt;
 </code></pre>
-<p><img src="/image/dockerDay7/7_4.png" alt="使用簡寫建立新的 Repository"></p>
+<p><img src="/image/dockerDay7/7_4.webp" alt="使用簡寫建立新的 Repository"></p>
 <h2 id="建立＋推送-push-自己的-Tags-標籤"><a href="#建立＋推送-push-自己的-Tags-標籤" class="headerlink" title="建立＋推送(push)自己的 Tags(標籤)"></a>建立＋推送(push)自己的 Tags(標籤)</h2><pre><code class="docker">docker tag &lt;本機現有映像id_or_repository&gt; &lt;Docker 儲存庫的主機名或 IP 地址&gt;:&lt;端口&gt;/&lt;新映像 repository&gt;:&lt;新標籤&gt;
 </code></pre>
 <p>這個指令包含兩個動作</p>

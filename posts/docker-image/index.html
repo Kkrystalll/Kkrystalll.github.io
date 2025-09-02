@@ -353,7 +353,7 @@
 <p>總結 Docker Image(映像) 的主要優勢包括 <strong>易於分發</strong> 、 <strong>跨平台</strong> 、 <strong>快速部署</strong> 和 <strong>版本控制</strong> 。</p>
 <h2 id="Docker-Image-映像-的常用語法"><a href="#Docker-Image-映像-的常用語法" class="headerlink" title="Docker Image(映像) 的常用語法"></a>Docker Image(映像) 的常用語法</h2><h3 id="查看本地的所有-Image-映像"><a href="#查看本地的所有-Image-映像" class="headerlink" title="查看本地的所有 Image(映像)"></a>查看本地的所有 Image(映像)</h3><pre><code class="docker">docker images
 </code></pre>
-<p><img src="/image/dockerDay9/9_1.png" alt="看本地的所有 Image"></p>
+<p><img src="/image/dockerDay9/9_1.webp" alt="看本地的所有 Image"></p>
 <p>這邊可以看到我前面幾天建立的 Image(映像)</p>
 <h3 id="拉取-Image-映像"><a href="#拉取-Image-映像" class="headerlink" title="拉取 Image(映像)"></a>拉取 Image(映像)</h3><pre><code class="docker">docker pull &lt;映像名稱:版本&gt;
 </code></pre>
@@ -374,7 +374,7 @@
 <h3 id="查看-Image-映像-的詳細資料"><a href="#查看-Image-映像-的詳細資料" class="headerlink" title="查看 Image(映像) 的詳細資料"></a>查看 Image(映像) 的詳細資料</h3><pre><code class="docker">docker inspect &lt;映像名稱或ID&gt;
 </code></pre>
 <p>docker inspect 呈現的方式為 JSON 格式，docker inspect 可以用在<strong>容器</strong>也可以用在<strong>映像</strong>，所有跟這個容器或是映像有關的資訊，都會在這裡記錄。</p>
-<p><img src="/image/dockerDay9/9_2.png" alt="docker inspect"></p>
+<p><img src="/image/dockerDay9/9_2.webp" alt="docker inspect"></p>
 <p>(上面圖片只先擷取一部份，實際上有更多資訊喔！)</p>
 <h2 id="如何生成-Docker-Image-映像"><a href="#如何生成-Docker-Image-映像" class="headerlink" title="如何生成 Docker Image(映像)?"></a>如何生成 Docker Image(映像)?</h2><p>我已經瞭解了 Docker Image(映像) 這麼多事，但最重要的事，我要怎麼生成屬於我的 Docker Image(映像) 呢？</p>
 <h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>我們要建立 Docker Image(映像) 要先建一個名為 Dockerfile 檔案。Dockerfile 包含了一系列的指令，用於定義如何建立一個鏡像。其中包括選擇基礎鏡像、安裝相依軟件、設置環境變量等。</p>

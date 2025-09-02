@@ -349,19 +349,19 @@
 <pre><code>psql
 </code></pre>
 <p>使用 psql 指令連接到您的 PostgreSQL 資料庫，可以看到如下</p>
-<p><img src="/image/dockerDay17/17_1.png" alt="psql"></p>
+<p><img src="/image/dockerDay17/17_1.webp" alt="psql"></p>
 <p>這邊可以看到後面的 14.5 就是 PostgreSQL 服務的版本，但若是你還是想再確認一次，或是知道更多詳細訊息，也可以在這邊再下</p>
 <pre><code class="SQL">SELECT version();
 </code></pre>
-<p><img src="/image/dockerDay17/17_2.png" alt="psql 詳細訊息"><br><img src="/image/dockerDay17/17_3.png" alt="psql 詳細訊息"></p>
+<p><img src="/image/dockerDay17/17_2.webp" alt="psql 詳細訊息"><br><img src="/image/dockerDay17/17_3.webp" alt="psql 詳細訊息"></p>
 <p>如圖我們就可以知道有關版本的更多詳細訊息。</p>
 <h4 id="在-Docker-Hub-找適合的-image"><a href="#在-Docker-Hub-找適合的-image" class="headerlink" title="在 Docker Hub 找適合的 image"></a>在 Docker Hub 找適合的 image</h4><p>要找公開包好的 image ，第一時間想到 Docker Hub，我在 Docker Hub 裡搜尋 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres">postgres</a> 找尋版本 14 開頭的 tag</p>
-<p><img src="/image/dockerDay17/17_4.png" alt="Docker Hub postgres"></p>
+<p><img src="/image/dockerDay17/17_4.webp" alt="Docker Hub postgres"></p>
 <p>因為沒有完全符合 14.5 的 tag ，所以我就選擇 <code>14-alpine</code> ，這時 docker-compose.yml 可以寫成：</p>
 <pre><code class="docker">image: postgres:14-alpine
 </code></pre>
 <h3 id="完成-db-服務設定"><a href="#完成-db-服務設定" class="headerlink" title="完成 db 服務設定"></a>完成 db 服務設定</h3><p>剛剛找好根據哪個 image ，然後呢？還有哪些要定義的？我們可以順勢參考頁面 <a target="_blank" rel="noopener" href="https://hub.docker.com/_/postgres">postgres</a></p>
-<p><img src="/image/dockerDay17/17_5.png" alt="Docker Hub postgres"></p>
+<p><img src="/image/dockerDay17/17_5.webp" alt="Docker Hub postgres"></p>
 <p>這邊寫到需要設置環境變數，我們就加上去</p>
 <pre><code class="docker">environment:
    POSTGRES_PASSWORD: password
@@ -396,11 +396,11 @@ services:
 <h2 id="啟動-docker-compose-看看"><a href="#啟動-docker-compose-看看" class="headerlink" title="啟動 docker-compose 看看"></a>啟動 docker-compose 看看</h2><pre><code class="docker">docker-compose up --build
 </code></pre>
 <p>使用 <code>docker-compose up --build</code> 建立＋啟動容器，通常會需要一小段時間，我們先讓子彈飛一會兒…</p>
-<p><img src="/image/dockerDay17/17_6.png" alt="建立＋啟動容器"></p>
+<p><img src="/image/dockerDay17/17_6.webp" alt="建立＋啟動容器"></p>
 <p>容器看似開起來，有動靜</p>
-<p><img src="/image/dockerDay17/17_7.png" alt="建立＋啟動容器"></p>
+<p><img src="/image/dockerDay17/17_7.webp" alt="建立＋啟動容器"></p>
 <p>但當我打開瀏覽器在網址搜尋 <code>http://0.0.0.0:3000</code> ，出現了跟之前一樣的</p>
-<p><img src="/image/dockerDay17/17_8.png" alt="瀏覽器頁面"></p>
+<p><img src="/image/dockerDay17/17_8.webp" alt="瀏覽器頁面"></p>
 <p>記得上次是因為我沒有指定 port ，於是我詢問谷歌大神，搜尋關鍵字 <code>docker compose port</code> 可以看到第一篇文章，也就是 <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/networking/">官方文件</a> 說明 docker-compose.yml 檔也要寫 port ，這樣才可以知道容器的 port 要對應到主機的哪個 port ，供主機訪問，所以我在 app 的服務中加上</p>
 <pre><code class="docker">ports:
    - 3000:3000
@@ -428,17 +428,17 @@ services:
 <p>要重新將容器 build ，需要先將 compose 內的容器移除</p>
 <pre><code class="docker">docker compose down
 </code></pre>
-<p><img src="/image/dockerDay17/17_9.png" alt="移除容器"></p>
+<p><img src="/image/dockerDay17/17_9.webp" alt="移除容器"></p>
 <p>再重複上述動作</p>
 <pre><code class="docker">docker-compose up --build
 </code></pre>
 <p>這時我們打開瀏覽器在網址搜尋 <code>http://0.0.0.0:3000</code> 可以看到</p>
-<p><img src="/image/dockerDay17/17_10.png" alt="Create database"></p>
+<p><img src="/image/dockerDay17/17_10.webp" alt="Create database"></p>
 <p>仔細看錯誤訊息只是因為我們的 database 還沒有建立，所以直接點選上面的 <code>Create database</code> 按鈕，這個按鈕其實就是我們平常打的 <code>bin/rails db:create</code> 。</p>
 <p>順利 Create database 後，不曉得大家腦中有沒有預期到等等會發生的錯誤了？</p>
-<p><img src="/image/dockerDay17/17_11.png" alt="rails db:migrate"></p>
+<p><img src="/image/dockerDay17/17_11.webp" alt="rails db:migrate"></p>
 <p>就是還需要跑 <code>rails db:migrate</code> ，一樣先點按按鈕即可</p>
-<p><img src="/image/dockerDay17/17_12.png" alt="成功開啟專案"></p>
+<p><img src="/image/dockerDay17/17_12.webp" alt="成功開啟專案"></p>
 <p>終於 🥳🥳🥳 看到了我們空空如也的首頁，這代表以後我們都可以透過 <code>docker compose up</code> 來啟動容器！</p>
 
   </div>
@@ -499,7 +499,7 @@ services:
 
     <div class="post-paging">
     
-    <a href="/posts/push-image-to-docker-hub/">
+    <a href="/posts/docker-push-image/">
         <div class="post-paging-last">
             <span>上一篇</span>
             <p>Docker - 將我的 Image 推到 Docker Hub 儲存庫</p>
