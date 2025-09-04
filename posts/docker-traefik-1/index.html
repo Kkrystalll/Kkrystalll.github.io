@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(一)-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Traefik,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Traefik">#Traefik</a></li>
+       
+    </ul>
+
+    <h1>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(一)</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+          <a href="../../categories/Docker/部署/AWS/Traefik/" target="_blank">Traefik</a>
+          
+        </div>
+        <p>2023-10-09 19:27:10</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-docker-compose-yml-%E5%8A%A0%E4%B8%8A-traefik-%E6%9C%8D%E5%8B%99"><span class="toc-number">1.</span> <span class="toc-text">在 docker-compose.yml 加上 traefik 服務</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%85%88%E5%B0%87%E5%8E%9F%E6%9C%AC%E7%9A%84-docker-compose-%E5%81%9C%E4%B8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1. 先將原本的 docker-compose 停下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B7%A8%E8%BC%AF-docker-compose-yml"><span class="toc-number">1.2.</span> <span class="toc-text">編輯 docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%95%9F%E5%8B%95%E5%AE%B9%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">重新啟動容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%BB%E7%9C%8B-Traefik-%E7%9A%84-API-%E5%8E%9F%E5%A7%8B%E8%B3%87%E6%96%99"><span class="toc-number">1.4.</span> <span class="toc-text">去看 Traefik 的 API 原始資料</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%96%8B-EC2-8080-port"><span class="toc-number">1.5.</span> <span class="toc-text">開 EC2 8080 port</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E7%9C%8B%E7%80%8F%E8%A6%BD%E5%99%A8-Traefik-%E7%9A%84-API-%E5%8E%9F%E5%A7%8B%E8%B3%87%E6%96%99"><span class="toc-number">1.6.</span> <span class="toc-text">重看瀏覽器 Traefik 的 API 原始資料</span></a></li></ol></li></ol>
+    </div>
+     <p>我參考 <a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/getting-started/quick-start/">官網</a> 用 Docker 啟動 Traefik ，跟者步驟試試</p>
+<h2 id="在-docker-compose-yml-加上-traefik-服務"><a href="#在-docker-compose-yml-加上-traefik-服務" class="headerlink" title="在 docker-compose.yml 加上 traefik 服務"></a>在 docker-compose.yml 加上 traefik 服務</h2><h3 id="1-先將原本的-docker-compose-停下"><a href="#1-先將原本的-docker-compose-停下" class="headerlink" title="1. 先將原本的 docker-compose 停下"></a>1. 先將原本的 docker-compose 停下</h3><pre><code class="docker">docker-compose down
+</code></pre>
+<p><img src="/image/dockerDay24/24_1.webp" alt="Traefik 配置"></p>
+<p>確認一下有沒有容器在跑</p>
+<pre><code class="docker">docker ps
+</code></pre>
+<p><img src="/image/dockerDay24/24_2.webp" alt="Traefik 配置"></p>
+<h3 id="編輯-docker-compose-yml"><a href="#編輯-docker-compose-yml" class="headerlink" title="編輯 docker-compose.yml"></a>編輯 docker-compose.yml</h3><p>官網上面說在 docker-compose.yml 加上 reverse-proxy 這個服務</p>
+<pre><code class="docker">reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.10
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - &quot;80:80&quot;
+      # The Web UI (enabled by --api.insecure=true)
+      - &quot;8080:8080&quot;
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+</code></pre>
+<p>我根據上方官網的提示將 service <code>reverse-proxy</code> 改為 <code>traefik</code> ，然後重新啟動 docker-compose 一次，首先使用 vi 來編輯:</p>
+<pre><code class="docker">vi docker-compose.yml
+</code></pre>
+<p>現在的 docker-compose.yml 長這樣：</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    image: krystallll/docker_test:1.0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    restart: on-failure
+    ports:
+      - 3000:3000
+  db:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: password
+  traefik:
+    image: traefik:v2.10
+    command: --api.insecure=true --providers.docker
+    ports:
+      - &quot;80:80&quot;
+      - &quot;8080:8080&quot;
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+</code></pre>
+<h3 id="重新啟動容器"><a href="#重新啟動容器" class="headerlink" title="重新啟動容器"></a>重新啟動容器</h3><pre><code class="docker">docker-compose up --build
+</code></pre>
+<p><img src="/image/dockerDay24/24_3.webp" alt="Traefik 配置"></p>
+<h3 id="去看-Traefik-的-API-原始資料"><a href="#去看-Traefik-的-API-原始資料" class="headerlink" title="去看 Traefik 的 API 原始資料"></a>去看 Traefik 的 API 原始資料</h3><p>官網說可以去以下網址看 Traefik 的 API 原始資料</p>
+<pre><code>http://localhost:8080/api/rawdata
+</code></pre>
+<p><img src="/image/dockerDay24/24_4.webp" alt="Traefik 配置"></p>
+<h3 id="開-EC2-8080-port"><a href="#開-EC2-8080-port" class="headerlink" title="開 EC2 8080 port"></a>開 EC2 8080 port</h3><p>看到無法連上網站，我先盲猜是因為沒有開 8080 port，所以跟之前一樣我先去 AWS EC2 裡跟之前設定 3000 port 一樣去設定 8080 port。</p>
+<p>一樣先去編輯 Security Groups</p>
+<p><img src="/image/dockerDay24/24_5.webp" alt="Traefik 配置"></p>
+<p>加上 8080 port</p>
+<p><img src="/image/dockerDay24/24_6.webp" alt="Traefik 配置"></p>
+<h3 id="重看瀏覽器-Traefik-的-API-原始資料"><a href="#重看瀏覽器-Traefik-的-API-原始資料" class="headerlink" title="重看瀏覽器 Traefik 的 API 原始資料"></a>重看瀏覽器 Traefik 的 API 原始資料</h3><p>重新看</p>
+<pre><code>http://localhost:8080/api/rawdata
+</code></pre>
+<p><img src="/image/dockerDay24/24_4.webp" alt="Traefik 配置"></p>
+<p>一樣是無法連上網站，突然靈機一動上面的網址是 <code>http://localhost</code> 但現在網址是 <code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com</code> 所以我換網址為 <code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:8080/api/rawdata</code> 可以看到以下</p>
+<p><img src="/image/dockerDay24/24_8.webp" alt="Traefik 配置"></p>
+<p>終於成功看到 API 原始資料，那明天我們繼續來完成使用 Traefik 取得 HTTPS 協定。</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-traefik-2/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(二)</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-traefik-info/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 了解 Traefik 反向代理伺服器</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 在 instance 上跑 Docker Image-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Image,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Image">#Image</a></li>
+       
+    </ul>
+
+    <h1>Docker - 在 instance 上跑 Docker Image</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+        </div>
+        <p>2023-10-06 16:42:38</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-EC2-instance-%E7%99%BB%E5%85%A5-Docker-Hub"><span class="toc-number">1.</span> <span class="toc-text">在 EC2 instance 登入 Docker Hub</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E6%88%91%E5%85%88%E5%89%8D%E6%8E%A8%E4%B8%8A%E5%8E%BB%E7%9A%84-image"><span class="toc-number">2.</span> <span class="toc-text">拉取我先前推上去的 image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D%E6%98%AF%E5%90%A6-pull-%E6%88%90%E5%8A%9F"><span class="toc-number">3.</span> <span class="toc-text">確認是否 pull 成功</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AB%E4%B8%8D%E5%8F%8A%E5%BE%85%E8%A9%A6%E8%B7%91%E7%9C%8B%E7%9C%8B-image"><span class="toc-number">4.</span> <span class="toc-text">迫不及待試跑看看 image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A3%E7%A2%BA%E7%9A%84%E7%B6%B2%E5%9D%80%E6%90%9C%E5%B0%8B"><span class="toc-number">5.</span> <span class="toc-text">使用正確的網址搜尋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D%E7%B6%B2%E8%B7%AF%E5%AE%89%E5%85%A8%E7%BE%A4%E7%B5%84"><span class="toc-number">6.</span> <span class="toc-text">確認網路安全群組</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A2%BA%E8%AA%8D-instance-%E7%9A%84-Security-%E5%8F%AB%E4%BB%80%E9%BA%BC%E5%90%8D%E5%AD%97"><span class="toc-number">6.1.</span> <span class="toc-text">確認 instance 的 Security 叫什麼名字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A8%AD%E7%BD%AE%E5%85%81%E8%A8%B1-3000-port-%E9%80%9A%E9%81%8E"><span class="toc-number">6.2.</span> <span class="toc-text">設置允許 3000 port 通過</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%80%E5%87%BA%E5%AE%B9%E5%99%A8%E5%86%8D%E9%87%8D%E6%96%B0%E8%A9%A6%E4%B8%80%E6%AC%A1"><span class="toc-number">7.</span> <span class="toc-text">退出容器再重新試一次</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%AD%E5%AE%9A-config-hosts-%EF%BC%8C%E9%87%8D%E6%8E%A8-image"><span class="toc-number">8.</span> <span class="toc-text">設定 config.hosts ，重推 image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-EC2-instance-%E8%A3%A1%E9%87%8D%E6%96%B0-pull-%E6%96%B0%E7%9A%84-image"><span class="toc-number">9.</span> <span class="toc-text">在 EC2 instance 裡重新 pull 新的 image</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%95%9F%E5%8B%95%EF%BC%8C%E6%89%93%E9%96%8B%E7%80%8F%E8%A6%BD%E5%99%A8"><span class="toc-number">10.</span> <span class="toc-text">重新啟動，打開瀏覽器</span></a></li></ol>
+    </div>
+     <h2 id="在-EC2-instance-登入-Docker-Hub"><a href="#在-EC2-instance-登入-Docker-Hub" class="headerlink" title="在 EC2 instance 登入 Docker Hub"></a>在 EC2 instance 登入 Docker Hub</h2><pre><code class="docker">docker login
+</code></pre>
+<p>除了可以使用之前在 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10333562">DAY 18 - 將我的 Image 推到 Docker Hub 儲存庫</a> ，教的 <code>docker login</code> ，再根據指示輸入 username 跟 password 外，也可以用下面一句話搞定。</p>
+<pre><code class="docker">docker login -u &lt; 我的 docker username &gt; -p &lt; 我的 docker password &gt;
+</code></pre>
+<p>順利登入成功後，一樣可以看到 <code>Login Succeeded</code> 。</p>
+<h2 id="拉取我先前推上去的-image"><a href="#拉取我先前推上去的-image" class="headerlink" title="拉取我先前推上去的 image"></a>拉取我先前推上去的 image</h2><pre><code class="docker">docker pull krystallll/docker_test:1.0
+</code></pre>
+<p><img src="/image/dockerDay21/21_1.webp" alt="拉取我先前推上去的 image"></p>
+<p>就跟我們 git pull 大同小異，只要打對 <code>遠端儲存庫/image 名稱:tag</code> 就可以順利 pull 下 image 啦！</p>
+<h2 id="確認是否-pull-成功"><a href="#確認是否-pull-成功" class="headerlink" title="確認是否 pull 成功"></a>確認是否 pull 成功</h2><pre><code class="docker">docker images
+</code></pre>
+<p><img src="/image/dockerDay21/21_2.webp" alt="確認 images"></p>
+<p>可以看到我 EC2 instance 的本地成功有 <code>krystallll/docker_test</code></p>
+<h2 id="迫不及待試跑看看-image"><a href="#迫不及待試跑看看-image" class="headerlink" title="迫不及待試跑看看 image"></a>迫不及待試跑看看 image</h2><pre><code class="docker">docker run -p 3000:3000 krystallll/docker_test:1.0
+</code></pre>
+<p><img src="/image/dockerDay21/21_3.webp" alt="跑看看 image"></p>
+<p>看起來跑成功了，但我瀏覽器要搜尋哪個網址呢？一樣是 <code>http://0.0.0.0:3000</code> 嗎？如果你試試相信會看到 404 無法連上這個網頁的字樣，因為 <code>http://0.0.0.0:3000</code> 是本機預設的，但我們現在在的地方是 EC2 inatance ，所以我們應該要去看看這個 instance 的是否有公開的 IP address 或是 DNS</p>
+<p><img src="/image/dockerDay21/21_4.webp" alt="Public IP address"></p>
+<p>📍 之所以找 Public (公開的) IP address 或是 DNS ，而不是 Private 是因為我們希望是一個別人搜尋也可以搜尋的到的網址，所以要用 Public。</p>
+<h2 id="使用正確的網址搜尋"><a href="#使用正確的網址搜尋" class="headerlink" title="使用正確的網址搜尋"></a>使用正確的網址搜尋</h2><pre><code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000
+</code></pre>
+<p>📍 這邊在後面加上 <code>:3000</code> 是因為我們一開始指定 port 3000</p>
+<pre><code>http://52.199.213.167:3000
+</code></pre>
+<p>如果有跟這我做的話，那您的這兩個應該會跟我長不一樣，如果是是複製貼上上面那段，那你只會看到我的專案喔 😜 <del>甚至我的專案內容空空如也，可能比你的還不好看 🤣</del></p>
+<p><img src="/image/dockerDay21/21_5.webp" alt="確認網址"></p>
+<p>你不是說這是正確的網址，為什麼還是連不上 😡😡😡 其實連不上的原因可能有很多，通常是網路的問題，那因為這邊我們比較特別是指定 3000 port ，所以首先我們可以先去查這個 instance 的網路是否有允許 3000 port。</p>
+<h2 id="確認網路安全群組"><a href="#確認網路安全群組" class="headerlink" title="確認網路安全群組"></a>確認網路安全群組</h2><h3 id="確認-instance-的-Security-叫什麼名字"><a href="#確認-instance-的-Security-叫什麼名字" class="headerlink" title="確認 instance 的 Security 叫什麼名字"></a>確認 instance 的 Security 叫什麼名字</h3><ol>
+<li><p>勾選想確認的 instance</p>
+</li>
+<li><p>選擇 Security Tab</p>
+</li>
+<li><p>記住 Security groups 是哪個<br><img src="/image/dockerDay21/21_6.webp" alt="Security groups"></p>
+</li>
+<li><p>從左邊側邊欄找到 Security groups 按鈕，點進頁面</p>
+</li>
+<li><p>找到剛剛記住的 Security groups ，並勾選</p>
+</li>
+<li><p>點選 Actions 下拉選單</p>
+</li>
+<li><p>選擇 Edit inbound rules 來編緝這個網路安全群組<br><img src="/image/dockerDay21/21_7.webp" alt="編緝網路安全群組"></p>
+</li>
+</ol>
+<h3 id="設置允許-3000-port-通過"><a href="#設置允許-3000-port-通過" class="headerlink" title="設置允許 3000 port 通過"></a>設置允許 3000 port 通過</h3><ol>
+<li>點選 <code>Add rule</code> 新增安全群組的規則</li>
+<li>選擇 <code>Custom TCP</code> 並在 Port range 填上 3000</li>
+<li>點選 <code>Save rules</code> 將新增的規則儲存<br><img src="/image/dockerDay21/21_8.webp" alt="新增安全群組規則"></li>
+</ol>
+<h2 id="退出容器再重新試一次"><a href="#退出容器再重新試一次" class="headerlink" title="退出容器再重新試一次"></a>退出容器再重新試一次</h2><p>使用之前教過的 <code>control 鍵 + c 鍵</code> 停止容器，再 <code>docker run -p 3000:3000 krystallll/docker_test:1.0</code> ，成功後在瀏覽器搜尋 <code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000</code></p>
+<p><img src="/image/dockerDay21/21_9.webp" alt="搜尋網頁"></p>
+<p>登登新的錯誤訊息來了！但是只要看到這熟悉的畫面<del>(最對味)</del> ，就知道至少是 rails 的錯誤了 🥺🥺🥺<br>看起來是在說需要在 rails 加上設定 <code>config.hosts</code>，還貼的附上 <a target="_blank" rel="noopener" href="https://guides.rubyonrails.org/configuring.html#actiondispatch-hostauthorization">官方文件</a> 😍</p>
+<h2 id="設定-config-hosts-，重推-image"><a href="#設定-config-hosts-，重推-image" class="headerlink" title="設定 config.hosts ，重推 image"></a>設定 <code>config.hosts</code> ，重推 image</h2><p>根據官方文件我們知道需要設定 <code>config/environments/development.rb</code> 或是 <code>config/environments/production.rb</code> ，那因為我們目前都是在 development ，所以我就設定 <code>config/environments/development.rb</code></p>
+<p>但是如果按照上面錯誤訊息那樣寫的話，本機請求的網址就會是 <code>ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com</code> 不是 <code>localhost:3000</code> ，我希望在本機時跑 <code>localhost:3000</code>，在 EC2 instance 時，跑 <code>ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com</code> ，這邊有個新學到的方法跟大家分享：</p>
+<pre><code class="ruby">config.hosts &lt;&lt; &quot;ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000&quot; unless Rails.root.join(&quot;tmp/hostname.txt&quot;).exist?
+</code></pre>
+<p>他會根據 tmp 裡面有沒有 hostname.txt 這個名稱的檔案，來決定是否要呈現 <code>config.hosts &lt;&lt; &quot;ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000&quot;</code> ，如果我們本機不需要 ec2 的 host ，那在 tmp 裡面新增一個名為 hostname.txt 即可。</p>
+<p>也別忘了新增一個 <code>.dockerignore</code> 檔案，並加上：</p>
+<pre><code>/tmp/hostname.txt
+</code></pre>
+<p><img src="/image/dockerDay21/21_10.webp" alt="加上 .dockerignore"></p>
+<p>這樣這個檔案就不會進到 docker 裡。</p>
+<p>📍<code>.dockerignore</code> 其實就跟<code>.gitignore</code> 是相同的概念。</p>
+<p>完成後即可重新 build 一顆新的 image 推上 Dokcker Hub(別忘了先 docker login)</p>
+<pre><code class="docker">docker build -t krystallll/docker_test:1.0 . --push
+</code></pre>
+<h2 id="在-EC2-instance-裡重新-pull-新的-image"><a href="#在-EC2-instance-裡重新-pull-新的-image" class="headerlink" title="在 EC2 instance 裡重新 pull 新的 image"></a>在 EC2 instance 裡重新 pull 新的 image</h2><p>因為剛剛上一步我們有重 push image ，所以我們需要拉最新的 image 下來運行</p>
+<pre><code class="docker">docker pull krystallll/docker_test:1.0
+</code></pre>
+<p><img src="/image/dockerDay21/21_11.webp" alt="pull 新的 image"></p>
+<h2 id="重新啟動，打開瀏覽器"><a href="#重新啟動，打開瀏覽器" class="headerlink" title="重新啟動，打開瀏覽器"></a>重新啟動，打開瀏覽器</h2><p>重複剛剛啟動容器<code>docker run -p 3000:3000 krystallll/docker_test:1.0</code> ，成功後在瀏覽器搜尋 <code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000</code> ，可以看到<br><img src="/image/dockerDay21/21_12.webp" alt="重新啟動，打開瀏覽器"></p>
+<p>沒錯這是我們熟悉的錯誤<del>從沒這麼期待看到錯誤</del>，那既然做到根本機一樣，接下來我們就知道，需要在 EC2 instance 裡面加上 docker compose ，這就是我們明天的內容，明天見！</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-create-compose/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 在 EC2 instance 加上 docker compose 跑起來</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-connect-aws-ec2/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 連接到 EC2 instance 並下載 Docker</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

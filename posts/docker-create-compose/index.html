@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 在 EC2 instance 加上 docker compose 跑起來-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,EC2,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/EC2">#EC2</a></li>
+       
+    </ul>
+
+    <h1>Docker - 在 EC2 instance 加上 docker compose 跑起來</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+        </div>
+        <p>2023-10-07 20:17:18</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B-docker-compose-yml-%E6%AA%94%E6%A1%88%EF%BC%8C%E4%B8%A6%E5%AF%AB%E5%85%A5%E8%B3%87%E6%96%99"><span class="toc-number">1.</span> <span class="toc-text">建立 docker-compose.yml 檔案，並寫入資料</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9C%A8%E5%B0%8D%E7%9A%84%E8%B7%AF%E5%BE%91%E4%B8%8B%E5%89%B5%E5%BB%BA%E3%80%81%E7%B7%A8%E8%BC%AF-docker-compose-yml"><span class="toc-number">1.1.</span> <span class="toc-text">1. 在對的路徑下創建、編輯 docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AF%AB%E5%85%A5%E5%B0%8D%E7%9A%84%E8%B3%87%E6%96%99%E5%88%B0-docker-compose-yml"><span class="toc-number">1.2.</span> <span class="toc-text">2. 寫入對的資料到 docker-compose.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%84%B2%E5%AD%98%E4%B8%A6%E9%80%80%E5%87%BA-vim"><span class="toc-number">1.3.</span> <span class="toc-text">3. 儲存並退出 vim</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-compose-up-%E8%A9%A6%E8%A9%A6"><span class="toc-number">2.</span> <span class="toc-text">docker-compose up 試試</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-docker-compose"><span class="toc-number">3.</span> <span class="toc-text">安裝 docker-compose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0-docker-compose-up"><span class="toc-number">4.</span> <span class="toc-text">重新 docker-compose up</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%95%AB%E9%9D%A2%E6%AA%A2%E6%9F%A5"><span class="toc-number">5.</span> <span class="toc-text">畫面檢查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A9%A6%E8%A9%A6%E7%94%A8%E5%85%B6%E4%BB%96%E4%BA%BA%E8%BA%AB%E4%BB%BD%E6%90%9C%E5%B0%8B%E7%B6%B2%E5%9D%80"><span class="toc-number">6.</span> <span class="toc-text">試試用其他人身份搜尋網址</span></a></li></ol>
+    </div>
+     <p>昨天我們實際讓 EC2 instance 使用 pull 下來的 image 啟動 container，因為遇到熟悉的錯誤，所以今天要來在 EC2 instance 加上 docker-compose.yml 跑起來。</p>
+<h2 id="建立-docker-compose-yml-檔案，並寫入資料"><a href="#建立-docker-compose-yml-檔案，並寫入資料" class="headerlink" title="建立 docker-compose.yml 檔案，並寫入資料"></a>建立 docker-compose.yml 檔案，並寫入資料</h2><p>在終端機要建立、編輯檔案可以選擇自己熟悉的文本編輯器，我這邊是使用 <code>vim</code> 編輯器，若是對於一些 vim 編輯器的語法有興趣深入鑽研，可以另外再去找文章學習，這邊只會簡單介紹基礎 vim 語法。</p>
+<h3 id="1-在對的路徑下創建、編輯-docker-compose-yml"><a href="#1-在對的路徑下創建、編輯-docker-compose-yml" class="headerlink" title="1. 在對的路徑下創建、編輯 docker-compose.yml"></a>1. 在對的路徑下創建、編輯 docker-compose.yml</h3><p>一樣先進入到 EC2 instance 的終端機，使用 vim 指令建立加進去檔案編輯</p>
+<pre><code class="vim">vim docker-compose.yml
+</code></pre>
+<p><img src="/image/dockerDay22/22_1.webp" alt="用 vim 建立 docker-compose.yml"></p>
+<p>這串按下 enter 會出現如下的編輯畫面<br><img src="/image/dockerDay22/22_2.webp" alt="vim 編輯器"></p>
+<h3 id="2-寫入對的資料到-docker-compose-yml"><a href="#2-寫入對的資料到-docker-compose-yml" class="headerlink" title="2. 寫入對的資料到 docker-compose.yml"></a>2. 寫入對的資料到 docker-compose.yml</h3><p>我們可以按鍵盤 <code>i</code> 鍵來切換成輸入模式，並將本來專案的 docker-compose.yml 檔內容給貼上<br>❗ 特別注意 ❗<br>本來在本機我們是根據本機的 dockerfile 來建置 app 服務的容器(如下)</p>
+<pre><code class="docker">app:
+  build:
+    context: .
+</code></pre>
+<p>但這邊我們要改使用我們在 Docker Hub 拉下來的 image ，來建立 app 容器，所以需要改成(如下)</p>
+<pre><code class="docker">app:
+  image: krystallll/docker_test:1.0
+</code></pre>
+<p>如此一來現在 <code>docker-compose.yml</code> 內容會長成如下：<br><img src="/image/dockerDay22/22_3.webp" alt="docker-compose.yml"></p>
+<h3 id="3-儲存並退出-vim"><a href="#3-儲存並退出-vim" class="headerlink" title="3. 儲存並退出 vim"></a>3. 儲存並退出 vim</h3><p>剛剛使用鍵盤 <code>i</code> 進入輸入模式，當需要退出輸入模式時，可以使用 <code>esc</code> 鍵，這時試試如何敲打鍵盤都不會有字被打出來，這時我們需要儲存檔案並退出檔案，可以使用 <code>:wq</code> 鍵，是 <code>儲存並退出</code> 的意思。<br><img src="/image/dockerDay22/22_4.webp" alt="儲存並退出 vim"></p>
+<h2 id="docker-compose-up-試試"><a href="#docker-compose-up-試試" class="headerlink" title="docker-compose up 試試"></a>docker-compose up 試試</h2><p>順利退出來後我們可以試跑看看 docker-compose</p>
+<p><img src="/image/dockerDay22/22_5.webp" alt="docker-compose up"></p>
+<blockquote>
+<p>-bash: docker-compose: command not found</p>
+</blockquote>
+<p>看到這個意思代表他連 docker-compose 都沒有</p>
+<h2 id="安裝-docker-compose"><a href="#安裝-docker-compose" class="headerlink" title="安裝 docker-compose"></a>安裝 docker-compose</h2><p>那就來找找應該如何安裝 docker-compose 吧！谷歌大神我又來了，我下關鍵字 <code>Amazon Linux install Docker Compose</code> 找到一篇 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/63708035/installing-docker-compose-on-amazon-ec2-linux-2-9kb-docker-compose-file">Stack Overflow</a> 的文章<br>看起來安裝 docker-compose 可以試試這個步驟，步驟內容大概是：</p>
+<ol>
+<li>安裝 docker-compose</li>
+<li>調整檔案權限</li>
+<li>確認 docker-compose 版本，以確認是否安裝成功</li>
+</ol>
+<pre><code>sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose version
+</code></pre>
+<p>我根據步驟實作，也確實安裝成功 v2.22.0 版本的 docker-compose<br><img src="/image/dockerDay22/22_6.webp" alt="安裝 docker-compose"><br><img src="/image/dockerDay22/22_7.webp" alt="確認 docker-compose 版本"></p>
+<h2 id="重新-docker-compose-up"><a href="#重新-docker-compose-up" class="headerlink" title="重新 docker-compose up"></a>重新 docker-compose up</h2><p>這時我們重新 docker-compose up 試試，可以看到容器有順利啟動了<br><img src="/image/dockerDay22/22_8.webp" alt="docker-compose up"></p>
+<h2 id="畫面檢查"><a href="#畫面檢查" class="headerlink" title="畫面檢查"></a>畫面檢查</h2><p>一樣回到瀏覽器，查詢網址，可以看到當初熟悉的錯誤訊息，要我們 create database，我們一樣可以選擇點按瀏覽器的按鈕</p>
+<p><img src="/image/dockerDay22/22_9.webp" alt="查詢網址"></p>
+<p>這邊一樣需要 <code>db:migrate</code> ，那我就來教大家另一個不按按鈕進到 docker 容器的語法</p>
+<p><img src="/image/dockerDay22/22_10.webp" alt="db:migrate"></p>
+<p>首先我們需要先進到 app 這個容器裡面，為了沁去容器我需要先知道這個容器的名稱，使用最常用的</p>
+<pre><code class="docker">docker ps
+</code></pre>
+<p><img src="/image/dockerDay22/22_11.webp" alt="docker ps"></p>
+<p>可以看到容器名稱為 <code>ec2-user-app-1</code> ，那我就可以使用以下語法進到容器內，</p>
+<pre><code class="docker">docker exec -it ec2-user-app-1 sh
+</code></pre>
+<p><img src="/image/dockerDay22/22_12.webp" alt="進到容器內"></p>
+<p>可以看到我們順利進到 app 資料夾裡，也就是我們的 rails ，這時我們就可以順利在這邊下</p>
+<pre><code class="rails">rails db:migrate
+</code></pre>
+<p><img src="/image/dockerDay22/22_13.webp" alt="rails db:migrate"></p>
+<p>回到網頁重整一下，就可以看到我們心心念念的空白首頁 🥳🥳🥳</p>
+<p><img src="/image/dockerDay22/22_14.webp" alt="重整網頁"></p>
+<h2 id="試試用其他人身份搜尋網址"><a href="#試試用其他人身份搜尋網址" class="headerlink" title="試試用其他人身份搜尋網址"></a>試試用其他人身份搜尋網址</h2><p>但謹慎的我還是想多確認一下，我是不是真的有部署成功，這時可以使用其他身份搜尋看看，我使用 Chrome 的無痕模式</p>
+<p><img src="/image/dockerDay22/22_15.webp" alt="無痕搜尋"></p>
+<p>一樣輸入網址，成功收工！！！😍😍😍<br><img src="/image/dockerDay22/22_16.webp" alt="成功顯示網址"></p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-traefik-info/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 了解 Traefik 反向代理伺服器</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-run-image/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 在 instance 上跑 Docker Image</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 了解 Traefik 反向代理伺服器-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Traefik,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Traefik">#Traefik</a></li>
+       
+    </ul>
+
+    <h1>Docker - 了解 Traefik 反向代理伺服器</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+          <a href="../../categories/Docker/部署/AWS/Traefik/" target="_blank">Traefik</a>
+          
+        </div>
+        <p>2023-10-08 10:27:38</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%87%E7%B6%B2%E5%9D%80%E5%BE%9E-HTTP-%E8%AE%8A%E6%88%90-HTTPS-%E7%9A%84%E6%AD%A5%E9%A9%9F"><span class="toc-number">1.</span> <span class="toc-text">將網址從 HTTP 變成 HTTPS 的步驟</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%96%E5%BE%97-SSL-x2F-TLS-%E6%86%91%E8%AD%89%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">1. 取得 SSL&#x2F;TLS 憑證：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%9D%E8%AD%89%E6%9B%B8%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">2. 安裝證書：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E4%BC%BA%E6%9C%8D%E5%99%A8%EF%BC%9A"><span class="toc-number">1.3.</span> <span class="toc-text">3. 配置伺服器：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%87%8D%E6%96%B0%E5%95%9F%E5%8B%95%E4%BC%BA%E6%9C%8D%E5%99%A8%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">4. 重新啟動伺服器：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-HTTP-%E5%88%B0-HTTPS-%E8%87%AA%E5%8B%95%E8%BD%89%E5%9D%80%EF%BC%9A"><span class="toc-number">1.5.</span> <span class="toc-text">5. HTTP 到 HTTPS 自動轉址：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Traefik-%E5%B0%87-HTTP-%E8%AE%8A%E6%88%90-HTTPS-%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%81%9A%E5%88%B0%E5%93%AA%E4%BA%9B%E4%BA%8B%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">使用 Traefik 將 HTTP 變成 HTTPS ，可以做到哪些事？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8B%95-SSL-x2F-TLS-%E6%86%91%E8%AD%89%E7%AE%A1%E7%90%86%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">自動 SSL&#x2F;TLS 憑證管理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-%E5%88%B0-HTTPS-%E8%87%AA%E5%8B%95%E9%87%8D%E6%96%B0%E5%B0%8E%E5%90%91%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP 到 HTTPS 自動重新導向：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1%E8%88%87%E8%B7%AF%E7%94%B1%EF%BC%9A"><span class="toc-number">2.3.</span> <span class="toc-text">負載平衡與路由：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E7%92%B0%E5%A2%83%E5%8F%8B%E5%96%84%EF%BC%9A"><span class="toc-number">2.4.</span> <span class="toc-text">容器環境友善：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B0%A1%E5%8C%96%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">2.5.</span> <span class="toc-text">簡化配置：</span></a></li></ol></li></ol>
+    </div>
+     <p>昨天已經部署完了就達成目的啦，怎麼我今天還出現？因為鐵人賽規定要 30 天啊！(開玩笑的)，其實是因為目前大概只能說是完成部署的 7 成，不知道大家有沒有發現，我們一直以來輸入的網址，無論是 DNS</p>
+<pre><code>http://ec2-52-199-213-167.ap-northeast-1.compute.amazonaws.com:3000
+</code></pre>
+<p>或是 IP Address</p>
+<pre><code>http://52.199.213.167:3000
+</code></pre>
+<p>兩者的網址都是 HTTP ，但其實在瀏覽器也會顯示 HTTP 是個 <code>不安全</code> 的通訊協議</p>
+<p><img src="/image/dockerDay23/23_1.webp" alt="搜尋 http 網址"></p>
+<p>正常應該要是 HTTPS 的安全網址才是正確的，那我們應該要如何將網址從 HTTP 變成 HTTPS 呢？</p>
+<h2 id="將網址從-HTTP-變成-HTTPS-的步驟"><a href="#將網址從-HTTP-變成-HTTPS-的步驟" class="headerlink" title="將網址從 HTTP 變成 HTTPS 的步驟"></a>將網址從 HTTP 變成 HTTPS 的步驟</h2><h3 id="1-取得-SSL-x2F-TLS-憑證："><a href="#1-取得-SSL-x2F-TLS-憑證：" class="headerlink" title="1. 取得 SSL&#x2F;TLS 憑證："></a>1. 取得 SSL&#x2F;TLS 憑證：</h3><p>在一個受信任的憑證授權單位（CA）（例如 Let’s Encrypt、Comodo、DigiCert 等）來取得 SSL&#x2F;TLS 憑證。有些 CA 提供免費的證書，有些可能需要付費。</p>
+<h3 id="2-安裝證書："><a href="#2-安裝證書：" class="headerlink" title="2. 安裝證書："></a>2. 安裝證書：</h3><p>在您的網頁伺服器上安裝 SSL&#x2F;TLS 憑證。這通常涉及將憑證檔案和私鑰檔案放置在伺服器上的特定位置。</p>
+<h3 id="3-配置伺服器："><a href="#3-配置伺服器：" class="headerlink" title="3. 配置伺服器："></a>3. 配置伺服器：</h3><p>修改你的網頁伺服器設定檔來啟用 HTTPS。<br>設定檔應包括<code>指定 SSL/TLS 憑證的路徑</code>、<code>設定伺服器以在 443 port 上監聽 HTTPS 請求</code>、<code>啟用 SSL/TLS 協定</code> 等。</p>
+<h3 id="4-重新啟動伺服器："><a href="#4-重新啟動伺服器：" class="headerlink" title="4. 重新啟動伺服器："></a>4. 重新啟動伺服器：</h3><p>重新啟動伺服器以應用新的設定。</p>
+<h3 id="5-HTTP-到-HTTPS-自動轉址："><a href="#5-HTTP-到-HTTPS-自動轉址：" class="headerlink" title="5. HTTP 到 HTTPS 自動轉址："></a>5. HTTP 到 HTTPS 自動轉址：</h3><p>設定伺服器在存取 HTTP 網址時，自動轉址到 HTTPS。這樣，無論使用者輸入是 HTTP 還是 HTTPS，它們都會被自動轉址到安全的 HTTPS 連線。</p>
+<p>以上是我簡化後的步驟就有五個，這麼麻煩的事情如果使用反向代理伺服器，如： Traefik 就可以全部簡化，那我還不快來認識 Traefik !!!</p>
+<h2 id="使用-Traefik-將-HTTP-變成-HTTPS-，可以做到哪些事？"><a href="#使用-Traefik-將-HTTP-變成-HTTPS-，可以做到哪些事？" class="headerlink" title="使用 Traefik 將 HTTP 變成 HTTPS ，可以做到哪些事？"></a>使用 Traefik 將 HTTP 變成 HTTPS ，可以做到哪些事？</h2><h3 id="自動-SSL-x2F-TLS-憑證管理："><a href="#自動-SSL-x2F-TLS-憑證管理：" class="headerlink" title="自動 SSL&#x2F;TLS 憑證管理："></a>自動 SSL&#x2F;TLS 憑證管理：</h3><p>Traefik 可以與 Let’s Encrypt 或其他證書頒發機構合作，自動獲取、更新和配置 SSL&#x2F;TLS 證書。這樣就不用需要手動管理證書有沒有過期啥的，它會自動處理，就像請一個小秘書一樣方便 🤩。</p>
+<h3 id="HTTP-到-HTTPS-自動重新導向："><a href="#HTTP-到-HTTPS-自動重新導向：" class="headerlink" title="HTTP 到 HTTPS 自動重新導向："></a>HTTP 到 HTTPS 自動重新導向：</h3><p>Traefik 可以輕鬆設定 HTTP 到 HTTPS 的自動轉址，確保所有流量都是加密的。</p>
+<h3 id="負載平衡與路由："><a href="#負載平衡與路由：" class="headerlink" title="負載平衡與路由："></a>負載平衡與路由：</h3><p>Traefik 支援負載平衡和路由配置，可將流量分發到多個負載服務，實現高可用性和容錯能力。</p>
+<h3 id="容器環境友善："><a href="#容器環境友善：" class="headerlink" title="容器環境友善："></a>容器環境友善：</h3><p>Traefik 特別適用於容器化環境，例如 Docker ，他都這樣說了我還不用？</p>
+<h3 id="簡化配置："><a href="#簡化配置：" class="headerlink" title="簡化配置："></a>簡化配置：</h3><p>Traefik 的配置相對簡單，可以將上述複雜的步驟簡化還不夠簡單嗎？</p>
+<p>總之，Traefik 簡化了將 HTTP 網站升級為 HTTPS 的過程，並提供了自動化、簡單配置和容器環境友善的功能。另外，Traefik 還提供了強大的反向代理和負載平衡功能，可增強您的應用程式的效能和安全性。</p>
+<p><img src="/image/dockerDay23/23_2.webp" alt="Traefik 配置"></p>
+<p>我們可以參考 <a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/">官網</a> 上的圖片，其實我就是把 Traefik 想像成交通警察阿北，如果迷路走到 HTTP 他會幫你導正路線到 HTTPS ; 如果這道車特多，他會引導你去隔壁道比較順暢。</p>
+<p>所以明天我們就要來實際使用 Traefik ，來將我們的網址變成安全的網址，那就明天見～</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-traefik-1/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(一)</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-create-compose/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 在 EC2 instance 加上 docker compose 跑起來</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
