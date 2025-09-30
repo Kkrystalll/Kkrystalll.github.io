@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(三)-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="Docker,部署,Traefik,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/Docker">#Docker</a></li>
+      
+      <li><a href="/tags/部署">#部署</a></li>
+      
+      <li><a href="/tags/Traefik">#Traefik</a></li>
+       
+    </ul>
+
+    <h1>Docker - 在我部署的專案使用 Traefik 取得 HTTPS 協定(三)</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/Docker/" target="_blank">Docker</a>
+          
+          <a href="../../categories/Docker/部署/" target="_blank">部署</a>
+          
+          <a href="../../categories/Docker/部署/AWS/" target="_blank">AWS</a>
+          
+          <a href="../../categories/Docker/部署/AWS/Traefik/" target="_blank">Traefik</a>
+          
+        </div>
+        <p>2023-10-12 11:07:02</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8B%99%E6%98%AF%E5%90%A6%E6%9C%89%E5%9C%A8%E5%85%B1%E5%90%8C%E7%9A%84-Network-%E4%B8%8B%E9%81%8B%E8%A1%8C%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">服務是否有在共同的 Network 下運行？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%AF%E5%90%A6%E6%9C%89%E9%96%8B%E5%95%9F%E5%AE%89%E5%85%A8%E7%BE%A4%E7%B5%84%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">是否有開啟安全群組？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AA%A2%E6%9F%A5-docker-compose-yml-%E8%A8%AD%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">檢查 docker-compose.yml 設置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#traefik-%E6%9C%8D%E5%8B%99%E7%9A%84-command"><span class="toc-number">3.1.</span> <span class="toc-text">traefik 服務的 command</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#app-%E6%9C%8D%E5%8B%99%E7%9A%84-labels"><span class="toc-number">3.2.</span> <span class="toc-text">app 服務的 labels</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%95%9F%E5%8B%95-docker-compose"><span class="toc-number">4.</span> <span class="toc-text">重新啟動 docker-compose</span></a></li></ol>
+    </div>
+     <p>昨天將 domain 設定好，確定目前的 <code>mydocker.online</code> 是已經跟我們的服務連上的， <code>docker-compose.yml</code> 目前長成如下，那我們今天要一步步來除錯。</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    image: krystallll/docker_test:1.0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    restart: on-failure
+    ports:
+      - 80:3000
+    labels:
+      - &quot;traefik.enable=true&quot;
+      - &quot;traefik.http.services.app.loadbalancer.server.port=3000&quot;
+      - &quot;traefik.http.routers.app.rule=Host(`mydocker.online`)&quot;`
+      - &quot;traefik.http.routers.app.entrypoints=web&quot;
+      - &quot;traefik.http.routers.app.tls=true&quot;
+      - &quot;traefik.http.routers.app.tls.certresolver=letsencrypt&quot;
+  db:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: password
+  # traefik:
+    # image: traefik:v2.10
+    # command:
+      # - &quot;--api.insecure=true&quot;
+      # - &quot;--providers.docker=true&quot;
+      # - &quot;--providers.docker.exposedbydefault=false&quot;
+      # - &quot;--entrypoints.web.address=:80&quot;
+      # - &quot;--entrypoints.websecure.address=:443&quot;
+      # - &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge=true&quot;
+      # - &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web&quot;
+      # - &quot;--certificatesresolvers.letsencrypt.acme.email=krystal@5xcampus.com&quot;
+      # - &quot;--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json&quot;
+    # ports:
+      # - &quot;80:80&quot;
+      # - &quot;443:443&quot;
+      # - &quot;8080:8080&quot;
+    # volumes:
+      # - &quot;./letsencrypt:/letsencrypt&quot;
+      # - /var/run/docker.sock:/var/run/docker.sock
+</code></pre>
+<p>當我將上述註解都打開，並且移除 app 服務的 <code>ports: - 80:3000</code> (移除是因為 traefik 服務有 80 port ，所以可以由他指揮去 app 服務) 後，重新 <code>docker-compose up</code> ，再去網址 <code>https://mydocker.online</code> 時，不外乎一樣是 404 page not found。</p>
+<p>統整一下我搜集到的可能連接不上的所有原因，來一一檢查修改</p>
+<h2 id="服務是否有在共同的-Network-下運行？"><a href="#服務是否有在共同的-Network-下運行？" class="headerlink" title="服務是否有在共同的 Network 下運行？"></a>服務是否有在共同的 Network 下運行？</h2><p>因為我的 docker-compose.yml 沒有特別設定在哪個網路下執行，所以我們就先來設定一下，確保我的 docker-compose 的所有服務都在同個網路下執行，可以互相通信，如果大家對於 Network 不太熟悉，可以參考 <a href="https://kkrystalll.github.io/posts/docker-networks/">Docker - Docker Networks(網路)容器與容器間的橋樑</a></p>
+<p>首先我要先建立一個網路，我就取名為 <code>development</code> 好了，那就在我的 AWS EC2 instance 終端機裡面，我可以先確認現在的 Network 有哪些</p>
+<pre><code class="docker">docker network ls
+</code></pre>
+<p>再來建立名為 <code>development</code> 的網路</p>
+<pre><code class="docker">docker network create development
+</code></pre>
+<p><img src="/image/dockerDay27/27_1.webp" alt="create network"></p>
+<p>看到這串 SHA 值就代表建立成功！</p>
+<p>接著去 <code>docker-compose.yml</code> 加上這個 <code>development</code> 的網路</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    image: krystallll/docker_test:1.0
+    networks:
+      - development
+    (...中間略)
+  db:
+    image: postgres:14-alpine
+    networks:
+      - development
+    (...中間略)
+  traefik:
+    image: traefik:v2.10
+    networks:
+      - development
+    (...中間略)
+networks:
+  development:
+    external: true
+</code></pre>
+<p>這邊只有我加上網路的片段，其他都跟本來一樣就先省略。</p>
+<h2 id="是否有開啟安全群組？"><a href="#是否有開啟安全群組？" class="headerlink" title="是否有開啟安全群組？"></a>是否有開啟安全群組？</h2><p>接者每當我們前面要去 port 3000 或是 8080 我們都有檢查 Security Groups ，但是現在我們在 docker-compose.yml 的 traefik 服務，是開了三個 port 80、443、8080</p>
+<pre><code class="docker">ports:
+   - &quot;80:80&quot;
+   - &quot;443:443&quot;
+   - &quot;8080:8080&quot;
+</code></pre>
+<p>所以現在要去檢查 Security Groups 是否都有開？</p>
+<p><img src="/image/dockerDay27/27_2.webp" alt="檢查 Security Groups"></p>
+<p>發現少了 https 的 443 port，所以我加開了 443 port 的 Security Groups</p>
+<h2 id="檢查-docker-compose-yml-設置"><a href="#檢查-docker-compose-yml-設置" class="headerlink" title="檢查 docker-compose.yml 設置"></a>檢查 docker-compose.yml 設置</h2><p>我重新翻閱了官網，找到以下兩個 <a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/reference/static-configuration/cli/">靜態設置</a> 以及 <a target="_blank" rel="noopener" href="https://doc.traefik.io/traefik/reference/dynamic-configuration/docker/">docker labels</a> 這邊列出了所有的設置，我重新配置了一下我的 docker-compose.yml</p>
+<pre><code class="docker">version: &quot;3.9&quot;
+services:
+  app:
+    image: krystallll/docker_test:1.0
+    networks:
+      - development
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    restart: on-failure
+    labels:
+      - &quot;traefik.enable=true&quot;
+      - &quot;traefik.http.routers.app-http.entrypoints=web&quot;
+      - &quot;traefik.http.routers.app-https.entrypoints=websecure&quot;
+      - &quot;traefik.http.routers.app-http.rule=Host(`mydocker.online`)&quot;
+      - &quot;traefik.http.routers.app-https.rule=Host(`mydocker.online`)&quot;
+      - &quot;traefik.http.routers.app-https.tls=true&quot;
+      - &quot;traefik.http.routers.app-https.tls.certresolver=letsencrypt&quot;
+      - &quot;traefik.http.middlewares.https-only.redirectscheme.scheme=https&quot;
+      - &quot;traefik.http.routers.app-http.middlewares=https-only&quot;
+      - &quot;traefik.http.routers.app-https.service=app&quot;
+      - &quot;traefik.http.services.app.loadbalancer.server.port=3000&quot;
+  db:
+    image: postgres:14-alpine
+    networks:
+      - development
+    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: password
+  traefik:
+    image: traefik:v2.10
+    networks:
+      - development
+    restart: on-failure
+    command:
+      - &quot;--api.insecure=true&quot;
+      - &quot;--providers.docker=true&quot;
+      - &quot;--providers.docker.exposedbydefault=false&quot;
+      - &quot;--entrypoints.web.address=:80&quot;
+      - &quot;--entrypoints.websecure.address=:443&quot;
+      - &quot;--certificatesresolvers.letsencrypt=true&quot;
+      - &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge=true&quot;
+      - &quot;--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web&quot;
+      - &quot;--certificatesresolvers.letsencrypt.acme.email=krystal@5xcampus.com&quot;
+      - &quot;--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json&quot;
+    ports:
+      - &quot;80:80&quot;
+      - &quot;443:443&quot;
+      - &quot;8080:8080&quot;
+    volumes:
+      - &quot;./letsencrypt:/letsencrypt&quot;
+      - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  development:
+    external: true
+</code></pre>
+<p>以下來一一說明：</p>
+<h3 id="traefik-服務的-command"><a href="#traefik-服務的-command" class="headerlink" title="traefik 服務的 command"></a>traefik 服務的 command</h3><ol>
+<li>開起 traefik 的 Web API</li>
+</ol>
+<pre><code class="docker">--api.insecure=true
+</code></pre>
+<ol start="2">
+<li>是否暴露 docker 服務，其實翻成白話就是我不要將 docker 給 traefik 自動追蹤，只有需要被追蹤的服務再加上 <code>traefik.enable=true</code> 就好</li>
+</ol>
+<pre><code class="docker">--providers.docker.exposedbydefault=false
+</code></pre>
+<ol start="3">
+<li>建立一個名為 <code>web</code> 的入口點，他的 port 是 80</li>
+</ol>
+<pre><code class="docker">--entrypoints.web.address=:80
+</code></pre>
+<ol start="4">
+<li>建立一個名為 <code>websecure</code> 的入口點，他的 port 是 443</li>
+</ol>
+<pre><code class="docker">--entrypoints.websecure.address=:443
+</code></pre>
+<ol start="5">
+<li>由 letsencrypt 來建立憑證</li>
+</ol>
+<pre><code class="docker">--certificatesresolvers.letsencrypt=true
+</code></pre>
+<ol start="6">
+<li>使用 httpchallenge 來憑證申請</li>
+</ol>
+<pre><code class="docker">--certificatesresolvers.letsencrypt.acme.httpchallenge=true
+</code></pre>
+<ol start="7">
+<li>letsencrypt 申請的憑證入口點是 web 也就是我們上面設定的 port 80</li>
+</ol>
+<pre><code class="docker">--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+</code></pre>
+<ol start="8">
+<li>申請憑證需要的有用的 email</li>
+</ol>
+<pre><code class="docker">--certificatesresolvers.letsencrypt.acme.email=krystal@5xcampus.com
+</code></pre>
+<ol start="9">
+<li>letsencrypt 申請來的憑證檔案儲存的路徑</li>
+</ol>
+<pre><code class="docker">--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+</code></pre>
+<h3 id="app-服務的-labels"><a href="#app-服務的-labels" class="headerlink" title="app 服務的 labels"></a>app 服務的 labels</h3><ol>
+<li>上面有說到，代表這個服務歸交警伯伯 traefik 管</li>
+</ol>
+<pre><code class="docker">traefik.enable=true
+</code></pre>
+<ol start="2">
+<li><code>app-http</code> 是我取的名字，代表 <code>app-http</code> 這個東東是走 web 這條路，因為 web 正常是 http ，所以我就直接取名為 <code>app-http</code></li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-http.entrypoints=web
+</code></pre>
+<ol start="3">
+<li>同上，代表 <code>app-https</code> 是走 websecure 這條路</li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-https.entrypoints=websecure
+</code></pre>
+<ol start="4">
+<li>設定 <code>app-http</code> 跟 <code>app-https</code> 的 Host 是 <code>mydocker.online</code></li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-http.rule=Host(`mydocker.online`)
+traefik.http.routers.app-https.rule=Host(`mydocker.online`)
+</code></pre>
+<ol start="5">
+<li>因為 <code>app-https</code> 是走 443 也就是 https 所以設定 true 代表他需要使用我們申請的憑證</li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-https.tls=true
+</code></pre>
+<ol start="6">
+<li>使用 letsencrypt 來加密解密憑證</li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-https.tls.certresolver=letsencrypt
+</code></pre>
+<ol start="7">
+<li>使用一個名為 https-only 的中介軟體，來固定將 http 轉址到 https (如果我們輸入的網址是 http 他會自動轉址到 https)</li>
+</ol>
+<pre><code class="docker">traefik.http.middlewares.https-only.redirectscheme.scheme=https
+traefik.http.routers.app-http.middlewares=https-only
+</code></pre>
+<ol start="8">
+<li>將 app-https 這個 router 定義一個叫做 app 的 service</li>
+</ol>
+<pre><code class="docker">traefik.http.routers.app-https.service=app
+</code></pre>
+<ol start="9">
+<li>告訴 traefik 這個 app 的 service 是在 3000 port</li>
+</ol>
+<pre><code class="docker">traefik.http.services.app.loadbalancer.server.port=3000
+</code></pre>
+<h2 id="重新啟動-docker-compose"><a href="#重新啟動-docker-compose" class="headerlink" title="重新啟動 docker-compose"></a>重新啟動 docker-compose</h2><pre><code class="docker">docker-compose up
+</code></pre>
+<p>去瀏覽器輸入網址 <code>mydocker.online</code></p>
+<p><img src="/image/dockerDay27/27_3.webp" alt="搜尋 mydocker.online"></p>
+<p>搞了這麼多天就為了這個 https 的鎖呀 🥹🎉🎉🎉<br>然後再根據按鈕按一按可以得來朝思暮想的首頁。</p>
+<p><img src="/image/dockerDay27/27_4.webp" alt="create database &amp; db:migrate"></p>
+<p><img src="/image/dockerDay27/27_5.webp" alt="成功在 mydocker.online 看到專案"></p>
+<p>另外也可以自己試試，硬是將網址輸入 <code>http://mydocker.online</code> ，他也會自動轉址到 <code>https://mydocker.online</code> 😍😍😍</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+    <a href="/posts/docker-volume/">
+        <div class="post-paging-last">
+            <span>上一篇</span>
+            <p>Docker - 使用 Volumes 讓我的資料庫保存之前的資料</p>
+        </div>
+    </a>
+    
+
+    
+    <a href="/posts/docker-connect-domain/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>Docker - 要取得協定得先有正確的 Domain</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2025 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
