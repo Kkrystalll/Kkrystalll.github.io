@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+<title>OpenSpec：在 AI 協作開發中，先寫 Spec，再寫 Code-Quiet</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<link rel="stylesheet" href="/css/index.css">
+
+
+
+<meta name="keywords" content="OpenSpec,Claude Code,Rails,">
+<meta name="description" content="">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/index.js"></script>
+
+
+<script src="/js/fancybox.umd.js"></script>
+
+
+<script src="/js/fancybox-images.js"></script>
+
+
+<script src="/js/gitalk.min.js"></script>
+
+
+<script src="/js/hljs.min.js"></script>
+ 
+<script>hljs.highlightAll();</script>
+
+	<meta name="generator" content="Hexo 6.3.0"></head>
+
+	<body>
+		<div class="header">
+  <div class="header-top" id="header-top">
+    <div class="h-left">
+      <a href="/" class="h-title">
+        <img src="/image/mugShot.jpeg" alt="Quiet" />
+        <h1>Krystal 的桃花源</h1>
+      </a>
+    </div>
+    <div class="h-right">
+      <ul>
+         
+        <li>
+          <a href="/">
+            首頁
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/archives">
+            文章
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/categories">
+            分類
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/tags">
+            標籤
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/links">
+            連結
+          </a>
+          <span class="dot"></span>
+        </li>
+          
+        <li>
+          <a href="/about">
+            關於
+          </a>
+          <span class="dot"></span>
+        </li>
+         
+      </ul>
+    </div>
+    <div class="h-right-close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+      >
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"
+          fill="rgba(68,68,68,1)"
+        />
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Krystal</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">首頁</a>
+        </li>
+        
+        <li>
+            <a href="/archives">文章</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分類</a>
+        </li>
+        
+        <li>
+            <a href="/tags">標籤</a>
+        </li>
+        
+        <li>
+            <a href="/links">連結</a>
+        </li>
+        
+        <li>
+            <a href="/about">關於</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+            <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'>
+</div>
+<style>
+    .shelter{
+        background-color: #333;
+        opacity:0.5;
+        cursor: pointer;
+        display: none; 
+        position: fixed;
+        left: 0;
+        top: 0; 
+        right: 0;
+        bottom: 0;
+        z-index: 1998;
+    }
+    .sidebar {
+        width: 66%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        bottom: 0;
+        background: #fff;
+        z-index: 1999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815);
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $( function () {
+	$( '.h-right-close>svg' )
+		.click( function () {
+			$( '.sidebar' )
+				.animate( {
+					right: "0"
+				}, 500 );
+			$( '.shelter' )
+				.fadeIn( "slow" )
+		} );
+	$( '.shelter' )
+		.click( function ( e ) {
+			$( '.sidebar' )
+				.animate( {
+					right: "-100%"
+				}, 500 );
+			$( '.shelter' )
+				.fadeOut( "slow" )
+		} )
+} )
+
+</script>
+
+<div class="post">
+    <div
+  class="post-header-background post-header-color"
+  style="
+    background: url('');
+  "
+>
+  <div class="post-header-background-content">
+    <ul class="post-header-tag">
+       
+      <li><a href="/tags/OpenSpec">#OpenSpec</a></li>
+      
+      <li><a href="/tags/Claude Code">#Claude Code</a></li>
+      
+      <li><a href="/tags/Rails">#Rails</a></li>
+       
+    </ul>
+
+    <h1>OpenSpec：在 AI 協作開發中，先寫 Spec，再寫 Code</h1>
+    <div class="post-header-info">
+      <div class="post-header-info-author">
+        
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+        >
+          <g>
+            <path
+              fill="#12183A"
+              d="M6.187 15.265A6.47 6.47 0 0 0 10 16.5a6.47 6.47 0 0 0 3.813-1.235A4.99 4.99 0 0 0 10 13.5a4.99 4.99 0 0 0-3.813 1.765zM5.082 14.25A6.485 6.485 0 0 1 10 12c1.965 0 3.726.872 4.918 2.25a6.5 6.5 0 1 0-9.836 0zM10 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-1.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
+            ></path>
+          </g>
+        </svg>
+        
+        <span class="post-header-info-author-text">
+          <a href="../../about"
+            >Krystal</a
+          ></span
+        >
+        <div class="post-header-info-author-categories">
+          
+          <a href="../../categories/OpenSpec/" target="_blank">OpenSpec</a>
+          
+          <a href="../../categories/OpenSpec/Claude-Code/" target="_blank">Claude Code</a>
+          
+          <a href="../../categories/OpenSpec/Claude-Code/Rails/" target="_blank">Rails</a>
+          
+        </div>
+        <p>2026-02-06 13:00:38</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="post-content" id="content">
+  <div id="article" class="post-content-info">
+    
+    <div id="post-toc">
+      <span class="post-toc-title">文章目錄</span>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#OpenSpec%EF%BC%9A%E5%9C%A8-AI-%E5%8D%94%E4%BD%9C%E9%96%8B%E7%99%BC%E4%B8%AD%EF%BC%8C%E5%85%88%E5%AF%AB-Spec%EF%BC%8C%E5%86%8D%E5%AF%AB-Code"><span class="toc-number">1.</span> <span class="toc-text">OpenSpec：在 AI 協作開發中，先寫 Spec，再寫 Code</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenSpec-%E8%A6%8F%E6%A0%BC%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC-Spec-Driven-Development-SDD-%E6%A1%86%E6%9E%B6"><span class="toc-number">1.1.</span> <span class="toc-text">OpenSpec 規格驅動開發 (Spec-Driven Development, SDD) 框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%88%86%E9%A1%9E"><span class="toc-number">1.1.2.</span> <span class="toc-text">文件分類</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C%E6%8C%87%E4%BB%A4"><span class="toc-number">1.1.3.</span> <span class="toc-text">執行指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E9%9A%9B%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="toc-number">1.1.4.</span> <span class="toc-text">實際使用案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B5%90%E8%AA%9E"><span class="toc-number">1.2.</span> <span class="toc-text">結語</span></a></li></ol></li></ol>
+    </div>
+     <h1 id="OpenSpec：在-AI-協作開發中，先寫-Spec，再寫-Code"><a href="#OpenSpec：在-AI-協作開發中，先寫-Spec，再寫-Code" class="headerlink" title="OpenSpec：在 AI 協作開發中，先寫 Spec，再寫 Code"></a>OpenSpec：在 AI 協作開發中，先寫 Spec，再寫 Code</h1><p>在這個 AI 協作開發的時代，當我在既有專案中開發新功能或除錯時，最常見的做法就是：把現有的 code 貼給 AI，描述一下問題，最後加一句「請幫我修正錯誤」或「請幫我生成功能」。</p>
+<p>多數時候，AI 真的會產出一段看起來「像樣」的程式碼。運氣好一點，功能可以正常運作；運氣差一點，不只問題沒有解決，還順手把其他功能一起弄壞 😓</p>
+<p>於是我開始抱怨 AI 不夠聰明、給的 code 不可靠。但後來想想，問題可能不完全在 AI，而是在我給它的需求與規格本來就不夠清楚。當需求與規格本身就模糊，產出錯誤的功能或程式碼，其實是一件再正常不過的事情。</p>
+<p>更麻煩的是，即使運氣好功能正常運作後，我開始 review 程式碼時，卻發現整個 coding style 跟團隊的規範相差甚遠，為了符合團隊的規範，於是又得花更多時間修改。</p>
+<p>以上大概是我過去使用 AI 工具寫程式時，遇到的種種狀況。</p>
+<p>其實以上狀況在我使用 Claude Code 後，已經有了很大的改善，但還是遇到了一些問題。</p>
+<p>例如我習慣在開發功能前先自己梳理需求並列點，一方面可以更清楚開發脈絡，另一方面也能讓容易分心且健忘的自己知道現在進行到哪一步驟。在執行前我也會先跟 Claude Code 好朋友確認一下執行邏輯，以及有沒有什麼邊界狀況需要考慮。有時候討論的太熱烈 token 不小心就燒完了 😅。</p>
+<p>但這不是最大的困難，我自己覺得最大的困難是：這些步驟脈絡不管用圖形化或是寫在筆記，總之是寫成一個我可以理解的方式，但是當我需要跟同事解釋較複雜的邏輯脈絡時，這份我的筆記可能不夠清楚到可以讓人一看就懂。有時候我花更多的時間是在準備一份同事、客戶都看得懂的邏輯或規格書（當然這已經是請 AI 協助調整過的版本）。</p>
+<p>雖然我自認為已經算是不那麼排斥寫文件的工程師了（畢竟是文組出身 🤔 ）但我不得不承認，花大把的時間搞這些，有時候難免會有點小困擾。</p>
+<p>以上的困擾基本上在我認識 <a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec">OpenSpec</a> 後，解決了八成以上（剩下的可能是 token 不夠用，開玩笑的）</p>
+<h2 id="OpenSpec-規格驅動開發-Spec-Driven-Development-SDD-框架"><a href="#OpenSpec-規格驅動開發-Spec-Driven-Development-SDD-框架" class="headerlink" title="OpenSpec 規格驅動開發 (Spec-Driven Development, SDD) 框架"></a>OpenSpec 規格驅動開發 (Spec-Driven Development, SDD) 框架</h2><p>如同我的標題所述 OpenSpec 就是一個讓你先寫規格 (Spec) 再寫程式碼 (Code) 的工具。</p>
+<p>值得一提的是，OpenSpec 的設計理念是</p>
+<blockquote>
+<p>“built for brownfield, not just greenfield”</p>
+</blockquote>
+<p>代表它不只適用於全新專案，更適合加入現有的專案中。這對於需要在既有系統上開發新功能的情境來說，非常實用，我下面的範例也是在我既有的專案中加入使用 OpenSpec。</p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>它會根據你的需求產生 Proposal (提案)，這個提案包含完整的規格文件 (proposal → specs → design → tasks)，接著可以根據這個 Proposal 去 Apply (應用)，也就是讓 AI 根據步驟去撰寫程式碼，最後完成後將剛剛的提案 Archive (歸檔)存成專案文件。</p>
+<p><img src="/image/openspecSpec/openspec_previous_process.webp" alt="openspec_previous_process"></p>
+<p>這是最理想的狀態，但理想很豐滿現實很骨感。實務上我們很常在開發中發現「這邊邏輯需要修改一下」的狀況，所以更多時候是遇到在 Apply 步驟但卻需要回去修改 Proposal 的文件，根據我的圖示可以看到舊版是一個單向的流程，我們不能走回頭路。</p>
+<p>不過這個問題現在已經被修正了!新版的 OPSX 工作流程變成可逆的，隨時可以滾動式調整，彈性更高：</p>
+<p><img src="/image/openspecSpec/openspec_new_process.webp" alt="openspec_new_process"></p>
+<h3 id="文件分類"><a href="#文件分類" class="headerlink" title="文件分類"></a>文件分類</h3><p>剛剛上面有提到，現在 continue 會依序建立需要的文件 (proposal → specs → design → tasks)，這四個文件分別代表：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>意思</th>
+<th>解釋</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>proposal.md</td>
+<td>變更提案</td>
+<td>WHY 為何要做這個功能</td>
+</tr>
+<tr>
+<td>specs.md</td>
+<td>規格</td>
+<td>WHAT 這個功能要做什麼內容</td>
+</tr>
+<tr>
+<td>design.md</td>
+<td>技術設計</td>
+<td>HOW 應該要怎麼執行</td>
+</tr>
+<tr>
+<td>tasks.md</td>
+<td>執行任務</td>
+<td>TODO LIST 執行內容的待辦步驟清單</td>
+</tr>
+</tbody></table>
+<p>📍 注意：這些文件的建立是有順序性的。其實看解釋應該不難理解 —- 我需要先知道「為何要做」(WHY)，才能知道「要做什麼」(WHAT)，接著才能規劃「怎麼執行」(HOW)，最後才是列出「執行的待辦清單」(TODO LIST)。</p>
+<h3 id="執行指令"><a href="#執行指令" class="headerlink" title="執行指令"></a>執行指令</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>意思</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/opsx:explore</code></td>
+<td>在正式開始變更前,先與 AI 討論想法、調查問題或比較方案。當想法逐漸清晰後，可以轉換到 <code>/opsx:new</code> 或 <code>/opsx:ff</code></td>
+</tr>
+<tr>
+<td><code>/opsx:new</code></td>
+<td>開啟一個新需求的資料夾，並準備開始建立規格文件</td>
+</tr>
+<tr>
+<td><code>/opsx:continue</code></td>
+<td>基於新開啟的需求，依序建立下一個文件</td>
+</tr>
+<tr>
+<td><code>/opsx:ff</code></td>
+<td>已經很清楚知道需求，可以用此一次建立所有需要的文件（<code>/opsx:new</code> + <code>/opsx:continue</code> 的濃縮版）</td>
+</tr>
+<tr>
+<td><code>/opsx:apply</code></td>
+<td>根據 <code>tasks.md</code> 開始依序執行任務，並根據需要更新文件（類似舊版 <code>/openspec:apply</code>）</td>
+</tr>
+<tr>
+<td><code>/opsx:sync</code></td>
+<td>預覽規格合併的結果（ 選用，因為 archive 本來就會自動合併）</td>
+</tr>
+<tr>
+<td><code>/opsx:archive</code></td>
+<td>將已經處理完成的任務內容，儲存成歸檔狀態（類似舊版 <code>/openspec:archive</code>）</td>
+</tr>
+</tbody></table>
+<p>💡 <strong>快速理解:</strong></p>
+<ul>
+<li><strong>需求不明確?</strong> 用 <code>/opsx:explore</code> 先討論</li>
+<li><strong>需求明確?</strong> 用 <code>/opsx:ff</code> 快速建立</li>
+<li><strong>想逐步確認?</strong> 用 <code>/opsx:new</code> + <code>/opsx:continue</code> 慢慢來</li>
+<li><strong>執行中發現問題?</strong> 直接編輯所有文件後，繼續執行 <code>/opsx:apply</code></li>
+</ul>
+<p><strong>新舊版對應:</strong></p>
+<ul>
+<li>舊版 <code>/openspec:proposal</code> ≈ 新版 <code>/opsx:ff</code></li>
+<li>舊版 <code>/openspec:apply</code> ≈ 新版 <code>/opsx:apply</code></li>
+<li>舊版 <code>/openspec:archive</code> ≈ 新版 <code>/opsx:archive</code></li>
+</ul>
+<p><strong>指令流程 &amp; 新版舊版比較圖</strong><br><img src="/image/openspecSpec/openspec.webp" alt="openspec"></p>
+<p>📍 注意：圖片中我雖然把 <code>/opsx:explore</code> 放在最前面，但是事實上在執行中若隨時有問題都可以用 <code>/opsx:explore</code> 開啟討論</p>
+<h3 id="實際使用案例"><a href="#實際使用案例" class="headerlink" title="實際使用案例"></a>實際使用案例</h3><p>首先根據 <a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec?tab=readme-ov-file#quick-start">官方文件</a> 安裝 OpenSpec，並依提示選擇你慣用的 AI 工具。</p>
+<p>我拿之前做的 <a href="https://kkrystalll.github.io/posts/rails-line-psychological-test/#8-%E4%BD%BF%E7%94%A8-Scaffold-%E4%BE%86%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90-Question-%E7%9A%84-CRUD">使用 Ruby on Rails 串接 LINE 快速構建心理測驗</a> 專案來示範。這次我想新增「分類功能」，但需求還不夠明確，所以先用：</p>
+<pre><code>/opsx:explore
+</code></pre>
+<p>然後開始描述需求：</p>
+<blockquote>
+<p>我希望可以新增分類資料表，內有欄位分類名稱(string)、順序(int)，並且一個分類可以有很多問題，在建立 question 時就可以選擇分類，並且在 line_bot_controller.rb 的 start_test 原本是傳 questions.first 進去 send_question_to_user 作為第一題，現在因為有分類了我希望是隨機的，只要每個分類有各出現一題就好，雖然說出的題目跟順序是隨機的，但是我希望我的答案 result 原本是回傳 reply_message(event[‘source’][‘userId’], “您的測驗結果是#{result.answers.values.join}”) 但我現在希望是根據我在分類的順序顯示答案，例如分類有 A、B、C，順序分別是 1、2、3，那麼答案就會是 A 分類的答案接著 B 分類的答案最後 C 分類的答案串接起來顯示</p>
+</blockquote>
+<p>我自認為需求已經算清楚了，但它依然開啟了下面的討論 — 像是一個確認需求的過程：</p>
+<p><img src="/image/openspecSpec/explore_previous_process.webp" alt="explore_previous_process"></p>
+<p><img src="/image/openspecSpec/explore_new_process.webp" alt="explore_new_process"></p>
+<p>它問了我三個關鍵問題：</p>
+<ol>
+<li><strong>題目順序的「隨機」程度？</strong> — 確認我說的「隨機」具體是什麼意思</li>
+<li><strong>如何追蹤測驗進度？</strong> — 提供兩個方案讓我選擇</li>
+<li><strong>答案怎麼存？</strong> — 分析三種存法的 tradeoff</li>
+</ol>
+<p>甚至連邊界狀況都問到：「如果某個分類沒有題目，要怎麼處理？」</p>
+<p>第一次用的時候蠻驚豔的 — 它不只會提問，連選項都幫我列好了。在一來一回的討論後，需求逐漸清晰：</p>
+<p><img src="/image/openspecSpec/explore_1.webp" alt="explore_1"><br><img src="/image/openspecSpec/explore_2.webp" alt="explore_2"></p>
+<pre><code>/opsx:ff
+</code></pre>
+<p>📍 注意：因為前面有先 <code>/opsx:explore</code>，所以這邊可以直接用 <code>/opsx:ff</code>，它會自動根據討論內容命名資料夾並建立相關文件。若沒有前面的討論，建議帶上名稱 <code>/opsx:ff add-category-to-questions</code>，它會先跟你確認需求再建立文件</p>
+<p>此次 <code>/opsx:ff</code> 生成了以下檔案</p>
+<pre><code>openspec/changes/add-category-to-questions
+├── design.md
+├── proposal.md
+├── specs
+│   ├── category-based-testing
+│   │   └── spec.md
+│   └── category-management
+│       └── spec.md
+└── tasks.md
+</code></pre>
+<p>確認沒問題後我就開始執行</p>
+<pre><code>/opsx:apply
+</code></pre>
+<p>它會依據 <code>tasks.md</code> 逐一執行任務，完成後自動勾選。確認功能沒問題後，執行歸檔：</p>
+<pre><code>/opsx:archive
+</code></pre>
+<p>就這樣看起來其實已經很完整了，但在我開 server 要新建分類時，發現此次內容並沒有包含分類的 CRUD 以及在問題表單內加上選擇分類的欄位，之類的小問題，回去看我當初的需求確實沒提到這塊，不過這都是簡單的小問題，我就直接手動解決了，整體使用體驗還是非常舒適流暢的。</p>
+<p>硬要說一個小缺點的話，就是在終端機裡讀這些 <code>.md</code> 檔不太美觀。不過這個問題被龍哥做的小工具 <code>Spectra</code> 解決了 — 加入專案後就能用圖形介面即時瀏覽和編輯這些文件，體驗好很多！</p>
+<p><img src="/image/openspecSpec/spectra.webp" alt="spectra"></p>
+<p>如果對這個小工具有興趣，可以參考龍哥的文章 <a target="_blank" rel="noopener" href="https://kaochenlong.com/spectra-with-openspec">Spectra：給 OpenSpec 的圖形介面</a>，裡面有附上 App 下載連結。</p>
+<h2 id="結語"><a href="#結語" class="headerlink" title="結語"></a>結語</h2><p>回顧整個使用過程，OpenSpec 最大的價值不只是「讓 AI 幫你寫 code」，而是在寫 code 之前，先把需求和設計想清楚。透過 <code>/opsx:explore</code> 的來回討論，很多邊界情況和設計決策在動手前就被釐清了，減少了後續修改的成本。</p>
+<p>對我來說，這套流程解決了兩個痛點：</p>
+<ol>
+<li>跟 AI 協作時需求不夠明確導致產出品質不穩定。</li>
+<li>開發完還要另外整理文件給同事看 — 現在這些 <code>.md</code> 檔在開發過程中就產出了，直接就能說明功能邏輯。</li>
+</ol>
+<p>如果你也有類似的困擾，不妨試試看使用 OpenSpec 規格驅動開發的方式搭配 Spectra。</p>
+
+  </div>
+  <div id=""></div>
+</div>
+
+<script>
+  Fancybox.bind('[data-fancybox="fancybox-gallery-img"]', {
+    dragToClose: true,
+    Toolbar: true,
+    closeButton: "top",
+    Image: {
+      zoom: true,
+    },
+    on: {
+      initCarousel: (fancybox) => {
+        const slide = fancybox.Carousel.slides[fancybox.Carousel.page];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+      "Carousel.change": (fancybox, carousel, to, from) => {
+        const slide = carousel.slides[to];
+        fancybox.$container.style.setProperty(
+          "--bg-image",
+          `url("${slide.$thumb.src}")`
+        );
+      },
+    },
+  });
+</script>
+
+<style>
+  #noneimg img {
+    display: none;
+    z-index: 9999;
+    /* width: 600px !important; */
+    min-width: 0%;
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0px;
+    position: fixed;
+    box-shadow: 0 0 0px #c3c3c300 !important;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto !important;
+  }
+
+  @media screen and (max-width: 600px) {
+    #noneimg img {
+      max-width: 88%;
+    }
+  }
+</style>
+
+    <div class="post-paging">
+    
+
+    
+    <a href="/posts/docker-course/">
+        <div class="post-paging-next">
+            <span>下一篇</span>
+            <p>為什麼我自學了三個月，還是要上 Docker 實戰指南？</p>
+        </div>
+    </a>
+    
+</div>
+</div>
+		<div class="footer">
+  <div class="Copyright">
+    ©2026 By Krystal. 主题：<a
+      style="text-decoration: none; display: contents; color: #898f9f"
+      target="_blank" rel="noopener" href="https://github.com/79e/hexo-theme-quiet"
+      >Quiet</a
+    >
+  </div>
+  <div class="contact">
+    
+    <a target="_blank" rel="noopener" href="https://github.com/Kkrystalll">
+      <img src="https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png" alt="Quiet主题" />
+    </a>
+    
+  </div>
+</div>
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            transition: border .5s;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $( '#js-go_top' )
+	.gotoTop( {
+		offset: 500,
+		speed: 300,
+		animationShow: {
+			'transform': 'translate(0,0)',
+			'transition': 'transform .5s ease-in-out'
+		},
+		animationHide: {
+			'transform': 'translate(100px,0)',
+			'transition': 'transform .5s ease-in-out'
+		}
+	} );
+</script>  
+    <!-- Gitalk -->
+    <script>
+        const data = '{"clientID":"02b3c","clientSecret":"adfc7b4","repo":"gimment","owner":"duneng","admin":"duneng"}'
+        const gitalk = new Gitalk({
+            ...JSON.parse( data),
+            id:location.pathname,
+            distractionFreeMode:false
+        })
+        
+        if(Boolean('false')){
+            gitalk.render('gitalk-container')
+        }
+    </script>
+
+
+	</body>
+</html>
+
